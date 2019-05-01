@@ -1,0 +1,55 @@
+#---------------------------------#
+# project section -  Used for shared variables through out the configuration file
+#http://www.loresoft.com/Entity-Framework-Core-Generator
+#---------------------------------#
+project:
+  # the root namespace for the project
+  namespace: 'Clockwerkz'
+  # the root directory for the project
+  directory: ..\  
+
+#---------------------------------#
+# data section -  Used for configuring database connections
+#---------------------------------#
+database:
+  # the connection string to the database
+  connectionString: 'Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=QuartzDb;Integrated Security=True;Connect Timeout=30'
+  # the database provider name.  Default: SqlServer
+  provider: SqlServer  
+
+  # schemas to include or empty to include all
+  #schemas:    
+  #  - dbo
+
+  # table naming hint for how existing tables are named.  Default: Singular
+  tableNaming: Plural
+
+#---------------------------------#
+# data section - controls the generated files for Entity Framework
+#---------------------------------#
+data:
+  # data context file configuration
+  context:
+    name: 'ClockwerkzDbContext'          # the data context class name
+    baseClass: DbContext                    # the data context base class name
+    namespace: '{Project.Namespace}.Persistence'   # the data context namespace
+    directory: '{Project.Directory}\Clockwerkz.Persistence'   # the data context output directory
+
+    # how to generate names for the DbSet properties on the data context.  Default: Plural
+    propertyNaming: Plural
+    #include XML documentation
+    document: false 
+
+  # entity class file configuration
+  entity:
+    namespace: '{Project.Namespace}.Domain.Entities'  # the entity class namespace
+    directory: '{Project.Directory}\Clockwerkz.Domain\Entities'  # the entity class output directory
+    entityNaming: Singular
+    relationshipNaming: Plural
+
+  # mapping class file configuration
+  mapping:
+    namespace: '{Project.Namespace}.Persistence.Mappings'   # the mapping class namespace
+    directory: '{Project.Directory}\Clockwerkz.Persistence\Mappings'   # the mapping class output directory
+    #include XML documentation
+    document: false
