@@ -1,5 +1,4 @@
 using Autofac;
-using Clockwerkz.Application;
 using Clockwerkz.Common;
 using Clockwerkz.Configuration;
 using Clockwerkz.Filters;
@@ -12,8 +11,6 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Quartz.Impl;
-using System.Collections.Specialized;
 
 namespace Clockwerkz
 {
@@ -51,6 +48,7 @@ namespace Clockwerkz
             });
 
             services.ConfigureQuartz();
+            services.ConfigureAuth0(_configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,10 +64,14 @@ namespace Clockwerkz
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.UseCookiePolicy();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -85,7 +87,7 @@ namespace Clockwerkz
                 if (env.IsDevelopment())
                 {
                     spa.UseReactDevelopmentServer(npmScript: "start");
-                }
+                }                
             });
         }
     }

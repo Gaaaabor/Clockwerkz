@@ -1,7 +1,6 @@
 ﻿using Clockwerkz.Application;
 using Clockwerkz.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Quartz;
 using Quartz.Impl;
 using System.Collections.Specialized;
 
