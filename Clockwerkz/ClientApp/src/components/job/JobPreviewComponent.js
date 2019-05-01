@@ -31,28 +31,6 @@ export class JobPreviewComponent extends Component {
             fontSize: '1rem'
         }
 
-        const groupStyle = {
-            width: '100%',
-            verticalAlign: 'middle',
-            layout: 'auto',
-            border: '1px solid #454d55',
-            backgroundColor: '#343a40',
-            color: 'white',
-            fontWeight: '400',
-            fontSize: '1rem'
-        }
-
-        const jobStyle = {
-            width: '100%',
-            verticalAlign: 'middle',
-            layout: 'auto',
-            border: '1px solid #454d55',
-            backgroundColor: '#343a40',
-            color: 'white',
-            fontWeight: '400',
-            fontSize: '1rem'
-        }
-
         return (
             <div>
                 <Container>
@@ -63,12 +41,16 @@ export class JobPreviewComponent extends Component {
                         <Col>End</Col>
                         <Col>1 fire</Col>
                         <Col>2 fire</Col>
+                        <Col>3 fire</Col>
                     </Row>
                     {this.state.jobPreviews.map(x =>
-                        <Row key="{x.groupName}" style={groupStyle}>
-                            <Col>{x.groupName}</Col>
-                        </Row>
-                        
+                        <GroupComponent key={x.groupName} groupName={x.groupName}>
+                            {x.jobs.map(job =>
+                                <JobComponent key={job.name} jobName={job.name}>
+                                    <TriggerComponent triggers={job.triggers} />
+                                </JobComponent>
+                            )}
+                        </GroupComponent>
                     )}
                 </Container>
 
@@ -76,8 +58,3 @@ export class JobPreviewComponent extends Component {
         );
     }
 }
-//{
-//    job.triggers.map(trigger =>
-//        <TriggerComponent triggers={trigger} />
-//    )
-//}

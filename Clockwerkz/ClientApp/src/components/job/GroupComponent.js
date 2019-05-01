@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 
 export class GroupComponent extends Component {
 
@@ -13,7 +13,7 @@ export class GroupComponent extends Component {
 
     render() {
 
-        const containerStyle = {
+        const groupStyle = {
             width: '100%',
             verticalAlign: 'middle',
             layout: 'auto',
@@ -26,11 +26,9 @@ export class GroupComponent extends Component {
 
         return (
             <div>
-                <Container style={containerStyle}>
-                    <Row>
-                        <Col xs="auto">{this.state.groupName}</Col>
-                    </Row>
-                </Container>                
+                <Row style={groupStyle}>
+                    <Col xs="auto">{this.state.groupName}</Col>
+                </Row>
                 {this.props.children}
             </div>
         );

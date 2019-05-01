@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 
 export class JobComponent extends Component {
 
@@ -12,7 +12,7 @@ export class JobComponent extends Component {
 
     render() {
 
-        const containerStyle = {
+        const jobStyle = {
             width: '100%',
             verticalAlign: 'middle',
             layout: 'auto',
@@ -25,11 +25,9 @@ export class JobComponent extends Component {
 
         return (
             <div>
-                <Container style={containerStyle}>
-                    <Row>
-                        <Col>{this.state.jobName}</Col>
-                    </Row>
-                </Container>
+                <Row style={jobStyle}>
+                    <Col>{this.state.jobName}</Col>
+                </Row>
                 {this.props.children}
             </div>
         );

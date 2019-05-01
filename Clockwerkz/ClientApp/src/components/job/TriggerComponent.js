@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'reactstrap';
-import { Button } from 'reactstrap'
+import { Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export class TriggerComponent extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { trigger: props.trigger };
+        this.state = { triggers: props.triggers };        
     }
 
-    static getRowColor(triggerstate) {
+    getRowColor(triggerstate) {
+
         switch (triggerstate) {
             case "NORMAL":
                 return "table-primary";
@@ -27,38 +27,39 @@ export class TriggerComponent extends Component {
                 return "table-primary";
             case "NONE":
                 return "";
+            case "ACQUIRED":
+                return "table-secondary";
             default:
-                return ""
+                return "table-primary"
         }
     };
 
     render() {
 
-        const containerStyle = {
+        const triggerStyle = {
             width: '100%',
             verticalAlign: 'middle',
-            layout: 'auto',
-            border: '1px solid #454d55',
-            backgroundColor: '#6c757d',
-            color: 'white',
+            layout: 'auto',            
             fontWeight: '400',
             fontSize: '1rem'
         }
 
         return (
-            <Row>
-                <Col >{this.state.state}</Col>
-                <Col >{this.state.type}</Col>
-                <Col >{this.state.startTime}</Col>
-                <Col >{this.state.endTime}</Col>
-                <Col >{this.state.previousFireTime}</Col>
-                <Col >{this.state.nextFireTime}</Col>
-                <Col >
-                    <FontAwesomeIcon xs="1" icon={faTrash} />
-                </Col>
-                <Col />
-                <Col />
-            </Row>
+            <div>
+                {this.state.triggers.map(trigger =>
+                    <Row key={trigger.id} style={triggerStyle} className={this.getRowColor(trigger.state)}>
+                        <Col >{trigger.state}</Col>
+                        <Col >{trigger.type}</Col>
+                        <Col >{trigger.startTime}</Col>
+                        <Col >{trigger.endTime}</Col>
+                        <Col >{trigger.previousFireTime}</Col>
+                        <Col >{trigger.nextFireTime}</Col>
+                        <Col >
+                            <FontAwesomeIcon xs="1" icon={faTrash} />
+                        </Col>
+                    </Row>
+                )}
+            </div>
         );
     }
 }
