@@ -1,6 +1,5 @@
 ﻿using Clockwerkz.Application;
 using Quartz;
-using Quartz.Impl;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,6 +9,7 @@ namespace Clockwerkz.Infrastructure
     public class JobManager : IJobManager
     {
         private readonly IScheduler _scheduler;
+
         public JobManager(IScheduler scheduler)
         {
             _scheduler = scheduler;

@@ -13,22 +13,23 @@ export class TriggerComponent extends Component {
     getRowColor(triggerstate) {
 
         switch (triggerstate) {
-            case "NORMAL":
-                return "table-primary";
-            case "PAUSED":
+
+            case "WAITING":
                 return "table-secondary";
+            case "ACQUIRED":
+                return "table-info";
+            case "EXECUTING":
+                return "table-info";
             case "COMPLETE":
                 return "table-success";
-            case "ERROR":
-                return "table-danger";
+            case "PAUSED":
+                return "table-warning";
             case "BLOCKED":
                 return "table-warning";
-            case "WAITING":
-                return "table-primary";
-            case "NONE":
-                return "";
-            case "ACQUIRED":
-                return "table-secondary";
+            case "PAUSEDANDBLOCKED":
+                return "table-warning";
+            case "ERROR":
+                return "table-danger";
             default:
                 return "table-primary"
         }

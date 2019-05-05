@@ -1,0 +1,29 @@
+{
+  "Quartz": {
+    "Scheduler": {
+      "InstanceName": "ClockwerkzScheduler",
+      "InstanceId": "7B89E80C-9042-4896-8CEA-2C61CBE7E89F"
+    },
+    "Serializer": {
+      "Type": "json"
+    },
+    "JobStore": {
+      "Type": "Quartz.Impl.AdoJobStore.JobStoreTX, Quartz",
+      "UseProperties": "true",
+      "DataSource": "default",
+      "TablePrefix": "QRTZ_",
+      "MisfireThreshold": "60000",
+      "DriverDelegateType": "Quartz.Impl.AdoJobStore.SqlServerDelegate, Quartz",
+      "LockHandlerType": "Quartz.Impl.AdoJobStore.UpdateLockRowSemaphore, Quartz"
+    },
+    "DataSource": {
+      "DefaultProvider": "SqlServer",
+      "DefaultConnectionString": "@\"Server=(localdb)\\MSSQLLOCALDB;Database=QuartzDb;Integrated Security=true\""
+    },
+    "ThreadPool": {
+      "Type": "Quartz.Simpl.SimpleThreadPool, Quartz",
+      "ThreadCount": "10",
+      "ThreadPriority": "Normal"
+    }
+  }
+}
