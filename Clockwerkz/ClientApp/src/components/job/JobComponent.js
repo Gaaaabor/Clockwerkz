@@ -21,7 +21,7 @@ export class JobComponent extends Component {
             color: 'white',
             fontWeight: '400',
             fontSize: '1rem'
-        }
+        }        
 
         return (
             <div>

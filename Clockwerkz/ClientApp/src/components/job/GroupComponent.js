@@ -27,7 +27,7 @@ export class GroupComponent extends Component {
         return (
             <div>
                 <Row style={groupStyle}>
-                    <Col xs="auto">{this.state.groupName}</Col>
+                    <Col>{this.state.groupName}</Col>
                 </Row>
                 {this.props.children}
             </div>

@@ -31,16 +31,20 @@ export class JobPreviewComponent extends Component {
             fontSize: '1rem'
         }
 
+        const columnStyle = {
+            borderRight: '1px black solid'
+        }
+
         return (
             <div>
                 <Container>
                     <Row style={rootStyle}>
-                        <Col>State</Col>
-                        <Col>Type</Col>
-                        <Col>Start</Col>
-                        <Col>End</Col>
-                        <Col>1 fire</Col>
-                        <Col>2 fire</Col>
+                        <Col style={columnStyle}>State</Col>
+                        <Col style={columnStyle}>Type</Col>
+                        <Col style={columnStyle}>Start</Col>
+                        <Col style={columnStyle}>End</Col>
+                        <Col style={columnStyle}>1 fire</Col>
+                        <Col style={columnStyle}>2 fire</Col>
                         <Col>3 fire</Col>
                     </Row>
                     {this.state.jobPreviews.map(x =>
