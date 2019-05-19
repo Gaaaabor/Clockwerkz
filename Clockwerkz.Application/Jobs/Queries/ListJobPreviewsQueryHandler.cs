@@ -1,5 +1,5 @@
 ﻿using Clockwerkz.Application.Jobs.Models;
-using Clockwerkz.Persistence;
+using Clockwerkz.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -11,23 +11,23 @@ namespace Clockwerkz.Application.Jobs.Queries
 {
     public class ListJobPreviewsQueryHandler : IRequestHandler<ListJobPreviewsQuery, ICollection<JobPreviewDto>>
     {
-        private readonly ClockwerkzDbContext _context;
+        private readonly IClockwerkzDbContext _context;
 
-        public ListJobPreviewsQueryHandler(ClockwerkzDbContext context)
+        public ListJobPreviewsQueryHandler(IClockwerkzDbContext context)
         {
             _context = context;
         }
 
         public async Task<ICollection<JobPreviewDto>> Handle(ListJobPreviewsQuery request, CancellationToken cancellationToken)
         {
-            var tmp = await _context.QrtzJobDetails
+            var jobs = await _context.QrtzJobDetails
                 .Include(x => x.QrtzTriggers)
                 .OrderBy(x => x.JobName)
                 .GroupBy(x => x.JobGroup)
                 .Select(JobPreviewDto.Projection)
                 .ToListAsync();
 
-            return tmp;
+           return jobs;
         }
     }
 }

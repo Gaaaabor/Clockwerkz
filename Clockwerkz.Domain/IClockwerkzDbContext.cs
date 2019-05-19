@@ -1,7 +1,9 @@
 ﻿using Clockwerkz.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Clockwerkz.Application
+namespace Clockwerkz.Domain
 {
     public interface IClockwerkzDbContext
     {
@@ -16,5 +18,7 @@ namespace Clockwerkz.Application
         DbSet<QrtzSimpleTrigger> QrtzSimpleTriggers { get; set; }
         DbSet<QrtzSimpropTrigger> QrtzSimpropTriggers { get; set; }
         DbSet<QrtzTrigger> QrtzTriggers { get; set; }
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

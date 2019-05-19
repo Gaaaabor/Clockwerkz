@@ -1,8 +1,9 @@
+using Clockwerkz.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence
 {
-    public partial class ClockwerkzDbContext : DbContext
+    public partial class ClockwerkzDbContext : DbContext, IClockwerkzDbContext
     {
         public ClockwerkzDbContext(DbContextOptions<ClockwerkzDbContext> options)
             : base(options)

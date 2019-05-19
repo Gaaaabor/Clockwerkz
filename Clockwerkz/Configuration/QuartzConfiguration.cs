@@ -1,6 +1,4 @@
-﻿using Clockwerkz.Application;
-using Clockwerkz.Infrastructure;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz.Impl;
 using System.Collections.Specialized;
@@ -22,17 +20,20 @@ namespace Clockwerkz.Configuration
         private const string ThreadPoolThreadCount = StdSchedulerFactory.PropertyThreadPoolPrefix + ".threadCount";
         private const string ThreadPoolThreadPriority = StdSchedulerFactory.PropertyThreadPoolPrefix + ".threadPriority";
 
+        public const string DefaultSchedulerName = "ClockwerkzScheduler";
+
         public static void ConfigureQuartz(this IServiceCollection services, IConfiguration configuration)
         {
-            //DI registrations
-            services.AddTransient<IJobManager, JobManager>();
-
-            services.AddTransient(async x =>
+            services.AddSingleton(serviceProvider =>
             {
                 var config = configuration.GetQuartzConfig();
                 var factory = new StdSchedulerFactory(config);
-                return await factory.GetScheduler("ClockwerkzScheduler");
 
+                var scheduler = factory.GetScheduler()
+                .GetAwaiter()
+                .GetResult();                
+
+                return scheduler;
             });
         }
 

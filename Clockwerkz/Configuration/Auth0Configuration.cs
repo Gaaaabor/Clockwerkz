@@ -11,10 +11,12 @@ namespace Clockwerkz.Configuration
 {
     public static class Auth0Configuration
     {
-        private const string Audience = "Auth0:Audience";
-        private const string Domain = "Auth0:Domain";
-        private const string ClientId = "Auth0:ClientId";
-        private const string ClientSecret = "Auth0:ClientSecret";
+        private const string Audience = "auth0:audience";
+        private const string Domain = "auth0:domain";
+        private const string ClientId = "auth0:clientId";
+        private const string ClientSecret = "auth0:clientSecret";
+
+        public const string AuthenticationScheme = "Auth0";
 
         public static void ConfigureAuth0(this IServiceCollection services, IConfiguration configuration)
         {
@@ -33,7 +35,7 @@ namespace Clockwerkz.Configuration
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddCookie()
-            .AddOpenIdConnect("Auth0", options =>
+            .AddOpenIdConnect(AuthenticationScheme, options =>
             {
                 // Set the authority to your Auth0 domain
                 options.Authority = $"https://{configuration[Domain]}";
@@ -54,7 +56,7 @@ namespace Clockwerkz.Configuration
                 options.CallbackPath = new PathString("/callback");
 
                 // Configure the Claims Issuer to be Auth0
-                options.ClaimsIssuer = "Auth0";
+                options.ClaimsIssuer = AuthenticationScheme;
 
                 options.Events = new OpenIdConnectEvents
                 {

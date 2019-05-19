@@ -36,7 +36,7 @@ namespace Clockwerkz.Infrastructure
                 var trigger = TriggerBuilder
                     .Create()
                     .WithIdentity(id, id)
-                    .WithSimpleSchedule(x => x.WithIntervalInMinutes(1))
+                    .WithSimpleSchedule(x => x.WithIntervalInMinutes(1))                    
                     .StartAt(now.AddSeconds(i))
                     .Build();
 

@@ -17,8 +17,10 @@
       "LockHandlerType": "Quartz.Impl.AdoJobStore.UpdateLockRowSemaphore, Quartz"
     },
     "DataSource": {
-      "DefaultProvider": "SqlServer",
-      "DefaultConnectionString": "@\"Server=(localdb)\\MSSQLLOCALDB;Database=QuartzDb;Integrated Security=true\""
+      "Default": {
+        "Provider": "SqlServer",
+        "ConnectionString": "Server=(localdb)\\MSSQLLOCALDB;Database=QuartzDb;Integrated Security=true"
+      }      
     },
     "ThreadPool": {
       "Type": "Quartz.Simpl.SimpleThreadPool, Quartz",

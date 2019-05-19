@@ -7,8 +7,11 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
-    <StartupObject></StartupObject>
+    <StartupObject>Clockwerkz.Program</StartupObject>
     <UserSecretsId>5018dd30-b96f-453b-a0cb-bd58faffc603</UserSecretsId>
+    <ApplicationIcon>clockwerkz.ico</ApplicationIcon>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Clockwerkz.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

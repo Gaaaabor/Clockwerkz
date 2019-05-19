@@ -1,6 +1,8 @@
 using Autofac;
+using Clockwerkz.Application;
 using Clockwerkz.Common;
 using Clockwerkz.Configuration;
+using Clockwerkz.Domain;
 using Clockwerkz.Filters;
 using Clockwerkz.Infrastructure;
 using Clockwerkz.Persistence;
@@ -30,14 +32,12 @@ namespace Clockwerkz
                 .AddJsonFile($"{AppSettingsKey}.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
-            builder.AddUserSecrets<Startup>();
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
 
             _configuration = builder.Build();
-        }
-
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            builder.RegisterModule(new AutofacModule());
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -45,13 +45,11 @@ namespace Clockwerkz
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-
             // Add DbContext using SQL Server Provider
-            services.AddDbContext<ClockwerkzDbContext>(x => x.UseSqlServer(_configuration.GetConnectionString(AppsettingsConfig.QuartzDb)));
+            services.AddDbContext<IClockwerkzDbContext, ClockwerkzDbContext>(x => x.UseSqlServer(_configuration.GetConnectionString(AppsettingsConfig.QuartzDb)));
 
             // Mvc + Custom Exception Filter
             services.AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)));
-            services.ConfigureMediatR();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -60,7 +58,16 @@ namespace Clockwerkz
             });
 
             services.ConfigureQuartz(_configuration);
+            services.ConfigureMediatR();
             services.ConfigureAuth0(_configuration);
+
+            //DI registrations
+            services.AddTransient<IJobManager, JobManager>();
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new AutofacModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
