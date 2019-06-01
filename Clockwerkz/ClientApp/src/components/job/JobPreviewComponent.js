@@ -28,7 +28,8 @@ export class JobPreviewComponent extends Component {
             backgroundColor: '#6c757d',
             color: 'white',
             fontWeight: '400',
-            fontSize: '1rem'
+            fontSize: '1rem',
+            textAlign: 'center'
         }
 
         const columnStyle = {
@@ -43,9 +44,9 @@ export class JobPreviewComponent extends Component {
                         <Col style={columnStyle}>Type</Col>
                         <Col style={columnStyle}>Start</Col>
                         <Col style={columnStyle}>End</Col>
-                        <Col style={columnStyle}>1 fire</Col>
-                        <Col style={columnStyle}>2 fire</Col>
-                        <Col>3 fire</Col>
+                        <Col style={columnStyle}>Last fire</Col>
+                        <Col style={columnStyle}>Next fire</Col>
+                        <Col>Buttons</Col>
                     </Row>
                     {this.state.jobPreviews.map(x =>
                         <GroupComponent key={x.groupName} groupName={x.groupName}>

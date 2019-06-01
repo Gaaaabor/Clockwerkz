@@ -15,25 +15,36 @@ export class TriggerComponent extends Component {
         switch (triggerstate) {
 
             case "WAITING":
-                return "table-secondary";
+                return "btn-secondary";
             case "ACQUIRED":
-                return "table-info";
+                return "btn-info";
             case "EXECUTING":
-                return "table-info";
+                return "btn-info";
             case "COMPLETE":
-                return "table-success";
+                return "btn-success";
             case "PAUSED":
-                return "table-warning";
+                return "btn-warning";
             case "BLOCKED":
-                return "table-warning";
+                return "btn-warning";
             case "PAUSEDANDBLOCKED":
-                return "table-warning";
+                return "btn-warning";
             case "ERROR":
-                return "table-danger";
+                return "btn-danger";
             default:
-                return "table-primary"
+                return "btn-primary"
         }
     };
+
+    parseDateTimeOffset(value) {
+
+        if (!value) {
+            return null;
+        }
+
+        //The mindate is 1970-01-01
+        const minDate = 621355968000000000;
+        return new Date((value - minDate) / 10000).toLocaleString("hu-hu");
+    }
 
     render() {
 
@@ -42,7 +53,13 @@ export class TriggerComponent extends Component {
             verticalAlign: 'middle',
             layout: 'auto',
             fontWeight: '400',
-            fontSize: '1rem'
+            fontSize: '1rem',
+            textAlign: 'center'
+        }
+
+        const dateStyle = {
+            borderRight: '1px black solid',
+            fontSize: '0.8rem'            
         }
 
         const columnStyle = {
@@ -55,10 +72,10 @@ export class TriggerComponent extends Component {
                     <Row key={trigger.id} style={triggerStyle} className={this.getRowColor(trigger.state)}>
                         <Col style={columnStyle}>{trigger.state}</Col>
                         <Col style={columnStyle}>{trigger.type}</Col>
-                        <Col style={columnStyle}>{trigger.startTime}</Col>
-                        <Col style={columnStyle}>{trigger.endTime}</Col>
-                        <Col style={columnStyle}>{trigger.previousFireTime}</Col>
-                        <Col style={columnStyle}>{trigger.nextFireTime}</Col>
+                        <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.startTime)}</Col>
+                        <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.endTime)}</Col>
+                        <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.previousFireTime)}</Col>
+                        <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.nextFireTime)}</Col>
                         <Col >
                             <FontAwesomeIcon xs="1" icon={faTrash} />
                         </Col>

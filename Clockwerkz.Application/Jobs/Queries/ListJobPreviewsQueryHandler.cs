@@ -27,7 +27,7 @@ namespace Clockwerkz.Application.Jobs.Queries
                 .Select(JobPreviewDto.Projection)
                 .ToListAsync();
 
-           return jobs;
+            return jobs;
         }
     }
 }
