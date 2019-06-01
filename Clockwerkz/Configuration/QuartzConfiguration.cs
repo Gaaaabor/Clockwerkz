@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Clockwerkz.Common;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz.Impl;
 using System.Collections.Specialized;
@@ -31,7 +32,7 @@ namespace Clockwerkz.Configuration
 
                 var scheduler = factory.GetScheduler()
                 .GetAwaiter()
-                .GetResult();                
+                .GetResult();
 
                 return scheduler;
             });
@@ -39,6 +40,12 @@ namespace Clockwerkz.Configuration
 
         private static NameValueCollection GetQuartzConfig(this IConfiguration configuration)
         {
+            var connectionString = configuration[DataSourceConnectionString.ToConfigKey()];
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = configuration.GetConnectionString(AppsettingsConfig.QuartzDb);
+            }
+
             return new NameValueCollection
             {
                 // json serialization is the one supported under .NET Core (binary isn't)
@@ -54,7 +61,7 @@ namespace Clockwerkz.Configuration
                 [JobStoreLockHandlerType] = configuration[JobStoreLockHandlerType.ToConfigKey()],
 
                 [DataSourceDefaultProvider] = configuration[DataSourceDefaultProvider.ToConfigKey()],
-                [DataSourceConnectionString] = configuration[DataSourceConnectionString.ToConfigKey()],
+                [DataSourceConnectionString] = connectionString,
 
                 [StdSchedulerFactory.PropertySchedulerInstanceName] = configuration[StdSchedulerFactory.PropertySchedulerInstanceName.ToConfigKey()],
                 [StdSchedulerFactory.PropertySchedulerInstanceId] = configuration[StdSchedulerFactory.PropertySchedulerInstanceId.ToConfigKey()],

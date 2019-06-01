@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class QrtzPausedTriggerGrpMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.QrtzPausedTriggerGrp>
+    public partial class PausedTriggerGrpMap
+        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.PausedTriggerGrp>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.QrtzPausedTriggerGrp> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.PausedTriggerGrp> builder)
         {
             #region Generated Configure
             // table
-            builder.ToTable("QRTZ_PAUSED_TRIGGER_GRPS", "dbo");
+            builder.ToTable("PAUSED_TRIGGER_GRPS", "Quartz");
 
             // key
             builder.HasKey(t => new { t.SchedName, t.TriggerGroup });

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Clockwerkz.Domain.Entities
 {
-    public partial class QrtzLock
+    public partial class PausedTriggerGrp
     {
-        public QrtzLock()
+        public PausedTriggerGrp()
         {
             #region Generated Constructor
             #endregion
@@ -14,7 +14,7 @@ namespace Clockwerkz.Domain.Entities
         #region Generated Properties
         public string SchedName { get; set; }
 
-        public string LockName { get; set; }
+        public string TriggerGroup { get; set; }
 
         #endregion
 

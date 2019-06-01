@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class QrtzSimpleTriggerMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.QrtzSimpleTrigger>
+    public partial class SimpleTriggerMap
+        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.SimpleTrigger>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.QrtzSimpleTrigger> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.SimpleTrigger> builder)
         {
             #region Generated Configure
             // table
-            builder.ToTable("QRTZ_SIMPLE_TRIGGERS", "dbo");
+            builder.ToTable("SIMPLE_TRIGGERS", "Quartz");
 
             // key
             builder.HasKey(t => new { t.SchedName, t.TriggerName, t.TriggerGroup });
@@ -51,10 +51,10 @@ namespace Clockwerkz.Persistence.Mappings
                 .HasColumnType("int");
 
             // relationships
-            builder.HasOne(t => t.QrtzTrigger)
-                .WithMany(t => t.QrtzSimpleTriggers)
+            builder.HasOne(t => t.Trigger)
+                .WithMany(t => t.SimpleTriggers)
                 .HasForeignKey(d => new { d.SchedName, d.TriggerName, d.TriggerGroup})
-                .HasConstraintName("FK_QRTZ_SIMPLE_TRIGGERS_QRTZ_TRIGGERS");
+                .HasConstraintName("FK_SIMPLE_TRIGGERS_TRIGGERS");
 
             #endregion
         }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Clockwerkz.Domain.Entities
 {
-    public partial class QrtzSimpleTrigger
+    public partial class BlobTrigger
     {
-        public QrtzSimpleTrigger()
+        public BlobTrigger()
         {
             #region Generated Constructor
             #endregion
@@ -18,17 +18,11 @@ namespace Clockwerkz.Domain.Entities
 
         public string TriggerGroup { get; set; }
 
-        public int RepeatCount { get; set; }
-
-        public long RepeatInterval { get; set; }
-
-        public int TimesTriggered { get; set; }
+        public Byte[] BlobData { get; set; }
 
         #endregion
 
         #region Generated Relationships
-        public virtual QrtzTrigger QrtzTrigger { get; set; }
-
         #endregion
 
     }

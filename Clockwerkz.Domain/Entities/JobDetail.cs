@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Clockwerkz.Domain.Entities
 {
-    public partial class QrtzJobDetail
+    public partial class JobDetail
     {
-        public QrtzJobDetail()
+        public JobDetail()
         {
             #region Generated Constructor
-            QrtzTriggers = new HashSet<QrtzTrigger>();
+            Triggers = new HashSet<Trigger>();
             #endregion
         }
 
@@ -36,7 +36,7 @@ namespace Clockwerkz.Domain.Entities
         #endregion
 
         #region Generated Relationships
-        public virtual ICollection<QrtzTrigger> QrtzTriggers { get; set; }
+        public virtual ICollection<Trigger> Triggers { get; set; }
 
         #endregion
 

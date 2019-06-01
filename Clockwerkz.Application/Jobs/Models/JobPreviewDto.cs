@@ -11,7 +11,7 @@ namespace Clockwerkz.Application.Jobs.Models
         public string GroupName { get; set; }
         public IEnumerable<JobDto> Jobs { get; set; }
 
-        public static Expression<Func<IGrouping<string, QrtzJobDetail>, JobPreviewDto>> Projection
+        public static Expression<Func<IGrouping<string, JobDetail>, JobPreviewDto>> Projection
         {
             get
             {
@@ -32,7 +32,7 @@ namespace Clockwerkz.Application.Jobs.Models
         public string Name { get; set; }
         public IEnumerable<TriggerDto> Triggers { get; set; }
 
-        public static Expression<Func<QrtzJobDetail, JobDto>> Projection
+        public static Expression<Func<JobDetail, JobDto>> Projection
         {
             get
             {
@@ -40,7 +40,7 @@ namespace Clockwerkz.Application.Jobs.Models
                 {
                     Id = $"{jobDetail.JobGroup}_{jobDetail.JobName}",
                     Name = jobDetail.JobName,
-                    Triggers = jobDetail.QrtzTriggers
+                    Triggers = jobDetail.Triggers
                     .AsQueryable()
                     .Select(TriggerDto.Projection)
                 };
@@ -58,7 +58,7 @@ namespace Clockwerkz.Application.Jobs.Models
         public long? PreviousFireTime { get; set; }
         public long? NextFireTime { get; set; }
 
-        public static Expression<Func<QrtzTrigger, TriggerDto>> Projection
+        public static Expression<Func<Trigger, TriggerDto>> Projection
         {
             get
             {

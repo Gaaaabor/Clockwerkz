@@ -11,7 +11,7 @@
       "Type": "Quartz.Impl.AdoJobStore.JobStoreTX, Quartz",
       "UseProperties": "true",
       "DataSource": "default",
-      "TablePrefix": "QRTZ_",
+      "TablePrefix": "[Quartz].",
       "MisfireThreshold": "60000",
       "DriverDelegateType": "Quartz.Impl.AdoJobStore.SqlServerDelegate, Quartz",
       "LockHandlerType": "Quartz.Impl.AdoJobStore.UpdateLockRowSemaphore, Quartz"
@@ -19,7 +19,7 @@
     "DataSource": {
       "Default": {
         "Provider": "SqlServer",
-        "ConnectionString": "Server=(localdb)\\MSSQLLOCALDB;Database=QuartzDb;Integrated Security=true"
+        "ConnectionString": ""
       }      
     },
     "ThreadPool": {

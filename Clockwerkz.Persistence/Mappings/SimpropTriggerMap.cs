@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class QrtzSimpropTriggerMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.QrtzSimpropTrigger>
+    public partial class SimpropTriggerMap
+        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.SimpropTrigger>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.QrtzSimpropTrigger> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.SimpropTrigger> builder)
         {
             #region Generated Configure
             // table
-            builder.ToTable("QRTZ_SIMPROP_TRIGGERS", "dbo");
+            builder.ToTable("SIMPROP_TRIGGERS", "Quartz");
 
             // key
             builder.HasKey(t => new { t.SchedName, t.TriggerName, t.TriggerGroup });
@@ -88,10 +88,10 @@ namespace Clockwerkz.Persistence.Mappings
                 .HasMaxLength(80);
 
             // relationships
-            builder.HasOne(t => t.QrtzTrigger)
-                .WithMany(t => t.QrtzSimpropTriggers)
+            builder.HasOne(t => t.Trigger)
+                .WithMany(t => t.SimpropTriggers)
                 .HasForeignKey(d => new { d.SchedName, d.TriggerName, d.TriggerGroup})
-                .HasConstraintName("FK_QRTZ_SIMPROP_TRIGGERS_QRTZ_TRIGGERS");
+                .HasConstraintName("FK_SIMPROP_TRIGGERS_TRIGGERS");
 
             #endregion
         }

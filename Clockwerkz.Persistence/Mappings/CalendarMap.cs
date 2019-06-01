@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class QrtzCalendarMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.QrtzCalendar>
+    public partial class CalendarMap
+        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.Calendar>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.QrtzCalendar> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.Calendar> builder)
         {
             #region Generated Configure
             // table
-            builder.ToTable("QRTZ_CALENDARS", "dbo");
+            builder.ToTable("CALENDARS", "Quartz");
 
             // key
             builder.HasKey(t => new { t.SchedName, t.CalendarName });
@@ -29,7 +29,7 @@ namespace Clockwerkz.Persistence.Mappings
                 .HasColumnType("nvarchar(200)")
                 .HasMaxLength(200);
 
-            builder.Property(t => t.Calendar)
+            builder.Property(t => t.CalendarMember)
                 .IsRequired()
                 .HasColumnName("CALENDAR")
                 .HasColumnType("varbinary(max)");

@@ -20,8 +20,8 @@ namespace Clockwerkz.Application.Jobs.Queries
 
         public async Task<ICollection<JobPreviewDto>> Handle(ListJobPreviewsQuery request, CancellationToken cancellationToken)
         {
-            var jobs = await _context.QrtzJobDetails
-                .Include(x => x.QrtzTriggers)
+            var jobs = await _context.JobDetails
+                .Include(x => x.Triggers)
                 .OrderBy(x => x.JobName)
                 .GroupBy(x => x.JobGroup)
                 .Select(JobPreviewDto.Projection)

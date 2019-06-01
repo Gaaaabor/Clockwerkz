@@ -87,16 +87,16 @@ namespace Clockwerkz
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
             app.UseCookiePolicy();
-
             app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                    template: "{controller}/{action=Login}");
+
+                //routes.MapSpaFallbackRoute("/", null); //TODO
             });
 
             app.UseSpa(spa =>

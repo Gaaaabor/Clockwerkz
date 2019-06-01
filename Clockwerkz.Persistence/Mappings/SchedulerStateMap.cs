@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class QrtzSchedulerStateMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.QrtzSchedulerState>
+    public partial class SchedulerStateMap
+        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.SchedulerState>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.QrtzSchedulerState> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.SchedulerState> builder)
         {
             #region Generated Configure
             // table
-            builder.ToTable("QRTZ_SCHEDULER_STATE", "dbo");
+            builder.ToTable("SCHEDULER_STATE", "Quartz");
 
             // key
             builder.HasKey(t => new { t.SchedName, t.InstanceName });

@@ -18,8 +18,8 @@ database:
   provider: SqlServer  
 
   # schemas to include or empty to include all
-  #schemas:    
-  #  - dbo
+  schemas:    
+    - Quartz
 
   # table naming hint for how existing tables are named.  Default: Singular
   tableNaming: Plural

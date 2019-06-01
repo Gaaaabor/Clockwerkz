@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class QrtzBlobTriggerMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.QrtzBlobTrigger>
+    public partial class BlobTriggerMap
+        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.BlobTrigger>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.QrtzBlobTrigger> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.BlobTrigger> builder)
         {
             #region Generated Configure
             // table
-            builder.ToTable("QRTZ_BLOB_TRIGGERS", "dbo");
+            builder.ToTable("BLOB_TRIGGERS", "Quartz");
 
             // key
             builder.HasKey(t => new { t.SchedName, t.TriggerName, t.TriggerGroup });

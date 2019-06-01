@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Clockwerkz.Domain.Entities
 {
-    public partial class QrtzFiredTrigger
+    public partial class FiredTrigger
     {
-        public QrtzFiredTrigger()
+        public FiredTrigger()
         {
             #region Generated Constructor
             #endregion

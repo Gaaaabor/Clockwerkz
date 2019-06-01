@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class QrtzJobDetailMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.QrtzJobDetail>
+    public partial class JobDetailMap
+        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.JobDetail>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.QrtzJobDetail> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.JobDetail> builder)
         {
             #region Generated Configure
             // table
-            builder.ToTable("QRTZ_JOB_DETAILS", "dbo");
+            builder.ToTable("JOB_DETAILS", "Quartz");
 
             // key
             builder.HasKey(t => new { t.SchedName, t.JobName, t.JobGroup });

@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class QrtzCronTriggerMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.QrtzCronTrigger>
+    public partial class CronTriggerMap
+        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.CronTrigger>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.QrtzCronTrigger> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.CronTrigger> builder)
         {
             #region Generated Configure
             // table
-            builder.ToTable("QRTZ_CRON_TRIGGERS", "dbo");
+            builder.ToTable("CRON_TRIGGERS", "Quartz");
 
             // key
             builder.HasKey(t => new { t.SchedName, t.TriggerName, t.TriggerGroup });
@@ -47,10 +47,10 @@ namespace Clockwerkz.Persistence.Mappings
                 .HasMaxLength(80);
 
             // relationships
-            builder.HasOne(t => t.QrtzTrigger)
-                .WithMany(t => t.QrtzCronTriggers)
+            builder.HasOne(t => t.Trigger)
+                .WithMany(t => t.CronTriggers)
                 .HasForeignKey(d => new { d.SchedName, d.TriggerName, d.TriggerGroup})
-                .HasConstraintName("FK_QRTZ_CRON_TRIGGERS_QRTZ_TRIGGERS");
+                .HasConstraintName("FK_CRON_TRIGGERS_TRIGGERS");
 
             #endregion
         }

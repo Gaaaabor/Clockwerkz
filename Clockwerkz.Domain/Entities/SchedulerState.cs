@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Clockwerkz.Domain.Entities
 {
-    public partial class QrtzBlobTrigger
+    public partial class SchedulerState
     {
-        public QrtzBlobTrigger()
+        public SchedulerState()
         {
             #region Generated Constructor
             #endregion
@@ -14,11 +14,11 @@ namespace Clockwerkz.Domain.Entities
         #region Generated Properties
         public string SchedName { get; set; }
 
-        public string TriggerName { get; set; }
+        public string InstanceName { get; set; }
 
-        public string TriggerGroup { get; set; }
+        public long LastCheckinTime { get; set; }
 
-        public Byte[] BlobData { get; set; }
+        public long CheckinInterval { get; set; }
 
         #endregion
 

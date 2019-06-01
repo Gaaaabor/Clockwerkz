@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Clockwerkz.Domain.Entities
 {
-    public partial class QrtzSimpropTrigger
+    public partial class SimpropTrigger
     {
-        public QrtzSimpropTrigger()
+        public SimpropTrigger()
         {
             #region Generated Constructor
             #endregion
@@ -45,7 +45,7 @@ namespace Clockwerkz.Domain.Entities
         #endregion
 
         #region Generated Relationships
-        public virtual QrtzTrigger QrtzTrigger { get; set; }
+        public virtual Trigger Trigger { get; set; }
 
         #endregion
 

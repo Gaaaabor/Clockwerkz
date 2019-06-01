@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class QrtzTriggerMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.QrtzTrigger>
+    public partial class TriggerMap
+        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.Trigger>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.QrtzTrigger> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.Trigger> builder)
         {
             #region Generated Configure
             // table
-            builder.ToTable("QRTZ_TRIGGERS", "dbo");
+            builder.ToTable("TRIGGERS", "Quartz");
 
             // key
             builder.HasKey(t => new { t.SchedName, t.TriggerName, t.TriggerGroup });
@@ -99,10 +99,10 @@ namespace Clockwerkz.Persistence.Mappings
                 .HasColumnType("varbinary(max)");
 
             // relationships
-            builder.HasOne(t => t.QrtzJobDetail)
-                .WithMany(t => t.QrtzTriggers)
+            builder.HasOne(t => t.JobDetail)
+                .WithMany(t => t.Triggers)
                 .HasForeignKey(d => new { d.SchedName, d.JobName, d.JobGroup})
-                .HasConstraintName("FK_QRTZ_TRIGGERS_QRTZ_JOB_DETAILS");
+                .HasConstraintName("FK_TRIGGERS_JOB_DETAILS");
 
             #endregion
         }

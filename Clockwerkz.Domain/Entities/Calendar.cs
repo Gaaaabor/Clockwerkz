@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Clockwerkz.Domain.Entities
 {
-    public partial class QrtzCalendar
+    public partial class Calendar
     {
-        public QrtzCalendar()
+        public Calendar()
         {
             #region Generated Constructor
             #endregion
@@ -16,7 +16,7 @@ namespace Clockwerkz.Domain.Entities
 
         public string CalendarName { get; set; }
 
-        public Byte[] Calendar { get; set; }
+        public Byte[] CalendarMember { get; set; }
 
         #endregion
 

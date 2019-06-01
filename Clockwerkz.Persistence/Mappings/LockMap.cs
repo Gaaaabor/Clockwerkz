@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class QrtzLockMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.QrtzLock>
+    public partial class LockMap
+        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.Lock>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.QrtzLock> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.Lock> builder)
         {
             #region Generated Configure
             // table
-            builder.ToTable("QRTZ_LOCKS", "dbo");
+            builder.ToTable("LOCKS", "Quartz");
 
             // key
             builder.HasKey(t => new { t.SchedName, t.LockName });
