@@ -1,27 +1,26 @@
 import * as React from 'react';
 import { Row, Col } from 'reactstrap';
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { JobTriggerDto } from './jobPreview.component';
+import { IJobTriggerDto } from './jobPreview.component';
 
-//<FontAwesomeIcon size="1" icon={faTrash} />
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLightbulb, faPause, faPlay, faCog, faEdit, faTrash, faExclamation, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
-interface JobTriggerProps {
-    triggers: any[];
+interface IJobTriggerProps {
+    triggers: IJobTriggerDto[];
 }
 
-interface JobTriggerState {
-    triggers: JobTriggerDto[];
+interface IJobTriggerState {
+    triggers: IJobTriggerDto[];
 }
 
-export class JobTrigger extends React.Component<JobTriggerProps, JobTriggerState> {
+export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerState> {
 
-    constructor(props: JobTriggerProps) {
+    constructor(props: IJobTriggerProps) {
         super(props);
         this.state = { triggers: props.triggers };
     }
 
-    getRowColor(triggerstate: string) {
+    private getRowColor(triggerstate: string): string {
 
         switch (triggerstate) {
 
@@ -46,49 +45,97 @@ export class JobTrigger extends React.Component<JobTriggerProps, JobTriggerState
         }
     };
 
-    parseDateTimeOffset(value?: number) {
+    private getStateIcon(triggerState: string): JSX.Element {
+
+        var icon: IconDefinition = faLightbulb;
+
+        switch (triggerState) {
+
+            case "WAITING":
+                icon = faPause;
+                break;
+            case "ACQUIRED":
+
+                break;
+            case "EXECUTING":
+                icon = faPlay;
+                break;
+            case "COMPLETE":
+
+                break;
+            case "PAUSED":
+
+                break;
+            case "BLOCKED":
+
+                break;
+            case "PAUSEDANDBLOCKED":
+
+                break;
+            case "ERROR":
+
+                break;
+            default:
+                icon = faLightbulb;
+                break;
+        }
+
+        return <FontAwesomeIcon icon={icon} />
+    }
+
+    private parseDateTimeOffset(value?: number): string {
 
         if (!value) {
-            return null;
+            return "";
         }
 
         //The mindate is 1970-01-01
         const minDate: number = 621355968000000000;
-        return new Date((value - minDate) / 10000).toLocaleString("hu-hu");
+        return new Date((value - minDate) / 10000).toLocaleString("hu-hu");        
     }
 
-    render() {
+    public render(): JSX.Element {
 
         const triggerStyle: React.CSSProperties = {
-            width: '100%',
             verticalAlign: 'middle',
-            tableLayout: 'auto',
             fontWeight: 400,
             fontSize: '1rem',
             textAlign: 'center'
         }
 
-        const dateStyle: React.CSSProperties = {
+        const columnStyle: React.CSSProperties = {
             borderRight: '1px black solid',
-            fontSize: '0.8rem'
+            minHeight: '30px'
         }
 
-        const columnStyle: React.CSSProperties = {
-            borderRight: '1px black solid'
+        const stateColumnStyle: React.CSSProperties = {
+            borderRight: '1px black solid',
+            width: '30px'
+        }
+
+        const dateStyle: React.CSSProperties = {
+            borderRight: '1px black solid',
+            minHeight: '30px'
+        }
+
+        const iconStyle: React.CSSProperties = {
+            marginLeft: 10,
+            marginRight: 10
         }
 
         return (
             <div>
                 {this.state.triggers.map(trigger =>
                     <Row key={trigger.id} style={triggerStyle} className={this.getRowColor(trigger.state)}>
-                        <Col style={columnStyle}>{trigger.state}</Col>
+                        <Col style={stateColumnStyle}>{this.getStateIcon(trigger.state)}</Col>
                         <Col style={columnStyle}>{trigger.type}</Col>
                         <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.startTime)}</Col>
                         <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.endTime)}</Col>
                         <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.previousFireTime)}</Col>
                         <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.nextFireTime)}</Col>
                         <Col >
-                            Trashbin
+                            <FontAwesomeIcon icon={faEdit} style={iconStyle} />
+                            <FontAwesomeIcon icon={faTrash} style={iconStyle} />
                         </Col>
                     </Row>
                 )}

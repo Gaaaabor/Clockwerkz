@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { JobPreview } from '../job/jobPreview.component';
 
-export class Home extends React.Component<{}, {}> {
+export class Dashboard extends React.Component<{}, {}> {
 
     render() {
 

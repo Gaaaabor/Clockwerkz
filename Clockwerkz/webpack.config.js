@@ -61,7 +61,7 @@ module.exports = (env) => {
             : [
                 // Plugins that apply in production builds only
                 //new webpack.optimization.minimize.UglifyJsPlugin(),
-                //new ExtractTextPlugin('site.css')
+                //new ExtractTextPlugin('main.css')
             ])
     }];
 };

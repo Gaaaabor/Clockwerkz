@@ -1,4 +1,5 @@
 ﻿using Clockwerkz.Application;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace Clockwerkz.Infrastructure
 
                 //TODO: implement
                 var job = JobBuilder
-                    .Create<ExampleJob>()
+                    .Create<IIdleJob>()
                     .WithIdentity($"Job_{i}", groupName)
                     .StoreDurably(true)
                     .Build();
@@ -55,13 +56,23 @@ namespace Clockwerkz.Infrastructure
         {
             await _scheduler.Start();
         }
-
-        public class ExampleJob : IJob
+        public interface IIdleJob : IJob
         {
+        }
+
+        [DisallowConcurrentExecution]
+        public class IdleJob : IIdleJob
+        {
+            private readonly ILogger _logger;
+
+            public IdleJob(ILogger logger)
+            {
+                _logger = logger;
+            }
+
             public async Task Execute(IJobExecutionContext context)
             {
-                Console.WriteLine($"{context.JobDetail.Key} is done!");
-
+                _logger.LogInformation($"{nameof(IdleJob)} is successfully executed!");
                 await Task.CompletedTask;
             }
         }

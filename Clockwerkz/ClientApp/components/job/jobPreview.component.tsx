@@ -1,30 +1,30 @@
 import * as React from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Button, Input } from 'reactstrap';
 import { JobGroup } from './jobGroup.component';
 import { Job } from './job.component';
 import { JobTrigger } from './jobTrigger.component';
 import * as Axios from 'axios';
 
-interface JobPreviewProps {
+interface IJobPreviewProps {
 
 }
 
-interface JobPreviewState {
-    jobPreviews: JobPreviewDto[];
+interface IJobPreviewState {
+    jobPreviews: IJobPreviewDto[];
     loading: boolean;
 }
 
-interface JobPreviewDto {
+interface IJobPreviewDto {
     groupName: string;
-    jobs: JobDto[];
+    jobs: IJobDto[];
 }
 
-interface JobDto {
+interface IJobDto {
     name: string;
-    triggers: JobTriggerDto[];
+    triggers: IJobTriggerDto[];
 }
 
-export interface JobTriggerDto {
+export interface IJobTriggerDto {
     id: string;
     state: string;
     type: string;
@@ -34,14 +34,14 @@ export interface JobTriggerDto {
     nextFireTime?: number;
 }
 
-export class JobPreview extends React.Component<JobPreviewProps, JobPreviewState> {
+export class JobPreview extends React.Component<IJobPreviewProps, IJobPreviewState> {
 
-    constructor(props: JobPreviewProps) {
+    constructor(props: IJobPreviewProps) {
         super(props);
 
         this.state = { jobPreviews: [], loading: true };
 
-        Axios.default.get<JobPreviewDto[]>('api/Jobs/Preview')
+        Axios.default.get<IJobPreviewDto[]>('api/Jobs/Preview')
             .then(response => {
                 this.setState({ jobPreviews: response.data, loading: false })
             });
@@ -49,8 +49,18 @@ export class JobPreview extends React.Component<JobPreviewProps, JobPreviewState
 
     render() {
 
-        const rootStyle: React.CSSProperties = {
-            width: '100%',
+        const buttonStyle: React.CSSProperties = {
+            width: 100,
+            marginBottom: 10,
+            borderRadius: 0
+        }
+
+        const filterStyle: React.CSSProperties = {
+            marginBottom: 10,
+            borderRadius: 0
+        };
+
+        const rowStyle: React.CSSProperties = {
             verticalAlign: 'middle',
             tableLayout: 'auto',
             border: '1px solid #454d55',
@@ -58,17 +68,27 @@ export class JobPreview extends React.Component<JobPreviewProps, JobPreviewState
             color: 'white',
             fontWeight: 400,
             fontSize: '1rem',
-            textAlign: 'center'
+            textAlign: 'center'            
         }
 
         const columnStyle: React.CSSProperties = {
-            borderRight: '1px black solid'
+            borderRight: '1px black solid',
+            minHeight: '30px'
         }
 
         return (
             <div>
                 <Container>
-                    <Row style={rootStyle}>
+
+                    <Row>
+                        <Button style={buttonStyle} className="box-shadow ">New job</Button>
+                    </Row>
+
+                    <Row >
+                        <Input style={filterStyle} className="box-shadow bg-white" type="text" />
+                    </Row>
+
+                    <Row style={rowStyle}>
                         <Col style={columnStyle}>State</Col>
                         <Col style={columnStyle}>Type</Col>
                         <Col style={columnStyle}>Start</Col>

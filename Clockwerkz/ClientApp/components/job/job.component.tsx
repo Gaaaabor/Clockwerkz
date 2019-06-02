@@ -21,19 +21,25 @@ export class Job extends React.Component<JobProps, JobState> {
     render() {
 
         const jobStyle: React.CSSProperties = {
-            width: '100%',
             verticalAlign: 'middle',
-            //layout: 'auto',
             border: '1px solid #454d55',
             backgroundColor: '#343a40',
             color: 'white',
             fontWeight: 400,
-            fontSize: '1rem'
+            fontSize: '1rem',
+            minHeight: '30px'
+        }
+
+        const firstColumn: React.CSSProperties = {
+            maxWidth: 30,
+            backgroundColor: '#ffffff',
+            borderRight: '1px solid #454d55'
         }
 
         return (
             <div>
                 <Row style={jobStyle}>
+                    <Col style={firstColumn}>D</Col>
                     <Col>{this.state.jobName}</Col>
                 </Row>
                 {this.props.children}

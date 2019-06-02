@@ -21,15 +21,15 @@ export class JobGroup extends React.Component<JobGroupProps, JobGroupState> {
 
     render() {
 
-        const groupStyle: React.CSSProperties = {
-            width: '100%',
+        const groupStyle: React.CSSProperties = {            
             verticalAlign: 'middle',
             tableLayout: 'auto',
             border: '1px solid #454d55',
             backgroundColor: '#343a40',
             color: 'white',
             fontWeight: 400,
-            fontSize: '1rem'
+            fontSize: '1rem',
+            minHeight: '30px'
         }
 
         return (
