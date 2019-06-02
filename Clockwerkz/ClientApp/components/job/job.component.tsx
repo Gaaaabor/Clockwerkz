@@ -1,9 +1,17 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { Row, Col } from 'reactstrap';
 
-export class JobComponent extends Component {
+interface JobProps {
+    jobName: string;
+}
 
-    constructor(props) {
+interface JobState {
+    jobName: string;
+}
+
+export class Job extends React.Component<JobProps, JobState> {
+
+    constructor(props: JobProps) {
         super(props);
         this.state = {
             jobName: props.jobName
@@ -12,16 +20,16 @@ export class JobComponent extends Component {
 
     render() {
 
-        const jobStyle = {
+        const jobStyle: React.CSSProperties = {
             width: '100%',
             verticalAlign: 'middle',
-            layout: 'auto',
+            //layout: 'auto',
             border: '1px solid #454d55',
             backgroundColor: '#343a40',
             color: 'white',
-            fontWeight: '400',
+            fontWeight: 400,
             fontSize: '1rem'
-        }        
+        }
 
         return (
             <div>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Clockwerkz.Controllers
 {
-    [Authorize]
+    //[Authorize] //TODO: turn on again
     [ApiController]
     [Route("api/[controller]")]
     public class JobsController : BaseController

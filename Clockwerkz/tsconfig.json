@@ -1,0 +1,21 @@
+﻿{
+  "compilerOptions": {
+    "typeRoots": [ "node_modules/@types" ],
+    "baseUrl": ".",
+    "module": "es6",
+    "moduleResolution": "node",
+    "target": "es6",
+    "allowJs": true,
+    "jsx": "react",
+    "sourceMap": true,
+    "skipDefaultLibCheck": true,
+    "strict": true,
+    "types": [ "webpack-env" ],
+    "lib": [ "es5", "es6", "dom" ]
+  },
+  "files": [ "./ClientApp/boot.tsx" ],
+  "exclude": [
+    "bin",
+    "node_modules"
+  ]
+}

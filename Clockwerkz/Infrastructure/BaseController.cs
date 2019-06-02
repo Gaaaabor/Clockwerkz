@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Clockwerkz.Infrastructure
 {
-    [Authorize]
+    //[Authorize] //TODO: turn on again
     public abstract class BaseController : Controller
     {
         private IMediator _mediator;

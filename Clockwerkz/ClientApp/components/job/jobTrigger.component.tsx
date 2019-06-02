@@ -1,16 +1,27 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { Row, Col } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+//import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { JobTriggerDto } from './jobPreview.component';
 
-export class TriggerComponent extends Component {
+//<FontAwesomeIcon size="1" icon={faTrash} />
 
-    constructor(props) {
+interface JobTriggerProps {
+    triggers: any[];
+}
+
+interface JobTriggerState {
+    triggers: JobTriggerDto[];
+}
+
+export class JobTrigger extends React.Component<JobTriggerProps, JobTriggerState> {
+
+    constructor(props: JobTriggerProps) {
         super(props);
         this.state = { triggers: props.triggers };
     }
 
-    getRowColor(triggerstate) {
+    getRowColor(triggerstate: string) {
 
         switch (triggerstate) {
 
@@ -35,34 +46,34 @@ export class TriggerComponent extends Component {
         }
     };
 
-    parseDateTimeOffset(value) {
+    parseDateTimeOffset(value?: number) {
 
         if (!value) {
             return null;
         }
 
         //The mindate is 1970-01-01
-        const minDate = 621355968000000000;
+        const minDate: number = 621355968000000000;
         return new Date((value - minDate) / 10000).toLocaleString("hu-hu");
     }
 
     render() {
 
-        const triggerStyle = {
+        const triggerStyle: React.CSSProperties = {
             width: '100%',
             verticalAlign: 'middle',
-            layout: 'auto',
-            fontWeight: '400',
+            tableLayout: 'auto',
+            fontWeight: 400,
             fontSize: '1rem',
             textAlign: 'center'
         }
 
-        const dateStyle = {
+        const dateStyle: React.CSSProperties = {
             borderRight: '1px black solid',
-            fontSize: '0.8rem'            
+            fontSize: '0.8rem'
         }
 
-        const columnStyle = {
+        const columnStyle: React.CSSProperties = {
             borderRight: '1px black solid'
         }
 
@@ -77,7 +88,7 @@ export class TriggerComponent extends Component {
                         <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.previousFireTime)}</Col>
                         <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.nextFireTime)}</Col>
                         <Col >
-                            <FontAwesomeIcon xs="1" icon={faTrash} />
+                            Trashbin
                         </Col>
                     </Row>
                 )}

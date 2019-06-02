@@ -1,9 +1,17 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { Row, Col } from 'reactstrap';
 
-export class GroupComponent extends Component {
+interface JobGroupProps {
+    groupName: string
+}
 
-    constructor(props) {
+interface JobGroupState {
+    groupName: string
+}
+
+export class JobGroup extends React.Component<JobGroupProps, JobGroupState> {
+
+    constructor(props: JobGroupProps) {
         super(props);
         this.state = {
             groupName: props.groupName,
@@ -13,14 +21,14 @@ export class GroupComponent extends Component {
 
     render() {
 
-        const groupStyle = {
+        const groupStyle: React.CSSProperties = {
             width: '100%',
             verticalAlign: 'middle',
-            layout: 'auto',
+            tableLayout: 'auto',
             border: '1px solid #454d55',
             backgroundColor: '#343a40',
             color: 'white',
-            fontWeight: '400',
+            fontWeight: 400,
             fontSize: '1rem'
         }
 

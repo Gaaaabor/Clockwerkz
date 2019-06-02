@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>3.5.1</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
@@ -22,6 +22,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="Quartz.Serialization.Json" Version="3.0.7" />
   </ItemGroup>
@@ -34,6 +35,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\components\Home.tsx" />
+    <None Remove="ClientApp\components\job\job.component.tsx" />
+    <None Remove="ClientApp\components\job\jobGroup.component.tsx" />
+    <None Remove="ClientApp\components\job\jobPreview.component.tsx" />
+    <None Remove="ClientApp\components\job\jobTrigger.component.tsx" />
+    <None Remove="ClientApp\components\NavMenu.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Clockwerkz.Application\Clockwerkz.Application.csproj" />
     <ProjectReference Include="..\Clockwerkz.Common\Clockwerkz.Common.csproj" />
     <ProjectReference Include="..\Clockwerkz.Infrastructure\Clockwerkz.Infrastructure.csproj" />
@@ -43,6 +53,20 @@
     <Content Update="quartzsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Shared\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\components\home\home.component.tsx" />
+    <TypeScriptCompile Include="ClientApp\components\job\jobGroup.component.tsx" />
+    <TypeScriptCompile Include="ClientApp\components\job\job.component.tsx" />
+    <TypeScriptCompile Include="ClientApp\components\job\jobPreview.component.tsx" />
+    <TypeScriptCompile Include="ClientApp\components\job\jobTrigger.component.tsx" />
+    <TypeScriptCompile Include="ClientApp\components\navMenu\navMenu.tsx" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
