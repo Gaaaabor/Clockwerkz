@@ -30,16 +30,9 @@ export class Job extends React.Component<JobProps, JobState> {
             minHeight: '30px'
         }
 
-        const firstColumn: React.CSSProperties = {
-            maxWidth: 30,
-            backgroundColor: '#ffffff',
-            borderRight: '1px solid #454d55'
-        }
-
         return (
             <div>
-                <Row style={jobStyle}>
-                    <Col style={firstColumn}>D</Col>
+                <Row style={jobStyle}>                    
                     <Col>{this.state.jobName}</Col>
                 </Row>
                 {this.props.children}

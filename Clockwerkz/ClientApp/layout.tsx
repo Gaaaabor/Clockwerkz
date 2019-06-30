@@ -5,7 +5,7 @@ import { NavMenu } from './components/navMenu/navMenu';
 
 export const layout =
     <div>
-        <NavMenu />
+        <NavMenu />        
         <Container>
             <Routes />
         </Container>

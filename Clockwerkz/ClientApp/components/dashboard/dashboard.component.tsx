@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { JobPreview } from '../job/jobPreview.component';
+import { JobDashboard } from '../job/jobDashboard.component';
 
 export class Dashboard extends React.Component<{}, {}> {
 
@@ -8,7 +8,7 @@ export class Dashboard extends React.Component<{}, {}> {
         return (
             <div>
                 <h1>Hello, world!</h1>
-                <JobPreview />
+                <JobDashboard />
             </div>
         );
     }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Row, Col } from 'reactstrap';
-import { IJobTriggerDto } from './jobPreview.component';
+import { IJobTriggerDto } from './jobDashboard.component';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLightbulb, faPause, faPlay, faCog, faEdit, faTrash, faExclamation, IconDefinition } from '@fortawesome/free-solid-svg-icons';
@@ -83,6 +83,24 @@ export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerSta
         return <FontAwesomeIcon icon={icon} />
     }
 
+    private getTypeIcon(triggerType: string): JSX.Element {
+
+        var icon: IconDefinition = faLightbulb;
+
+        switch (triggerType) {
+
+            case "SIMPLE":
+                icon = faLightbulb;
+                break;
+
+            default:
+                icon = faLightbulb;
+                break;
+        }
+
+        return <FontAwesomeIcon icon={icon} />
+    }
+
     private parseDateTimeOffset(value?: number): string {
 
         if (!value) {
@@ -91,7 +109,7 @@ export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerSta
 
         //The mindate is 1970-01-01
         const minDate: number = 621355968000000000;
-        return new Date((value - minDate) / 10000).toLocaleString("hu-hu");        
+        return new Date((value - minDate) / 10000).toLocaleString("hu-hu");
     }
 
     public render(): JSX.Element {
@@ -101,19 +119,14 @@ export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerSta
             fontWeight: 400,
             fontSize: '1rem',
             textAlign: 'center'
-        }
+        }        
 
-        const columnStyle: React.CSSProperties = {
+        const iconColumnStyle: React.CSSProperties = {
             borderRight: '1px black solid',
-            minHeight: '30px'
+            maxWidth: '30px'
         }
 
-        const stateColumnStyle: React.CSSProperties = {
-            borderRight: '1px black solid',
-            width: '30px'
-        }
-
-        const dateStyle: React.CSSProperties = {
+        const dateColumnStyle: React.CSSProperties = {
             borderRight: '1px black solid',
             minHeight: '30px'
         }
@@ -127,14 +140,16 @@ export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerSta
             <div>
                 {this.state.triggers.map(trigger =>
                     <Row key={trigger.id} style={triggerStyle} className={this.getRowColor(trigger.state)}>
-                        <Col style={stateColumnStyle}>{this.getStateIcon(trigger.state)}</Col>
-                        <Col style={columnStyle}>{trigger.type}</Col>
-                        <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.startTime)}</Col>
-                        <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.endTime)}</Col>
-                        <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.previousFireTime)}</Col>
-                        <Col style={dateStyle}>{this.parseDateTimeOffset(trigger.nextFireTime)}</Col>
+                        <Col style={iconColumnStyle}>{this.getStateIcon(trigger.state)}</Col>
+                        <Col style={iconColumnStyle}>{this.getTypeIcon(trigger.type)}</Col>
+                        <Col style={dateColumnStyle}>{this.parseDateTimeOffset(trigger.startTime)}</Col>
+                        <Col style={dateColumnStyle}>{this.parseDateTimeOffset(trigger.endTime)}</Col>
+                        <Col style={dateColumnStyle}>{this.parseDateTimeOffset(trigger.previousFireTime)}</Col>
+                        <Col style={dateColumnStyle}>{this.parseDateTimeOffset(trigger.nextFireTime)}</Col>
                         <Col >
                             <FontAwesomeIcon icon={faEdit} style={iconStyle} />
+                        </Col>
+                        <Col >
                             <FontAwesomeIcon icon={faTrash} style={iconStyle} />
                         </Col>
                     </Row>
