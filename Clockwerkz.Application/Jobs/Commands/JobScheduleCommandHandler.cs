@@ -16,7 +16,7 @@ namespace Clockwerkz.Application.Jobs.Commands
         public async Task<Unit> Handle(JobScheduleCommand request, CancellationToken cancellationToken)
         {
             await _jobManager.ScheduleDeviceActivationJob(
-                request.Name,
+                request.JobName,
                 request.GroupName,
                 request.StartImmediately,
                 request.CronExpression,

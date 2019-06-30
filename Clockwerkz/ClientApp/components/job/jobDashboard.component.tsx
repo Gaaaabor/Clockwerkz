@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { Container, Row, Col, Button, Input, Label, Form, FormGroup, FormText, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Container, Row, Col, Button, Input, Label, Form, FormGroup, FormText, Modal, ModalHeader, ModalBody, ModalFooter, Spinner } from 'reactstrap';
 import { JobGroup } from './jobGroup.component';
 import { Job } from './job.component';
 import { JobTrigger } from './jobTrigger.component';
 import { JobModal, IJobModalModel } from './jobModal.component';
 import * as Axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrafficLight, faMicrochip, faCalendarPlus, faCalendarMinus, faCalendarCheck, faCalendarAlt, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 interface IJobDashboardProps {
 
@@ -12,9 +14,10 @@ interface IJobDashboardProps {
 
 interface IJobDashboardState {
     jobPreviews: IJobPreviewDto[];
-    loading: boolean;
+    isLoading: boolean;
     filter: string;
     creationMode: boolean;
+    reloadGrid: boolean;
 }
 
 interface IJobPreviewDto {
@@ -40,9 +43,10 @@ export interface IJobTriggerDto {
 const getInitialState = (props: IJobDashboardProps): IJobDashboardState => {
     return {
         jobPreviews: [],
-        loading: false,
+        isLoading: false,
         filter: '',
-        creationMode: false
+        creationMode: false,
+        reloadGrid: false
     }
 }
 
@@ -51,15 +55,19 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
 
     public componentDidMount() {
 
-        this.setState({ loading: true });
+        this.setState({ isLoading: true });
+        this.loadJobs();
+    }
 
+    private loadJobs() {
         Axios.default.get<IJobPreviewDto[]>('api/Jobs/Preview')
             .then(response => {
-                this.setState((prevState, props) => {
+                this.setState((prevState) => {
                     return {
+                        ...prevState,
                         jobPreviews: response.data,
-                        loading: false,
-                        filter: prevState.filter
+                        isLoading: false,
+                        reloadGrid: false
                     }
                 })
             });
@@ -69,10 +77,9 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
 
         const filter = e.currentTarget.value;
 
-        this.setState((prevState, props) => {
+        this.setState((prevState) => {
             return {
-                jobPreviews: prevState.jobPreviews,
-                loading: prevState.loading,
+                ...prevState,
                 filter: filter
             }
         });
@@ -114,27 +121,35 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
     }
 
     private newJob() {
-        this.setState((prevState, props) => {
+        this.setState((prevState) => {
             return {
+                ...prevState,
                 creationMode: !prevState.creationMode
             }
         });
     }
 
-    private create(model: IJobModalModel) {        
+    private create(model: IJobModalModel) {
 
+        this.setState((prevState) => { return { ...prevState, isLoading: true } });
 
+        Axios.default.post('api/Jobs/Schedule', model)
+            .then(response => {
+                this.setState((prevState) => { return { ...prevState, isLoading: false, reloadGrid: true } })
+            });
 
-        this.setState((prevState, props) => {
+        this.setState((prevState) => {
             return {
+                ...prevState,
                 creationMode: false
             }
         });
     }
 
     private cancel() {
-        this.setState((prevState, props) => {
+        this.setState((prevState) => {
             return {
+                ...prevState,
                 creationMode: false
             }
         });
@@ -169,12 +184,15 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
             minHeight: '30px'
         }
 
-        const stateColumnStyle: React.CSSProperties = {
-            borderRight: '1px black solid',
-            minHeight: '30px',
-            maxWidth: '30px'
+        const iconColumnStyle: React.CSSProperties = {
+            borderRight: '1px black solid'
         }
 
+        if (this.state.reloadGrid) {
+            this.loadJobs();
+        }
+
+        const spinner = this.state.isLoading ? (<Spinner color="primary" />) : null;
         const filteredJobs = this.getFilteredJobs();
         const creationModal = this.getCreationModal();
 
@@ -192,15 +210,41 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
                         <Input style={filterStyle} onChange={this.handleFilterChange.bind(this)} className="box-shadow bg-white" type="text" />
                     </Row>
 
+                    {spinner}
                     <Row style={rowStyle}>
-                        <Col style={stateColumnStyle}></Col>
-                        <Col style={columnStyle}>Type</Col>
-                        <Col style={columnStyle}>Start</Col>
-                        <Col style={columnStyle}>End</Col>
-                        <Col style={columnStyle}>Last fire</Col>
-                        <Col style={columnStyle}>Next fire</Col>
-                        <Col>Buttons</Col>
+                        <Col sm={1} style={iconColumnStyle}>
+                            <FontAwesomeIcon icon={faTrafficLight} />
+                            <br />
+                            Status
+                        </Col>
+                        <Col sm={1} style={iconColumnStyle}>
+                            <FontAwesomeIcon icon={faMicrochip} />
+                            <br />
+                            Type
+                        </Col>
+                        <Col style={columnStyle}>
+                            <FontAwesomeIcon icon={faCalendarPlus} />
+                            <br />
+                            Start
+                        </Col>
+                        <Col style={columnStyle}>
+                            <FontAwesomeIcon icon={faCalendarMinus} />
+                            <br />
+                            End
+                        </Col>
+                        <Col style={columnStyle}>
+                            <FontAwesomeIcon icon={faCalendarCheck} />
+                            <br />
+                            Last fire
+                        </Col>
+                        <Col style={columnStyle}>
+                            <FontAwesomeIcon icon={faCalendarAlt} />
+                            <br />
+                            Next fire
+                        </Col>
+                        <Col style={columnStyle}></Col>                        
                     </Row>
+
                     {filteredJobs.map(x =>
                         <JobGroup key={x.groupName} groupName={x.groupName}>
                             {x.jobs.map(job =>
@@ -210,6 +254,7 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
                             )}
                         </JobGroup>
                     )}
+
                 </Container>
 
             </div>

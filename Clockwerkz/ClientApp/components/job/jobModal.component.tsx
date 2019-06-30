@@ -2,9 +2,10 @@
 import { Col, Button, Input, Label, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export interface IJobModalModel {
-    groupName: string;
     jobName: string;
-    cron: string;
+    groupName: string;
+    cronExpression: string;
+    deviceSerial: string;
 }
 
 export interface IJobModalProps {
@@ -25,7 +26,8 @@ const getInitialState = (props: IJobModalProps): IJobModalState => {
         model: {
             jobName: '',
             groupName: '',
-            cron: ''
+            cronExpression: '',
+            deviceSerial: ''
         }
     }
 }
@@ -73,11 +75,17 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
                             </Col>
                         </FormGroup>
                         <FormGroup row>
-                            <Label for="cron" sm={3}>Cron</Label>
+                            <Label for="cronExpression" sm={3}>Cron</Label>
                             <Col sm={9}>
-                                <Input id="cron" placeholder="Cron expression" onChange={this.handleChange.bind(this)} />
+                                <Input id="cronExpression" placeholder="Cron expression" onChange={this.handleChange.bind(this)} />
                             </Col>
                         </FormGroup>
+                        <FormGroup row>
+                            <Label for="deviceSerial" sm={3}>Device serial</Label>
+                            <Col sm={9}>
+                                <Input id="deviceSerial" placeholder="Device serial" onChange={this.handleChange.bind(this)} />
+                            </Col>
+                        </FormGroup>                        
                     </Form>
 
                 </ModalBody>

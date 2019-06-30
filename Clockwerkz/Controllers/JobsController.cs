@@ -2,7 +2,6 @@ using Clockwerkz.Application.Jobs.Commands;
 using Clockwerkz.Application.Jobs.Queries;
 using Clockwerkz.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace Clockwerkz.Controllers
@@ -18,7 +17,7 @@ namespace Clockwerkz.Controllers
             return Json(jobPreviews);
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Schedule(JobScheduleCommand jobScheduleCommand)
         {
             var result = await Mediator.Send(jobScheduleCommand);

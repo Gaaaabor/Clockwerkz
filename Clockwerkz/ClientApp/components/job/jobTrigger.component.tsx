@@ -119,11 +119,10 @@ export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerSta
             fontWeight: 400,
             fontSize: '1rem',
             textAlign: 'center'
-        }        
+        }
 
         const iconColumnStyle: React.CSSProperties = {
-            borderRight: '1px black solid',
-            maxWidth: '30px'
+            borderRight: '1px black solid'
         }
 
         const dateColumnStyle: React.CSSProperties = {
@@ -140,16 +139,14 @@ export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerSta
             <div>
                 {this.state.triggers.map(trigger =>
                     <Row key={trigger.id} style={triggerStyle} className={this.getRowColor(trigger.state)}>
-                        <Col style={iconColumnStyle}>{this.getStateIcon(trigger.state)}</Col>
-                        <Col style={iconColumnStyle}>{this.getTypeIcon(trigger.type)}</Col>
+                        <Col sm={1} style={iconColumnStyle}>{this.getStateIcon(trigger.state)}</Col>
+                        <Col sm={1} style={iconColumnStyle}>{this.getTypeIcon(trigger.type)}</Col>
                         <Col style={dateColumnStyle}>{this.parseDateTimeOffset(trigger.startTime)}</Col>
                         <Col style={dateColumnStyle}>{this.parseDateTimeOffset(trigger.endTime)}</Col>
                         <Col style={dateColumnStyle}>{this.parseDateTimeOffset(trigger.previousFireTime)}</Col>
                         <Col style={dateColumnStyle}>{this.parseDateTimeOffset(trigger.nextFireTime)}</Col>
-                        <Col >
-                            <FontAwesomeIcon icon={faEdit} style={iconStyle} />
-                        </Col>
-                        <Col >
+                        <Col style={iconColumnStyle}>
+                            <FontAwesomeIcon icon={faEdit} style={iconStyle} />                        
                             <FontAwesomeIcon icon={faTrash} style={iconStyle} />
                         </Col>
                     </Row>
