@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const bundleOutputDir = './wwwroot/dist';
 
 module.exports = (env) => {
@@ -23,20 +24,19 @@ module.exports = (env) => {
 
         module: {
             rules: [
-                //{ test: /\.css$/, use: ['style-loader', 'css-loader'], include: path.join(__dirname, 'ClientApp') },
                 {
                     test: /\.css$/,
-                    include: path.join(__dirname, 'ClientApp/'),
                     use: [
-                        'style-loader',
                         {
-                            loader: 'typings-for-css-modules-loader',
+                            loader: MiniCssExtractPlugin.loader,
                             options: {
-                                modules: true,
-                                namedExport: true,
-                                camelCase: true
+                                // only enable hot in development
+                                hmr: process.env.NODE_ENV === 'development',
+                                // if hmr does not work, this is a forceful method.
+                                reloadAll: true
                             }
-                        }
+                        },
+                        'css-loader'
                     ]
                 },
                 { test: /\.tsx?$/, loader: 'ts-loader' },
@@ -44,6 +44,10 @@ module.exports = (env) => {
             ]
         },
         plugins: [
+            new MiniCssExtractPlugin({
+                filename: '[name].css',
+                chunkFilename: '[id].css'
+            }),
             new CheckerPlugin(),
             new webpack.ProvidePlugin({ Popper: ['popper.js', 'default'] })
         ].concat(isDevBuild
@@ -57,7 +61,7 @@ module.exports = (env) => {
             : [
                 // Plugins that apply in production builds only
                 //new webpack.optimization.minimize.UglifyJsPlugin(),
-                //new ExtractTextPlugin('site.css')
+                //new ExtractTextPlugin('main.css')
             ])
     }];
 };

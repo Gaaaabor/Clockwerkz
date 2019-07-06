@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const bundleOutputDir = './wwwroot/dist';
 
 module.exports = (env) => {
-    const isDevBuild = true|| !(env && env.prod);
+    const isDevBuild = !(env && env.prod);
     return [{
         mode: isDevBuild ? 'development' : 'production',
         stats: 'errors-only',
@@ -60,8 +60,8 @@ module.exports = (env) => {
             ]
             : [
                 // Plugins that apply in production builds only
-                new webpack.optimization.minimize.UglifyJsPlugin(),
-                new ExtractTextPlugin('main.css')
+                //new webpack.optimization.minimize.UglifyJsPlugin(),
+                //new ExtractTextPlugin('main.css')
             ])
     }];
 };
