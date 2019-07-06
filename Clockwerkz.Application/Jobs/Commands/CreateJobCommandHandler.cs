@@ -14,8 +14,10 @@ namespace Clockwerkz.Application.Jobs.Commands
         }
 
         public async Task<Unit> Handle(CreateJobCommand request, CancellationToken cancellationToken)
-        {            
-            await _jobManager.CreateJobAsync();            
+        {
+            //await _jobManager.CreateJobAsync();            
+
+            await Task.CompletedTask;
 
             return Unit.Value;
         }

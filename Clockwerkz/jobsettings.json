@@ -1,0 +1,15 @@
+{
+  "JobSettings": {
+    "JobTypes": [
+      {
+        "Type": "Machinewerkz.JobInterfaces.IDeviceActivationJob, Machinewerkz.JobInterfaces",
+        "Name": "DeviceActivation"
+      },
+      {
+        "Type": "Machinewerkz.JobInterfaces.IDeviceActivationJob_2, Machinewerkz.JobInterfaces",
+        "Name": "DeviceActivation_2"
+      }
+    ],
+    "DefaultJobDataMapKeys": [ "JobType", "DeviceSerial" ]
+  }
+}

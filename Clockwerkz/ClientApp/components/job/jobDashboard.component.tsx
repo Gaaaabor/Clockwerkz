@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Row, Col, Button, Input, Label, Form, FormGroup, FormText, Modal, ModalHeader, ModalBody, ModalFooter, Spinner } from 'reactstrap';
+import { Container, Row, Col, Button, Input, Spinner } from 'reactstrap';
 import { JobGroup } from './jobGroup.component';
 import { Job } from './job.component';
 import { JobTrigger } from './jobTrigger.component';
@@ -13,20 +13,16 @@ interface IJobDashboardProps {
 }
 
 interface IJobDashboardState {
-    jobPreviews: IJobPreviewDto[];
+    jobs: IJobDto[];
     isLoading: boolean;
     filter: string;
     creationMode: boolean;
     reloadGrid: boolean;
 }
 
-interface IJobPreviewDto {
-    groupName: string;
-    jobs: IJobDto[];
-}
-
 interface IJobDto {
     name: string;
+    jobGroup: string;
     triggers: IJobTriggerDto[];
 }
 
@@ -40,9 +36,13 @@ export interface IJobTriggerDto {
     nextFireTime?: number;
 }
 
+export interface IJobDataMap {
+    [Key: string]: string
+}
+
 const getInitialState = (props: IJobDashboardProps): IJobDashboardState => {
     return {
-        jobPreviews: [],
+        jobs: [],
         isLoading: false,
         filter: '',
         creationMode: false,
@@ -60,12 +60,12 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
     }
 
     private loadJobs() {
-        Axios.default.get<IJobPreviewDto[]>('api/Jobs/Preview')
+        Axios.default.get<IJobDto[]>('api/Jobs')
             .then(response => {
                 this.setState((prevState) => {
                     return {
                         ...prevState,
-                        jobPreviews: response.data,
+                        jobs: response.data,
                         isLoading: false,
                         reloadGrid: false
                     }
@@ -85,29 +85,16 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
         });
     }
 
-    private getFilteredJobs(): IJobPreviewDto[] {
+    private getFilteredJobs(): IJobDto[] {
 
-        const jobPreviews = this.state.jobPreviews;
+        const jobs = this.state.jobs;
 
         if (this.state.filter === '') {
-            return jobPreviews;
+            return jobs;
         }
 
         const filter = this.state.filter.toLowerCase();
-        let filtered: IJobPreviewDto[] = [];
-
-        jobPreviews.forEach(x => {
-
-            let jobs = x.jobs.filter(j => j.name.toLowerCase().includes(filter));
-            if (0 < jobs.length) {
-
-                filtered.push({
-                    groupName: x.groupName,
-                    jobs: jobs
-                });
-            }
-        });
-
+        let filtered = jobs.filter(x => x.name.toLowerCase().includes(filter));
         return filtered;
     }
 
@@ -133,7 +120,7 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
 
         this.setState((prevState) => { return { ...prevState, isLoading: true } });
 
-        Axios.default.post('api/Jobs/Schedule', model)
+        Axios.default.post('api/Jobs', model)
             .then(response => {
                 this.setState((prevState) => { return { ...prevState, isLoading: false, reloadGrid: true } })
             });
@@ -242,16 +229,14 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
                             <br />
                             Next fire
                         </Col>
-                        <Col style={columnStyle}></Col>                        
+                        <Col style={columnStyle}></Col>
                     </Row>
 
-                    {filteredJobs.map(x =>
-                        <JobGroup key={x.groupName} groupName={x.groupName}>
-                            {x.jobs.map(job =>
-                                <Job key={job.name} jobName={job.name}>
-                                    <JobTrigger triggers={job.triggers} />
-                                </Job>
-                            )}
+                    {filteredJobs.map(job =>
+                        <JobGroup key={job.jobGroup} groupName={job.jobGroup}>
+                            <Job key={job.name} jobName={job.name}>
+                                <JobTrigger triggers={job.triggers} />
+                            </Job>
                         </JobGroup>
                     )}
 

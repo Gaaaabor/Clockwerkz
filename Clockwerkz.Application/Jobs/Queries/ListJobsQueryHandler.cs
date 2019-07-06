@@ -9,22 +9,22 @@ using System.Threading.Tasks;
 
 namespace Clockwerkz.Application.Jobs.Queries
 {
-    public class ListJobPreviewsQueryHandler : IRequestHandler<ListJobPreviewsQuery, ICollection<JobPreviewDto>>
+    public class ListJobDetailsQueryHandler : IRequestHandler<ListJobDetailsQuery, ICollection<JobDetailsDto>>
     {
         private readonly IClockwerkzDbContext _context;
 
-        public ListJobPreviewsQueryHandler(IClockwerkzDbContext context)
+        public ListJobDetailsQueryHandler(IClockwerkzDbContext context)
         {
             _context = context;
         }
 
-        public async Task<ICollection<JobPreviewDto>> Handle(ListJobPreviewsQuery request, CancellationToken cancellationToken)
+        public async Task<ICollection<JobDetailsDto>> Handle(ListJobDetailsQuery request, CancellationToken cancellationToken)
         {
             var jobs = await _context.JobDetails
                 .Include(x => x.Triggers)
-                .OrderBy(x => x.JobName)
-                .GroupBy(x => x.JobGroup)
-                .Select(JobPreviewDto.Projection)
+                .OrderBy(x => x.JobGroup)
+                .ThenBy(x => x.JobName)
+                .Select(JobDetailsDto.Projection)
                 .ToListAsync();
 
             return jobs;

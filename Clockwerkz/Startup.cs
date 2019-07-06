@@ -1,5 +1,4 @@
 using Autofac;
-using Clockwerkz.Application;
 using Clockwerkz.Common;
 using Clockwerkz.Configuration;
 using Clockwerkz.Domain;
@@ -21,6 +20,7 @@ namespace Clockwerkz
     {
         private const string AppSettingsKey = "appsettings";
         private const string QuartzSettingsKey = "quartzsettings";
+        private const string JobSettingsKey = "jobsettings";
 
         private IConfiguration _configuration { get; }
 
@@ -30,6 +30,7 @@ namespace Clockwerkz
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile($"{AppSettingsKey}.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"{QuartzSettingsKey}.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"{JobSettingsKey}.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"{AppSettingsKey}.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
@@ -65,9 +66,7 @@ namespace Clockwerkz
             services.ConfigureQuartz(_configuration);
             services.ConfigureMediatR();
             services.ConfigureAuth0(_configuration);
-
-            //DI registrations
-            services.AddTransient<IJobManager, JobManager>();
+            services.ConfigureDependencyInjection(_configuration);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

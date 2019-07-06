@@ -10,24 +10,17 @@ namespace Clockwerkz.Controllers
     [Route("api/[controller]")]
     public class JobsController : BaseController
     {
-        [HttpGet("[action]")]
-        public async Task<IActionResult> Preview()
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {            
-            var jobPreviews = await Mediator.Send(new ListJobPreviewsQuery());
-            return Json(jobPreviews);
+            var jobDetails = await Mediator.Send(new ListJobDetailsQuery());
+            return Json(jobDetails);
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Schedule(JobScheduleCommand jobScheduleCommand)
+        [HttpPost]
+        public async Task<IActionResult> Post(JobScheduleCommand jobScheduleCommand)
         {
             var result = await Mediator.Send(jobScheduleCommand);
-            return Ok(result);
-        }
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> CreateJobs()
-        {
-            var result = await Mediator.Send(new CreateJobCommand());
             return Ok(result);
         }
     }

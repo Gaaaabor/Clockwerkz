@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System.Collections.Generic;
 
 namespace Clockwerkz.Application.Jobs.Commands
 {
@@ -8,6 +9,6 @@ namespace Clockwerkz.Application.Jobs.Commands
         public string GroupName { get; set; }
         public bool StartImmediately { get; set; }
         public string CronExpression { get; set; }
-        public string DeviceSerial { get; set; }
+        public Dictionary<string, object> JobDataMap { get; set; }
     }
 }

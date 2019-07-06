@@ -15,12 +15,12 @@ namespace Clockwerkz.Application.Jobs.Commands
 
         public async Task<Unit> Handle(JobScheduleCommand request, CancellationToken cancellationToken)
         {
-            await _jobManager.ScheduleDeviceActivationJob(
+            await _jobManager.ScheduleCustomJob(
                 request.JobName,
                 request.GroupName,
                 request.StartImmediately,
                 request.CronExpression,
-                request.DeviceSerial);
+                request.JobDataMap);
 
             return Unit.Value;
         }

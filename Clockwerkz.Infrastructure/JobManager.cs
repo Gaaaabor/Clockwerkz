@@ -1,5 +1,4 @@
 ﻿using Clockwerkz.Application;
-using Microsoft.Extensions.Logging;
 using Quartz;
 using System;
 using System.Collections.Generic;
@@ -16,35 +15,28 @@ namespace Clockwerkz.Infrastructure
             _scheduler = scheduler;
         }
 
-        public async Task CreateJobAsync()
+        public async Task ScheduleCustomJob(string name, string groupName, bool startImmediately, string cronExpression, IDictionary<string, object> jobDataMap)
         {
-            var jobs = new Dictionary<IJobDetail, IReadOnlyCollection<ITrigger>>();
+            var job = JobBuilder
+                .Create<IJob>()
+                .WithIdentity(name, groupName)
+                .UsingJobData(new JobDataMap(jobDataMap))
+                .StoreDurably(true)
+                .Build();
 
-            var now = DateTime.Now;
+            var id = Guid.NewGuid().ToString();
 
-            for (int i = 1; i <= 100; i++)
+            var trigger = TriggerBuilder
+                .Create()
+                .WithIdentity(id, groupName)
+                .WithCronSchedule(cronExpression, x => x.InTimeZone(TimeZoneInfo.Utc));
+
+            if (startImmediately)
             {
-                var groupName = $"Group_{i % 4}";
+                trigger = trigger.StartNow();
+            }
 
-                //TODO: implement
-                var job = JobBuilder
-                    .Create<IIdleJob>()
-                    .WithIdentity($"Job_{i}", groupName)
-                    .StoreDurably(true)
-                    .Build();
-
-                var id = Guid.NewGuid().ToString();
-                var trigger = TriggerBuilder
-                    .Create()
-                    .WithIdentity(id, id)
-                    .WithSimpleSchedule(x => x.WithIntervalInMinutes(1))                    
-                    .StartAt(now.AddSeconds(i))
-                    .Build();
-
-                jobs.Add(job, new[] { trigger });
-            }            
-
-            await _scheduler.ScheduleJobs(jobs, false);
+            await _scheduler.ScheduleJob(job, trigger.Build());
         }
 
         public async Task RemoveJob(string name, string groupName)
@@ -55,26 +47,6 @@ namespace Clockwerkz.Infrastructure
         public async Task Start()
         {
             await _scheduler.Start();
-        }
-        public interface IIdleJob : IJob
-        {
-        }
-
-        [DisallowConcurrentExecution]
-        public class IdleJob : IIdleJob
-        {
-            private readonly ILogger _logger;
-
-            public IdleJob(ILogger logger)
-            {
-                _logger = logger;
-            }
-
-            public async Task Execute(IJobExecutionContext context)
-            {
-                _logger.LogInformation($"{nameof(IdleJob)} is successfully executed!");
-                await Task.CompletedTask;
-            }
         }
     }
 }
