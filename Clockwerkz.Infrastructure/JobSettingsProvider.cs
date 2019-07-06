@@ -19,10 +19,16 @@ namespace Clockwerkz.Infrastructure
             _jobSettings = jobSettings;
         }
 
-        public async Task<ICollection<JobType>> GetJobTypesAsync()
+        public async Task<ICollection<JobType>> ListJobTypesAsync()
         {
             await Task.CompletedTask;
             return _jobSettings.JobTypes;
+        }
+
+        public async Task<ICollection<string>> ListDefaultJobDataMapKeys()
+        {
+            await Task.CompletedTask;
+            return _jobSettings.DefaultJobDataMapKeys;
         }
     }
 }

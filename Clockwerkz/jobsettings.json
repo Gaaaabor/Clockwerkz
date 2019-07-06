@@ -10,6 +10,6 @@
         "Name": "DeviceActivation_2"
       }
     ],
-    "DefaultJobDataMapKeys": [ "JobType", "DeviceSerial" ]
+    "DefaultJobDataMapKeys": [ "DeviceSerial" ]
   }
 }

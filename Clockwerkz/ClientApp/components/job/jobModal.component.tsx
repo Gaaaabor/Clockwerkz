@@ -19,8 +19,9 @@ export interface IJobModalState {
     cancelAction: React.MouseEventHandler<any>;
     createAction: (model: IJobModalModel) => void;
     jobTypes: IJobTypeDto[];
-    model: IJobModalModel;
+    defaultJobDataMapKeys: string[];
     isDropdownOpen: boolean;
+    model: IJobModalModel;
 }
 
 export interface IJobTypeDto {
@@ -33,7 +34,9 @@ const getInitialState = (props: IJobModalProps): IJobModalState => {
         cancelAction: props.cancelAction,
         createAction: props.createAction,
         jobTypes: [],
+        defaultJobDataMapKeys: [],
         isDropdownOpen: false,
+
         model: {
             jobName: '',
             groupName: '',
@@ -48,15 +51,28 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
 
     public componentDidMount() {
         this.loadJobTypes();
+        this.loadJobDataMapProperties();
     }
 
     private loadJobTypes() {
-        Axios.default.get<IJobTypeDto[]>('api/JobTypes')
+        Axios.default.get<IJobTypeDto[]>('api/JobMetadata/JobTypes')
             .then(response => {
                 this.setState((prevState) => {
                     return {
                         ...prevState,
                         jobTypes: response.data
+                    }
+                })
+            });
+    }
+
+    private loadJobDataMapProperties() {
+        Axios.default.get<string[]>('api/JobMetadata/DefaultJobDataMapKeys')
+            .then(response => {
+                this.setState((prevState) => {
+                    return {
+                        ...prevState,
+                        defaultJobDataMapKeys: response.data
                     }
                 })
             });
@@ -149,6 +165,7 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
         const jobTypes = this.state.jobTypes;
         const isDropdownOpen = this.state.isDropdownOpen;
         const selectedJobTypeName = this.getJobTypeName(jobTypes, this.state.model.jobDataMap["jobType"]);
+        const defaultJobDataMapKeys = this.state.defaultJobDataMapKeys;
 
         return (
             <Modal isOpen={true}>
@@ -189,12 +206,15 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
                                 <Input id="cronExpression" placeholder="Cron expression" onChange={this.handleChange.bind(this)} />
                             </Col>
                         </FormGroup>
-                        <FormGroup row>
-                            <Label for="deviceSerial" sm={3}>Device serial</Label>
-                            <Col sm={9}>
-                                <Input id="deviceSerial" placeholder="Device serial" onChange={this.handleJobDataMapChange.bind(this)} />
-                            </Col>
-                        </FormGroup>
+                        {defaultJobDataMapKeys.map(x =>
+                            <FormGroup row>
+                                <Label for={x} sm={3}>{x}</Label>
+                                <Col sm={9}>
+                                    <Input id={x} placeholder={x} onChange={this.handleJobDataMapChange.bind(this)} />
+                                </Col>
+                            </FormGroup>
+                            )}
+                        
                     </Form>
 
                 </ModalBody>

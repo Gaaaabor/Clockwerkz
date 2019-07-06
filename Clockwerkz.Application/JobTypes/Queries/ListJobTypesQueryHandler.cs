@@ -17,7 +17,7 @@ namespace Clockwerkz.Application.JobTypes.Queries
 
         public async Task<ICollection<JobType>> Handle(ListJobTypesQuery request, CancellationToken cancellationToken)
         {
-            return await _jobSettingsProvider.GetJobTypesAsync();
+            return await _jobSettingsProvider.ListJobTypesAsync();
         }
     }
 }
