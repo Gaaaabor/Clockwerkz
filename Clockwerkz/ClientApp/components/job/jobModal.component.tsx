@@ -20,7 +20,7 @@ export interface IJobModalState {
     cancelAction: React.MouseEventHandler<any>;
     createAction: (model: IJobModalModel) => void;
     jobTypes: IJobTypeDto[];
-    defaultJobDataMapKeys: IJobDataMapKey[];
+    jobDataMapKeys: IJobDataMapKey[];
     isDropdownOpen: boolean;
     model: IJobModalModel;
 }
@@ -35,7 +35,7 @@ const getInitialState = (props: IJobModalProps): IJobModalState => {
         cancelAction: props.cancelAction,
         createAction: props.createAction,
         jobTypes: [],
-        defaultJobDataMapKeys: [],
+        jobDataMapKeys: [],
         isDropdownOpen: false,
 
         model: {
@@ -68,12 +68,12 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
     }
 
     private loadJobDataMapProperties() {
-        Axios.default.get<IJobDataMapKey[]>('api/JobMetadata/DefaultJobDataMapKeys')
+        Axios.default.get<IJobDataMapKey[]>('api/JobMetadata/JobDataMapKeys')
             .then(response => {
                 this.setState((prevState) => {
                     return {
                         ...prevState,
-                        defaultJobDataMapKeys: response.data
+                        jobDataMapKeys: response.data
                     }
                 })
             });
@@ -163,7 +163,7 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
         const jobTypes = this.state.jobTypes;
         const isDropdownOpen = this.state.isDropdownOpen;
         const selectedJobTypeName = this.getJobTypeName(jobTypes, this.state.model.jobDataMap["jobType"]);
-        const defaultJobDataMapKeys = this.state.defaultJobDataMapKeys;
+        const jobDataMapKeys = this.state.jobDataMapKeys;
 
         return (
             <Modal isOpen={true}>
@@ -204,7 +204,7 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
                                 <Input id="cronExpression" placeholder="Cron expression" onChange={this.handleChange.bind(this)} />
                             </Col>
                         </FormGroup>
-                        {defaultJobDataMapKeys.map(x =>
+                        {jobDataMapKeys.map(x =>
                             <JobDataMapInput key={x.name} jobDataMapKey={x} onChange={this.handleJobDataMapChange.bind(this)} />
                         )}
                     </Form>

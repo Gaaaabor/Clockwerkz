@@ -6,7 +6,7 @@
         "Name": "DeviceActivation"
       }
     ],
-    "DefaultJobDataMapKeys": [
+    "JobDataMapKeys": [
       {
         "Label": "Device stuff",
         "Name": "deviceStuff",
@@ -21,7 +21,7 @@
             "Value": "2"
           },
           {
-            "Key": "C",
+            "Key": "CC",
             "Value": "3"
           }
         ]

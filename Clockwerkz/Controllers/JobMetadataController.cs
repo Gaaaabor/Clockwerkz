@@ -17,9 +17,9 @@ namespace Clockwerkz.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> DefaultJobDataMapKeys()
+        public async Task<IActionResult> JobDataMapKeys()
         {
-            var jobTypes = await Mediator.Send(new ListDefaultJobDataMapKeysQuery());
+            var jobTypes = await Mediator.Send(new ListJobDataMapKeysQuery());
             return Json(jobTypes);
         }
     }
