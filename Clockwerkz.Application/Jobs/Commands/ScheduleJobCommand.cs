@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Clockwerkz.Application.Jobs.Commands
 {
-    public class JobScheduleCommand : IRequest
+    public class ScheduleJobCommand : IRequest
     {
         public string JobName { get; set; }
         public string GroupName { get; set; }

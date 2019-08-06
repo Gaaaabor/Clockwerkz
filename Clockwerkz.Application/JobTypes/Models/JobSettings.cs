@@ -3,6 +3,6 @@
     public class JobSettings
     {
         public JobType[] JobTypes { get; set; }
-        public string[] DefaultJobDataMapKeys { get; set; }
+        public JobDataMapKey[] DefaultJobDataMapKeys { get; set; }
     }
 }

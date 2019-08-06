@@ -2,6 +2,7 @@
 import * as Axios from 'axios';
 import { Col, Button, Input, Label, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownItem, DropdownToggle, DropdownMenu, DropdownItemProps } from 'reactstrap';
 import { IJobDataMap } from './jobDashboard.component';
+import { JobDataMapInput, IJobDataMapKey } from './jobDataMapInput.component';
 
 export interface IJobModalModel {
     jobName: string;
@@ -19,7 +20,7 @@ export interface IJobModalState {
     cancelAction: React.MouseEventHandler<any>;
     createAction: (model: IJobModalModel) => void;
     jobTypes: IJobTypeDto[];
-    defaultJobDataMapKeys: string[];
+    defaultJobDataMapKeys: IJobDataMapKey[];
     isDropdownOpen: boolean;
     model: IJobModalModel;
 }
@@ -67,7 +68,7 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
     }
 
     private loadJobDataMapProperties() {
-        Axios.default.get<string[]>('api/JobMetadata/DefaultJobDataMapKeys')
+        Axios.default.get<IJobDataMapKey[]>('api/JobMetadata/DefaultJobDataMapKeys')
             .then(response => {
                 this.setState((prevState) => {
                     return {
@@ -94,10 +95,7 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
         });
     }
 
-    private handleJobDataMapChange(event: React.ChangeEvent<HTMLInputElement>) {
-
-        const prop = event.currentTarget.id;
-        const value = event.currentTarget.value;
+    private handleJobDataMapChange(prop: string, value: string) {
 
         this.setState((prevState) => {
             return {
@@ -207,14 +205,8 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
                             </Col>
                         </FormGroup>
                         {defaultJobDataMapKeys.map(x =>
-                            <FormGroup row>
-                                <Label for={x} sm={3}>{x}</Label>
-                                <Col sm={9}>
-                                    <Input id={x} placeholder={x} onChange={this.handleJobDataMapChange.bind(this)} />
-                                </Col>
-                            </FormGroup>
-                            )}
-                        
+                            <JobDataMapInput key={x.name} jobDataMapKey={x} onChange={this.handleJobDataMapChange.bind(this)} />
+                        )}
                     </Form>
 
                 </ModalBody>

@@ -38,6 +38,7 @@
     <None Remove="ClientApp\components\Home.tsx" />
     <None Remove="ClientApp\components\job\job.component.tsx" />
     <None Remove="ClientApp\components\job\jobDashboard.component.tsx" />
+    <None Remove="ClientApp\components\job\jobDataMapInput.component.tsx" />
     <None Remove="ClientApp\components\job\jobGroup.component.tsx" />
     <None Remove="ClientApp\components\job\jobModal.component.tsx" />
     <None Remove="ClientApp\components\job\jobPreview.component.tsx" />
@@ -71,6 +72,7 @@
     <TypeScriptCompile Include="ClientApp\components\job\jobGroup.component.tsx" />
     <TypeScriptCompile Include="ClientApp\components\job\job.component.tsx" />
     <TypeScriptCompile Include="ClientApp\components\job\jobDashboard.component.tsx" />
+    <TypeScriptCompile Include="ClientApp\components\job\jobDataMapInput.component.tsx" />
     <TypeScriptCompile Include="ClientApp\components\job\jobTrigger.component.tsx" />
     <TypeScriptCompile Include="ClientApp\components\navMenu\navMenu.tsx" />
   </ItemGroup>

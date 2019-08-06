@@ -2,6 +2,7 @@
 using Quartz;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Clockwerkz.Infrastructure
@@ -17,10 +18,12 @@ namespace Clockwerkz.Infrastructure
 
         public async Task ScheduleCustomJob(string name, string groupName, bool startImmediately, string cronExpression, IDictionary<string, object> jobDataMap)
         {
+            var normalizedJobData = NormalizeKeys(jobDataMap);
+
             var job = JobBuilder
                 .Create<IJob>()
                 .WithIdentity(name, groupName)
-                .UsingJobData(new JobDataMap(jobDataMap))
+                .UsingJobData(normalizedJobData)
                 .StoreDurably(true)
                 .Build();
 
@@ -37,6 +40,12 @@ namespace Clockwerkz.Infrastructure
             }
 
             await _scheduler.ScheduleJob(job, trigger.Build());
+        }
+
+        private JobDataMap NormalizeKeys(IDictionary<string, object> jobDataMap)
+        {
+            var upperKeyedDict = jobDataMap.ToDictionary(k => k.Key.ToUpper(), v => v.ToString());
+            return new JobDataMap(upperKeyedDict);
         }
 
         public async Task RemoveJob(string name, string groupName)

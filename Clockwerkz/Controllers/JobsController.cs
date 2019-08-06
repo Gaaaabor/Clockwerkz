@@ -18,7 +18,7 @@ namespace Clockwerkz.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(JobScheduleCommand jobScheduleCommand)
+        public async Task<IActionResult> Post(ScheduleJobCommand jobScheduleCommand)
         {
             var result = await Mediator.Send(jobScheduleCommand);
             return Ok(result);

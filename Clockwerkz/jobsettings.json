@@ -4,12 +4,33 @@
       {
         "Type": "Machinewerkz.JobInterfaces.IDeviceActivationJob, Machinewerkz.JobInterfaces",
         "Name": "DeviceActivation"
-      },
-      {
-        "Type": "Machinewerkz.JobInterfaces.IDeviceActivationJob_2, Machinewerkz.JobInterfaces",
-        "Name": "DeviceActivation_2"
       }
     ],
-    "DefaultJobDataMapKeys": [ "DeviceSerial" ]
+    "DefaultJobDataMapKeys": [
+      {
+        "Label": "Device stuff",
+        "Name": "deviceStuff",
+        "Type": "Dropdown",
+        "DropdownValues": [
+          {
+            "Key": "A",
+            "Value": "1"
+          },
+          {
+            "Key": "B",
+            "Value": "2"
+          },
+          {
+            "Key": "C",
+            "Value": "3"
+          }
+        ]
+      },
+      {
+        "Label": "Device serial",
+        "Name": "deviceSerial",
+        "Type": "Default"
+      }
+    ]
   }
 }

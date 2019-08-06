@@ -1,4 +1,5 @@
 ﻿using Clockwerkz.Application.Jobs.Queries;
+using Clockwerkz.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +15,7 @@ namespace Clockwerkz.Configuration
             // Add MediatR
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
             services.AddMediatR(typeof(ListJobDetailsQueryHandler).GetTypeInfo().Assembly);
 
             // Add Open API support (will generate specification document)

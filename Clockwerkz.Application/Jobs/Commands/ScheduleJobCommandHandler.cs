@@ -4,16 +4,16 @@ using System.Threading.Tasks;
 
 namespace Clockwerkz.Application.Jobs.Commands
 {
-    public class JobScheduleCommandHandler : IRequestHandler<JobScheduleCommand>
+    public class ScheduleJobCommandHandler : IRequestHandler<ScheduleJobCommand>
     {
         private readonly IJobManager _jobManager;
 
-        public JobScheduleCommandHandler(IJobManager jobManager)
+        public ScheduleJobCommandHandler(IJobManager jobManager)
         {
             _jobManager = jobManager;
         }
 
-        public async Task<Unit> Handle(JobScheduleCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(ScheduleJobCommand request, CancellationToken cancellationToken)
         {
             await _jobManager.ScheduleCustomJob(
                 request.JobName,

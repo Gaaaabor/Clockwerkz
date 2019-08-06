@@ -7,6 +7,6 @@ namespace Clockwerkz.Application
     public interface IJobSettingsProvider
     {
         Task<ICollection<JobType>> ListJobTypesAsync();
-        Task<ICollection<string>> ListDefaultJobDataMapKeys();
+        Task<ICollection<JobDataMapKey>> ListDefaultJobDataMapKeys();
     }
 }
