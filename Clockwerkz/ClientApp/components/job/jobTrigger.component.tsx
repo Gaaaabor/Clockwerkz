@@ -5,11 +5,11 @@ import { Button, Col, Row } from 'reactstrap';
 import { IJobTriggerDto } from '../../infrastructure/dtos/jobTrigger.dto';
 import { TriggersApi } from '../../infrastructure/trigger.api';
 
-interface IJobTriggerProps {    
+interface IJobTriggerProps {
     triggers: IJobTriggerDto[];
 }
 
-interface IJobTriggerState {    
+interface IJobTriggerState {
     triggers: IJobTriggerDto[];
 }
 
@@ -17,7 +17,7 @@ export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerSta
 
     constructor(props: IJobTriggerProps) {
         super(props);
-        this.state = {            
+        this.state = {
             triggers: props.triggers
         };
     }
@@ -119,9 +119,21 @@ export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerSta
     }
 
     private deleteTrigger(name: string, groupName: string) {
+
         TriggersApi.deleteTrigger({
             name: name,
             groupName: groupName
+        }).then(_ => {
+
+            const filteredTriggers = this.state.triggers.filter(x => x.name !== name && x.jobGroup !== groupName);
+
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    triggers: filteredTriggers
+                }
+            })
+
         });
     }
 
@@ -150,7 +162,7 @@ export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerSta
             borderRight: '1px black solid',
             maxWidth: "50px",
             padding: "0px",
-        }        
+        }
 
         return (
             <div>
