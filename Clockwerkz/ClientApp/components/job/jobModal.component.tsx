@@ -42,7 +42,6 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
 
     public componentDidMount() {
         this.loadJobTypes();
-        this.loadJobDataMapProperties();
     }
 
     private loadJobTypes() {
@@ -56,14 +55,17 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
         });
     }
 
-    private loadJobDataMapProperties() {
-        JobMetadatasApi.getJobDataMapKeys().then(response => {
-            this.setState((prevState) => {
-                return {
-                    ...prevState,
-                    jobDataMapKeys: response
-                }
-            })
+    private loadJobDataMapProperties(dataMapGroup: string) {
+        JobMetadatasApi.getJobDataMapKeys(dataMapGroup).then(response => {
+
+            if (response !== undefined && 0 < response.length) {
+                this.setState((prevState) => {
+                    return {
+                        ...prevState,
+                        jobDataMapKeys: response
+                    }
+                })
+            }
         });
     }
 
@@ -108,7 +110,7 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
         });
     }
 
-    private handleDropDownClick(selection: string) {
+    private handleDropDownClick(jobType: IJobTypeDto) {
 
         const prop = 'jobType';
 
@@ -119,11 +121,13 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
                     ...prevState.model,
                     jobDataMap: {
                         ...prevState.model.jobDataMap,
-                        [prop]: selection
+                        [prop]: jobType.type
                     }
                 }
             };
         });
+
+        this.loadJobDataMapProperties(jobType.dataMapGroup);
     }
 
     private getJobTypeName(jobTypes: IJobTypeDto[], jobType: string): string {
@@ -172,6 +176,12 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
                             </Col>
                         </FormGroup>
                         <FormGroup row>
+                            <Label for="cronExpression" sm={3}>Cron</Label>
+                            <Col sm={9}>
+                                <Input id="cronExpression" placeholder="Cron expression" onChange={this.handleChange.bind(this)} />
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
                             <Label for="jobType" sm={3}>JobType</Label>
                             <Col sm={9}>
                                 <Dropdown style={dropdownStyle} isOpen={isDropdownOpen} toggle={this.handleToggle.bind(this)}>
@@ -180,21 +190,17 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
                                     </DropdownToggle>
                                     <DropdownMenu style={dropdownStyle}>
                                         {jobTypes.map(x =>
-                                            <DropdownItem style={dropdownStyle} onClick={this.handleDropDownClick.bind(this, x.type)} key={x.type}>{x.name}</DropdownItem>
+                                            <DropdownItem style={dropdownStyle} onClick={this.handleDropDownClick.bind(this, x)} key={x.type}>{x.name}</DropdownItem>
                                         )}
                                     </DropdownMenu>
                                 </Dropdown>
                             </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Label for="cronExpression" sm={3}>Cron</Label>
-                            <Col sm={9}>
-                                <Input id="cronExpression" placeholder="Cron expression" onChange={this.handleChange.bind(this)} />
-                            </Col>
-                        </FormGroup>
+                        </FormGroup>                        
+
                         {jobDataMapKeys.map(x =>
                             <JobDataMapInput key={x.name} jobDataMapKey={x} onChange={this.handleJobDataMapChange.bind(this)} />
                         )}
+
                     </Form>
 
                 </ModalBody>

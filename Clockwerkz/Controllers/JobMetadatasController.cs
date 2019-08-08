@@ -7,7 +7,7 @@ namespace Clockwerkz.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class JobMetadataController : BaseController
+    public class JobMetadatasController : BaseController
     {
         [HttpGet("[action]")]
         public async Task<IActionResult> JobTypes()
@@ -16,10 +16,14 @@ namespace Clockwerkz.Controllers
             return Json(jobTypes);
         }
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> JobDataMapKeys()
+        [HttpGet("[action]/{group}")]
+        public async Task<IActionResult> JobDataMapKeys(string group)
         {
-            var jobTypes = await Mediator.Send(new ListJobDataMapKeysQuery());
+            var jobTypes = await Mediator.Send(new ListJobDataMapKeysQuery
+            {
+                Group = group
+            });
+
             return Json(jobTypes);
         }
     }

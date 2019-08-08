@@ -1,7 +1,9 @@
 ﻿using Clockwerkz.Application;
 using Clockwerkz.Application.JobTypes.Models;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Clockwerkz.Infrastructure
@@ -25,10 +27,22 @@ namespace Clockwerkz.Infrastructure
             return _jobSettings.JobTypes;
         }
 
-        public async Task<ICollection<JobDataMapKey>> ListJobDataMapKeys()
+        public async Task<ICollection<JobDataMapKey>> ListJobDataMapKeys(string group)
         {
             await Task.CompletedTask;
-            return _jobSettings.JobDataMapKeys;
+
+            var jobDataMapKeys = new List<JobDataMapKey>();
+
+            foreach (var jobDataMapKey in _jobSettings.JobDataMapKeys)
+            {
+                var groups = jobDataMapKey.Groups.Split(';');
+                if (groups.Contains(group, StringComparer.OrdinalIgnoreCase))
+                {
+                    jobDataMapKeys.Add(jobDataMapKey);
+                }
+            }
+
+            return jobDataMapKeys;
         }
     }
 }

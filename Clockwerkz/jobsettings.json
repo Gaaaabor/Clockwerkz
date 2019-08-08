@@ -3,11 +3,18 @@
     "JobTypes": [
       {
         "Type": "Machinewerkz.JobInterfaces.IDeviceActivationJob, Machinewerkz.JobInterfaces",
-        "Name": "DeviceActivation"
+        "Name": "DeviceActivation",
+        "DataMapGroup": "ActivationGroup"
+      },
+      {
+        "Type": "Machinewerkz.JobInterfaces.IApiCallJob, Machinewerkz.JobInterfaces",
+        "Name": "ApiCallJob",
+        "DataMapGroup": "ApiCallGroup"
       }
     ],
     "JobDataMapKeys": [
       {
+        "Groups": "ActivationGroup;ApiCallGroup",
         "Label": "Device stuff",
         "Name": "deviceStuff",
         "Type": "Dropdown",
@@ -27,8 +34,33 @@
         ]
       },
       {
+        "Groups": "ActivationGroup",
         "Label": "Device serial",
         "Name": "deviceSerial",
+        "Type": "Default"
+      },
+      {
+        "Groups": "ApiCallGroup",
+        "Label": "HttpMethod",
+        "Name": "httpMethod",
+        "Type": "Default"
+      },
+      {
+        "Groups": "ApiCallGroup",
+        "Label": "BaseAddress",
+        "Name": "baseAddress",
+        "Type": "Default"
+      },
+      {
+        "Groups": "ApiCallGroup",
+        "Label": "Port",
+        "Name": "port",
+        "Type": "Default"
+      },
+      {
+        "Groups": "ApiCallGroup",
+        "Label": "Path",
+        "Name": "path",
         "Type": "Default"
       }
     ]

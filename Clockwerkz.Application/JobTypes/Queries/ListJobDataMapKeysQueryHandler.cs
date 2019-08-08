@@ -18,7 +18,7 @@ namespace Clockwerkz.Application.JobTypes.Queries
         public async Task<ICollection<JobDataMapKey>> Handle(ListJobDataMapKeysQuery request, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
-            return await _jobSettingsProvider.ListJobDataMapKeys();
+            return await _jobSettingsProvider.ListJobDataMapKeys(request.Group);
         }
     }
 }

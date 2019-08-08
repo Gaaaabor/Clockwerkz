@@ -6,5 +6,6 @@ namespace Clockwerkz.Application.JobTypes.Queries
 {
     public class ListJobDataMapKeysQuery : IRequest<ICollection<JobDataMapKey>>
     {
+        public string Group { get; set; }
     }
 }
