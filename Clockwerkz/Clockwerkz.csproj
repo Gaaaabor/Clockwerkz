@@ -44,6 +44,17 @@
     <None Remove="ClientApp\components\job\jobPreview.component.tsx" />
     <None Remove="ClientApp\components\job\jobTrigger.component.tsx" />
     <None Remove="ClientApp\components\NavMenu.tsx" />
+    <None Remove="ClientApp\infrastructure\dtos\job.create.dto.tsx" />
+    <None Remove="ClientApp\infrastructure\dtos\job.dto.tsx" />
+    <None Remove="ClientApp\infrastructure\dtos\jobDataMap.dto.tsx" />
+    <None Remove="ClientApp\infrastructure\dtos\jobDataMapKey.dto.tsx" />
+    <None Remove="ClientApp\infrastructure\dtos\jobTrigger.dto.tsx" />
+    <None Remove="ClientApp\infrastructure\dtos\jobType.dto.tsx" />
+    <None Remove="ClientApp\infrastructure\dtos\trigger.delete.dto.tsx" />
+    <None Remove="ClientApp\infrastructure\job.api.tsx" />
+    <None Remove="ClientApp\infrastructure\jobMetadata.api.tsx" />
+    <None Remove="ClientApp\infrastructure\path.provider.tsx" />
+    <None Remove="ClientApp\infrastructure\trigger.api.tsx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,6 +86,33 @@
     <TypeScriptCompile Include="ClientApp\components\job\jobDataMapInput.component.tsx" />
     <TypeScriptCompile Include="ClientApp\components\job\jobTrigger.component.tsx" />
     <TypeScriptCompile Include="ClientApp\components\navMenu\navMenu.tsx" />
+    <TypeScriptCompile Include="ClientApp\infrastructure\dtos\jobDataMapKey.dto.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\infrastructure\dtos\jobTrigger.dto.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\infrastructure\dtos\job.dto.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\infrastructure\dtos\jobType.dto.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\infrastructure\dtos\job.create.dto.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\infrastructure\dtos\jobDataMap.dto.tsx" />
+    <TypeScriptCompile Include="ClientApp\infrastructure\dtos\trigger.delete.dto.tsx" />
+    <TypeScriptCompile Include="ClientApp\infrastructure\jobMetadata.api.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\infrastructure\path.provider.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\infrastructure\trigger.api.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\infrastructure\job.api.tsx" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

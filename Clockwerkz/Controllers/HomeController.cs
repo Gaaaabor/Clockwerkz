@@ -10,5 +10,10 @@ namespace Clockwerkz.Controllers
         {
             return View();
         }
+
+        public IActionResult Welcome()
+        {
+            return Json("This is a minimalist welcome message!");
+        }
     }
 }

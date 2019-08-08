@@ -1,15 +1,15 @@
-import * as React from 'react';
-import { Row, Col } from 'reactstrap';
-import { IJobTriggerDto } from './jobDashboard.component';
-
+import { faBolt, faEdit, faLightbulb, faPause, faPlay, faSync, faTrash, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLightbulb, faPause, faPlay, faCog, faEdit, faTrash, faExclamation, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import * as React from 'react';
+import { Button, Col, Row } from 'reactstrap';
+import { IJobTriggerDto } from '../../infrastructure/dtos/jobTrigger.dto';
+import { TriggersApi } from '../../infrastructure/trigger.api';
 
-interface IJobTriggerProps {
+interface IJobTriggerProps {    
     triggers: IJobTriggerDto[];
 }
 
-interface IJobTriggerState {
+interface IJobTriggerState {    
     triggers: IJobTriggerDto[];
 }
 
@@ -17,7 +17,9 @@ export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerSta
 
     constructor(props: IJobTriggerProps) {
         super(props);
-        this.state = { triggers: props.triggers };
+        this.state = {            
+            triggers: props.triggers
+        };
     }
 
     private getRowColor(triggerstate: string): string {
@@ -90,11 +92,11 @@ export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerSta
         switch (triggerType) {
 
             case "SIMPLE":
-                icon = faLightbulb;
+                icon = faBolt;
                 break;
 
             default:
-                icon = faLightbulb;
+                icon = faSync;
                 break;
         }
 
@@ -112,43 +114,68 @@ export class JobTrigger extends React.Component<IJobTriggerProps, IJobTriggerSta
         return new Date((value - minDate) / 10000).toLocaleString("hu-hu");
     }
 
+    private editTrigger(name: string, groupName: string) {
+        console.log("Edit");
+    }
+
+    private deleteTrigger(name: string, groupName: string) {
+        TriggersApi.deleteTrigger({
+            name: name,
+            groupName: groupName
+        });
+    }
+
     public render(): JSX.Element {
 
         const triggerStyle: React.CSSProperties = {
             verticalAlign: 'middle',
             fontWeight: 400,
             fontSize: '1rem',
-            textAlign: 'center'
+            textAlign: 'center',
+            borderBottom: '1px black solid',
+            lineHeight: "34px"
         }
 
         const iconColumnStyle: React.CSSProperties = {
-            borderRight: '1px black solid'
+            borderRight: '1px black solid',
+            maxWidth: "50px",
+            padding: "0px"
         }
 
         const dateColumnStyle: React.CSSProperties = {
-            borderRight: '1px black solid',
-            minHeight: '30px'
+            borderRight: '1px black solid'
         }
 
-        const iconStyle: React.CSSProperties = {
-            marginLeft: 10,
-            marginRight: 10
-        }
+        const buttonColumnStyle: React.CSSProperties = {
+            borderRight: '1px black solid',
+            maxWidth: "50px",
+            padding: "0px",
+        }        
 
         return (
             <div>
                 {this.state.triggers.map(trigger =>
-                    <Row key={trigger.id} style={triggerStyle} className={this.getRowColor(trigger.state)}>
-                        <Col sm={1} style={iconColumnStyle}>{this.getStateIcon(trigger.state)}</Col>
-                        <Col sm={1} style={iconColumnStyle}>{this.getTypeIcon(trigger.type)}</Col>
+                    <Row key={trigger.name} style={triggerStyle} className={this.getRowColor(trigger.state)}>
+
+                        <Col style={iconColumnStyle}>{this.getStateIcon(trigger.state)}</Col>
+                        <Col style={iconColumnStyle}>{this.getTypeIcon(trigger.type)}</Col>
+
                         <Col style={dateColumnStyle}>{this.parseDateTimeOffset(trigger.startTime)}</Col>
                         <Col style={dateColumnStyle}>{this.parseDateTimeOffset(trigger.endTime)}</Col>
                         <Col style={dateColumnStyle}>{this.parseDateTimeOffset(trigger.previousFireTime)}</Col>
                         <Col style={dateColumnStyle}>{this.parseDateTimeOffset(trigger.nextFireTime)}</Col>
-                        <Col style={iconColumnStyle}>
-                            <FontAwesomeIcon icon={faEdit} style={iconStyle} />                        
-                            <FontAwesomeIcon icon={faTrash} style={iconStyle} />
+
+                        <Col style={buttonColumnStyle} onClick={() => this.editTrigger(trigger.name, trigger.jobGroup)}>
+                            <Button>
+                                <FontAwesomeIcon icon={faEdit} />
+                            </Button>
                         </Col>
+                        <Col style={buttonColumnStyle} onClick={() => this.deleteTrigger(trigger.name, trigger.jobGroup)}>
+                            <Button>
+                                <FontAwesomeIcon icon={faTrash} />
+                            </Button>
+                        </Col>
+
                     </Row>
                 )}
             </div>

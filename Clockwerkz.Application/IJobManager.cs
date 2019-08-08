@@ -7,6 +7,7 @@ namespace Clockwerkz.Application
     {
         Task Start();
         Task ScheduleCustomJob(string name, string groupName, bool startImmediately, string cronExpression, IDictionary<string, object> jobDataMap);
-        Task RemoveJob(string name, string groupName);
+        Task DeleteJob(string name, string groupName);
+        Task DeleteTrigger(string name, string groupName);
     }
 }

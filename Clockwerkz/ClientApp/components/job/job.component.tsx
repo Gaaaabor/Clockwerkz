@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Row, Col } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 
 interface JobProps {
     jobName: string;
@@ -20,20 +20,29 @@ export class Job extends React.Component<JobProps, JobState> {
 
     render() {
 
-        const jobStyle: React.CSSProperties = {
+        const jobStyle: React.CSSProperties = {            
             verticalAlign: 'middle',
             border: '1px solid #454d55',
             backgroundColor: '#343a40',
             color: 'white',
             fontWeight: 400,
-            fontSize: '1rem',
-            minHeight: '30px'
+            fontSize: '1rem'
+        }
+
+        const emptyColumnStyle: React.CSSProperties = {
+            maxWidth: "50px",
+        }
+
+        const jobNameColumnStyle: React.CSSProperties = {
+            paddingTop: "5px",
+            paddingBottom: "5px"
         }
 
         return (
             <div>
-                <Row style={jobStyle}>                    
-                    <Col>{this.state.jobName}</Col>
+                <Row style={jobStyle}>
+                    <Col style={emptyColumnStyle}></Col>
+                    <Col style={jobNameColumnStyle}>{this.state.jobName}</Col>
                 </Row>
                 {this.props.children}
             </div>

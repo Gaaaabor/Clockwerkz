@@ -1,26 +1,9 @@
 import * as React from 'react';
-import { Col, Input, Label, FormGroup, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from 'reactstrap';
-
-export interface IJobDataMapKey {
-    label: string;
-    name: string;
-    type: JobDataMapInputType;
-    dropdownValues: IDropdownValue[];
-}
-
-export interface IDropdownValue {
-    key: string;
-    value: string;
-}
-
-export enum JobDataMapInputType {
-    Default = "Default",
-    Dropdown = "Dropdown",
-    Date = "Date"
-}
+import { Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, FormGroup, Input, Label } from 'reactstrap';
+import { IDropdownValueDto, IJobDataMapKeyDto, JobDataMapInputType } from '../../infrastructure/dtos/jobDataMapKey.dto';
 
 interface IJobDataMapInputProps {
-    jobDataMapKey: IJobDataMapKey;
+    jobDataMapKey: IJobDataMapKeyDto;
     onChange: (prop: string, value: string) => void;
 }
 
@@ -29,7 +12,7 @@ interface IJobDataMapInputState {
     propertyName: string;
     type: JobDataMapInputType;
     inputValue: string;
-    dropdownValues: IDropdownValue[];
+    dropdownValues: IDropdownValueDto[];
     isDropdownOpen: boolean;
     onChange: (prop: string, value: string) => void;
 }
@@ -89,7 +72,7 @@ export class JobDataMapInput extends React.Component<IJobDataMapInputProps, IJob
         onChange(prop, value);
     }
 
-    private getSelectedItemDisplayName(dropdownValues: IDropdownValue[], dropdownValue: string): string {
+    private getSelectedItemDisplayName(dropdownValues: IDropdownValueDto[], dropdownValue: string): string {
 
         if (dropdownValue === '' || dropdownValue === undefined) {
             return 'Please select a value';

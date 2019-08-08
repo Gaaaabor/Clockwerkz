@@ -28,11 +28,5 @@ namespace Clockwerkz.Controllers
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
-        
-        public async Task<IActionResult> IsAuthenticated()
-        {
-            await Task.CompletedTask;
-            return Json(HttpContext.User.Identity.IsAuthenticated);
-        }
     }
 }

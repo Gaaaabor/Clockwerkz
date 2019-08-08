@@ -1,33 +1,23 @@
 ﻿import * as React from 'react';
-import * as Axios from 'axios';
-import { Col, Button, Input, Label, Form, FormGroup, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownItem, DropdownToggle, DropdownMenu, DropdownItemProps } from 'reactstrap';
-import { IJobDataMap } from './jobDashboard.component';
-import { JobDataMapInput, IJobDataMapKey } from './jobDataMapInput.component';
-
-export interface IJobModalModel {
-    jobName: string;
-    groupName: string;
-    cronExpression: string;
-    jobDataMap: IJobDataMap
-}
+import { Button, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { IJobCreateDto } from '../../infrastructure/dtos/job.create.dto';
+import { IJobDataMapKeyDto } from '../../infrastructure/dtos/jobDataMapKey.dto';
+import { IJobTypeDto } from '../../infrastructure/dtos/jobType.dto';
+import { JobMetadatasApi } from '../../infrastructure/jobMetadata.api';
+import { JobDataMapInput } from './jobDataMapInput.component';
 
 export interface IJobModalProps {
     cancelAction: React.MouseEventHandler<any>;
-    createAction: (model: IJobModalModel) => void;
+    createAction: (model: IJobCreateDto) => void;
 }
 
 export interface IJobModalState {
     cancelAction: React.MouseEventHandler<any>;
-    createAction: (model: IJobModalModel) => void;
+    createAction: (model: IJobCreateDto) => void;
     jobTypes: IJobTypeDto[];
-    jobDataMapKeys: IJobDataMapKey[];
+    jobDataMapKeys: IJobDataMapKeyDto[];
     isDropdownOpen: boolean;
-    model: IJobModalModel;
-}
-
-export interface IJobTypeDto {
-    type: string;
-    name: string;
+    model: IJobCreateDto;
 }
 
 const getInitialState = (props: IJobModalProps): IJobModalState => {
@@ -56,27 +46,25 @@ export class JobModal extends React.Component<IJobModalProps, IJobModalState> {
     }
 
     private loadJobTypes() {
-        Axios.default.get<IJobTypeDto[]>('api/JobMetadata/JobTypes')
-            .then(response => {
-                this.setState((prevState) => {
-                    return {
-                        ...prevState,
-                        jobTypes: response.data
-                    }
-                })
-            });
+        JobMetadatasApi.getJobTypes().then(response => {
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    jobTypes: response
+                }
+            })
+        });
     }
 
     private loadJobDataMapProperties() {
-        Axios.default.get<IJobDataMapKey[]>('api/JobMetadata/JobDataMapKeys')
-            .then(response => {
-                this.setState((prevState) => {
-                    return {
-                        ...prevState,
-                        jobDataMapKeys: response.data
-                    }
-                })
-            });
+        JobMetadatasApi.getJobDataMapKeys().then(response => {
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    jobDataMapKeys: response
+                }
+            })
+        });
     }
 
     private handleChange(event: React.ChangeEvent<HTMLInputElement>) {

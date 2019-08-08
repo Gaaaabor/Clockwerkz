@@ -21,21 +21,25 @@ export class JobGroup extends React.Component<JobGroupProps, JobGroupState> {
 
     render() {
 
-        const groupStyle: React.CSSProperties = {            
+        const groupStyle: React.CSSProperties = {
             verticalAlign: 'middle',
             tableLayout: 'auto',
-            border: '1px solid #454d55',
+            borderBottom: '1px solid #454d55',
             backgroundColor: '#343a40',
             color: 'white',
             fontWeight: 400,
-            fontSize: '1rem',
-            minHeight: '30px'
+            fontSize: '1rem'
+        }
+
+        const groupNameColumnStyle: React.CSSProperties = {
+            paddingTop: "5px",
+            paddingBottom: "5px"
         }
 
         return (
             <div>
                 <Row style={groupStyle}>
-                    <Col>{this.state.groupName}</Col>
+                    <Col style={groupNameColumnStyle}>{this.state.groupName}</Col>
                 </Row>
                 {this.props.children}
             </div>

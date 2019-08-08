@@ -1,12 +1,14 @@
-import * as React from 'react';
-import { Container, Row, Col, Button, Input, Spinner } from 'reactstrap';
-import { JobGroup } from './jobGroup.component';
-import { Job } from './job.component';
-import { JobTrigger } from './jobTrigger.component';
-import { JobModal, IJobModalModel } from './jobModal.component';
-import * as Axios from 'axios';
+import { faCalendarAlt, faCalendarCheck, faCalendarMinus, faCalendarPlus, faMicrochip, faTrafficLight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrafficLight, faMicrochip, faCalendarPlus, faCalendarMinus, faCalendarCheck, faCalendarAlt, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import * as React from 'react';
+import { Button, Col, Container, Input, Row, Spinner } from 'reactstrap';
+import { IJobCreateDto } from '../../infrastructure/dtos/job.create.dto';
+import { IJobDto } from '../../infrastructure/dtos/job.dto';
+import { JobsApi } from '../../infrastructure/job.api';
+import { Job } from './job.component';
+import { JobGroup } from './jobGroup.component';
+import { JobModal } from './jobModal.component';
+import { JobTrigger } from './jobTrigger.component';
 
 interface IJobDashboardProps {
 
@@ -20,24 +22,9 @@ interface IJobDashboardState {
     reloadGrid: boolean;
 }
 
-interface IJobDto {
-    name: string;
-    jobGroup: string;
-    triggers: IJobTriggerDto[];
-}
-
-export interface IJobTriggerDto {
-    id: string;
-    state: string;
-    type: string;
-    startTime: number;
-    endTime?: number;
-    previousFireTime?: number;
-    nextFireTime?: number;
-}
-
-export interface IJobDataMap {
-    [Key: string]: string
+interface IJobGroupDto {
+    groupName: string;
+    jobs: IJobDto[];
 }
 
 const getInitialState = (props: IJobDashboardProps): IJobDashboardState => {
@@ -60,17 +47,16 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
     }
 
     private loadJobs() {
-        Axios.default.get<IJobDto[]>('api/Jobs')
-            .then(response => {
-                this.setState((prevState) => {
-                    return {
-                        ...prevState,
-                        jobs: response.data,
-                        isLoading: false,
-                        reloadGrid: false
-                    }
-                })
-            });
+        JobsApi.getJobs().then(response => {
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    jobs: response,
+                    isLoading: false,
+                    reloadGrid: false
+                }
+            })
+        });
     }
 
     private handleFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -85,7 +71,30 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
         });
     }
 
-    private getFilteredJobs(): IJobDto[] {
+    private groupJobs(jobs: IJobDto[]) {
+
+        let groupedJobs: IJobGroupDto[] = [];
+
+        for (var i = 0; i < jobs.length; i++) {
+
+            var job = jobs[i];
+
+            var found = groupedJobs.find(x => x.groupName === job.jobGroup);
+            if (found === undefined) {
+                groupedJobs.push({
+                    groupName: job.jobGroup,
+                    jobs: [job]
+                });
+            }
+            else {
+                found.jobs.push(job);
+            }
+        }
+
+        return groupedJobs;
+    }
+
+    private filterJobs(): IJobDto[] {
 
         const jobs = this.state.jobs;
 
@@ -95,6 +104,7 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
 
         const filter = this.state.filter.toLowerCase();
         let filtered = jobs.filter(x => x.name.toLowerCase().includes(filter));
+
         return filtered;
     }
 
@@ -116,11 +126,11 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
         });
     }
 
-    private create(model: IJobModalModel) {
+    private create(model: IJobCreateDto) {
 
         this.setState((prevState) => { return { ...prevState, isLoading: true } });
 
-        Axios.default.post('api/Jobs', model)
+        JobsApi.createJob(model)
             .then(response => {
                 this.setState((prevState) => { return { ...prevState, isLoading: false, reloadGrid: true } })
             });
@@ -172,15 +182,18 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
         }
 
         const iconColumnStyle: React.CSSProperties = {
-            borderRight: '1px black solid'
+            borderRight: '1px black solid',
+            minWidth: "10px",
+            maxWidth: "25px",
+            padding: "0px"
         }
 
         if (this.state.reloadGrid) {
             this.loadJobs();
         }
 
-        const spinner = this.state.isLoading ? (<Spinner color="primary" />) : null;
-        const filteredJobs = this.getFilteredJobs();
+        const spinner = this.state.isLoading ? (<Spinner color="primary" />) : null;        
+        const groupedJobs = this.groupJobs(this.filterJobs());
         const creationModal = this.getCreationModal();
 
         return (
@@ -199,15 +212,11 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
 
                     {spinner}
                     <Row style={rowStyle}>
-                        <Col sm={1} style={iconColumnStyle}>
+                        <Col style={iconColumnStyle}>
                             <FontAwesomeIcon icon={faTrafficLight} />
-                            <br />
-                            Status
                         </Col>
-                        <Col sm={1} style={iconColumnStyle}>
+                        <Col style={iconColumnStyle}>
                             <FontAwesomeIcon icon={faMicrochip} />
-                            <br />
-                            Type
                         </Col>
                         <Col style={columnStyle}>
                             <FontAwesomeIcon icon={faCalendarPlus} />
@@ -229,14 +238,17 @@ export class JobDashboard extends React.Component<IJobDashboardProps, IJobDashbo
                             <br />
                             Next fire
                         </Col>
-                        <Col style={columnStyle}></Col>
+                        <Col style={iconColumnStyle} />
+                        <Col style={iconColumnStyle} />
                     </Row>
 
-                    {filteredJobs.map(job =>
-                        <JobGroup key={job.jobGroup} groupName={job.jobGroup}>
-                            <Job key={job.name} jobName={job.name}>
-                                <JobTrigger triggers={job.triggers} />
-                            </Job>
+                    {groupedJobs.map(jobGroup =>
+                        <JobGroup key={jobGroup.groupName} groupName={jobGroup.groupName}>
+                            {jobGroup.jobs.map(job =>
+                                <Job key={job.name} jobName={job.name}>
+                                    <JobTrigger triggers={job.triggers} />
+                                </Job>
+                            )}
                         </JobGroup>
                     )}
 

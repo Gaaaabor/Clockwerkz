@@ -16,22 +16,22 @@ namespace Clockwerkz.Infrastructure
             _scheduler = scheduler;
         }
 
-        public async Task ScheduleCustomJob(string name, string groupName, bool startImmediately, string cronExpression, IDictionary<string, object> jobDataMap)
+        public async Task ScheduleCustomJob(string jobName, string groupName, bool startImmediately, string cronExpression, IDictionary<string, object> jobDataMap)
         {
             var normalizedJobData = NormalizeKeys(jobDataMap);
 
             var job = JobBuilder
                 .Create<IJob>()
-                .WithIdentity(name, groupName)
+                .WithIdentity(jobName, groupName)
                 .UsingJobData(normalizedJobData)
                 .StoreDurably(true)
                 .Build();
 
-            var id = Guid.NewGuid().ToString();
+            var triggerName = Guid.NewGuid().ToString();
 
             var trigger = TriggerBuilder
                 .Create()
-                .WithIdentity(id, groupName)
+                .WithIdentity(triggerName, groupName)
                 .WithCronSchedule(cronExpression, x => x.InTimeZone(TimeZoneInfo.Utc));
 
             if (startImmediately)
@@ -48,9 +48,14 @@ namespace Clockwerkz.Infrastructure
             return new JobDataMap(upperKeyedDict);
         }
 
-        public async Task RemoveJob(string name, string groupName)
+        public async Task DeleteJob(string name, string groupName)
         {
             await _scheduler.DeleteJob(JobKey.Create(name, groupName));
+        }
+
+        public async Task DeleteTrigger(string name, string groupName)
+        {            
+            await _scheduler.UnscheduleJob(new TriggerKey(name, groupName));
         }
 
         public async Task Start()

@@ -6,7 +6,8 @@ namespace Clockwerkz.Application.Jobs.Models
 {
     public class TriggerDto
     {
-        public string Id { get; set; }
+        public string Name { get; set; }
+        public string JobGroup { get; set; }
         public string State { get; set; }
         public string Type { get; set; }
         public long StartTime { get; set; }
@@ -20,7 +21,8 @@ namespace Clockwerkz.Application.Jobs.Models
             {
                 return trigger => new TriggerDto
                 {
-                    Id = $"{trigger.JobGroup}_{trigger.TriggerName}",
+                    Name = trigger.TriggerName,
+                    JobGroup = trigger.JobGroup,                    
                     State = trigger.TriggerState,
                     Type = trigger.TriggerType,
                     StartTime = trigger.StartTime,
