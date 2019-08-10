@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Row, Col } from 'reactstrap';
+import { JobsApi } from '../../infrastructure/job.api';
 
 interface JobGroupProps {
     groupName: string

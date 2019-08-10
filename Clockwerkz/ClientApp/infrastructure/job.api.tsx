@@ -11,7 +11,11 @@ const createJob = (dto: IJobCreateDto): Promise<any> => {
     return Axios.default.post(`${jobsPath}`, dto).then(response => response.data);
 };
 
+const deleteJob = (jobId: string) => {    
+};
+
 export const JobsApi = {
     getJobs,
-    createJob    
+    createJob,
+    deleteJob
 };

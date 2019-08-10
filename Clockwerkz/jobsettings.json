@@ -10,29 +10,14 @@
         "Type": "Machinewerkz.JobInterfaces.IApiCallJob, Machinewerkz.JobInterfaces",
         "Name": "ApiCallJob",
         "DataMapGroup": "ApiCallGroup"
+      },
+      {
+        "Type": "Machinewerkz.JobInterfaces.IRemoteMeasurementJob, Machinewerkz.JobInterfaces",
+        "Name": "RemoteMeasurement",
+        "DataMapGroup": "RemoteMeasurementGroup"
       }
     ],
     "JobDataMapKeys": [
-      {
-        "Groups": "ActivationGroup;ApiCallGroup",
-        "Label": "Device stuff",
-        "Name": "deviceStuff",
-        "Type": "Dropdown",
-        "DropdownValues": [
-          {
-            "Key": "A",
-            "Value": "1"
-          },
-          {
-            "Key": "B",
-            "Value": "2"
-          },
-          {
-            "Key": "CC",
-            "Value": "3"
-          }
-        ]
-      },
       {
         "Groups": "ActivationGroup",
         "Label": "Device serial",
@@ -62,6 +47,28 @@
         "Label": "Path",
         "Name": "path",
         "Type": "Default"
+      },
+      {
+        "Groups": "RemoteMeasurementGroup",
+        "Label": "Api endpoint url",
+        "Name": "apiEndpointUrl",
+        "Type": "Default"
+      },
+      {
+        "Groups": "RemoteMeasurementGroup",
+        "Label": "Api method",
+        "Name": "apiMethod",
+        "Type": "Dropdown",
+        "DropdownValues": [
+          {
+            "Key": "POST",
+            "Value": "POST"
+          },
+          {
+            "Key": "GET",
+            "Value": "GET"
+          }
+        ]
       }
     ]
   }

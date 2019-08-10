@@ -8,7 +8,7 @@ namespace Clockwerkz.Infrastructure
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(ListJobDetailsQueryHandler).Assembly)
+            builder.RegisterAssemblyTypes(typeof(ListJobsQueryHanlder).Assembly)
                 .Where(x => x.Name.EndsWith("Command") || x.Name.EndsWith("Query") || x.Name.EndsWith("Service"))
                 .AsImplementedInterfaces();
         }

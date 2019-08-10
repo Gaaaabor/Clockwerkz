@@ -16,7 +16,7 @@ namespace Clockwerkz.Configuration
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
-            services.AddMediatR(typeof(ListJobDetailsQueryHandler).GetTypeInfo().Assembly);
+            services.AddMediatR(typeof(ListJobsQueryHanlder).GetTypeInfo().Assembly);
 
             // Add Open API support (will generate specification document)
             //services.AddSwagger();

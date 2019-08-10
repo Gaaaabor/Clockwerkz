@@ -36,7 +36,7 @@ namespace Clockwerkz.Infrastructure
 
             if (startImmediately)
             {
-                trigger = trigger.StartNow();
+                trigger = trigger.StartNow(); 
             }
 
             await _scheduler.ScheduleJob(job, trigger.Build());

@@ -2,7 +2,7 @@
 
 namespace Clockwerkz.Application.Jobs.Commands
 {
-    public class RemoveJobCommand: IRequest
+    public class DeleteJobCommand : IRequest
     {
     }
 }

@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Clockwerkz.Application.Jobs.Commands
 {
-    public class RemoveJobCommandHandler : IRequestHandler<RemoveJobCommand>
+    public class DeleteJobCommandHandler : IRequestHandler<DeleteJobCommand>
     {
-        public Task<Unit> Handle(RemoveJobCommand request, CancellationToken cancellationToken)
+        public Task<Unit> Handle(DeleteJobCommand request, CancellationToken cancellationToken)
         {
             throw new System.NotImplementedException();
         }

@@ -12,8 +12,8 @@ namespace Clockwerkz.Controllers
     {
         [HttpGet]
         public async Task<IActionResult> Get()
-        {            
-            var jobDetails = await Mediator.Send(new ListJobDetailsQuery());
+        {
+            var jobDetails = await Mediator.Send(new ListJobsQuery());
             return Json(jobDetails);
         }
 
@@ -21,6 +21,13 @@ namespace Clockwerkz.Controllers
         public async Task<IActionResult> Post(ScheduleJobCommand jobScheduleCommand)
         {
             var result = await Mediator.Send(jobScheduleCommand);
+            return Ok(result);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteJobCommand deleteJobCommand)
+        {
+            var result = await Mediator.Send(deleteJobCommand);
             return Ok(result);
         }
     }

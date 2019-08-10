@@ -1,5 +1,8 @@
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
-import { Col, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
+import { JobsApi } from '../../infrastructure/job.api';
 
 interface JobProps {
     jobName: string;
@@ -20,7 +23,7 @@ export class Job extends React.Component<JobProps, JobState> {
 
     render() {
 
-        const jobStyle: React.CSSProperties = {            
+        const jobStyle: React.CSSProperties = {
             verticalAlign: 'middle',
             border: '1px solid #454d55',
             backgroundColor: '#343a40',
@@ -45,7 +48,7 @@ export class Job extends React.Component<JobProps, JobState> {
                     <Col style={jobNameColumnStyle}>{this.state.jobName}</Col>
                 </Row>
                 {this.props.children}
-            </div>
+            </div >
         );
     }
 }
