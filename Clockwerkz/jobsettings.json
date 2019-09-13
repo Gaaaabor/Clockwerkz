@@ -28,7 +28,17 @@
         "Groups": "ApiCallGroup",
         "Label": "HttpMethod",
         "Name": "httpMethod",
-        "Type": "Default"
+        "Type": "Dropdown",
+        "DropdownValues": [
+          {
+            "Key": "POST",
+            "Value": "POST"
+          },
+          {
+            "Key": "GET",
+            "Value": "GET"
+          }
+        ]
       },
       {
         "Groups": "ApiCallGroup",

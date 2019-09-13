@@ -44,7 +44,7 @@ namespace Clockwerkz.Infrastructure
 
         private JobDataMap NormalizeKeys(IDictionary<string, object> jobDataMap)
         {
-            var upperKeyedDict = jobDataMap.ToDictionary(k => k.Key.ToUpper(), v => v.ToString());
+            var upperKeyedDict = jobDataMap.ToDictionary(k => k.Key.ToUpper(), v => v.Value.ToString());
             return new JobDataMap(upperKeyedDict);
         }
 
