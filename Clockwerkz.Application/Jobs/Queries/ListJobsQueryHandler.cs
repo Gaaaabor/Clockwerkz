@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Clockwerkz.Application.Jobs.Queries
 {
-    public class ListJobsQueryHanlder : IRequestHandler<ListJobsQuery, ICollection<JobDetailsDto>>
+    public class ListJobsQueryHanlder : IRequestHandler<ListJobsQuery, ICollection<JobListDto>>
     {
         private readonly IClockwerkzDbContext _context;
 
@@ -18,14 +18,17 @@ namespace Clockwerkz.Application.Jobs.Queries
             _context = context;
         }
 
-        public async Task<ICollection<JobDetailsDto>> Handle(ListJobsQuery request, CancellationToken cancellationToken)
+        public async Task<ICollection<JobListDto>> Handle(ListJobsQuery request, CancellationToken cancellationToken)
         {
-            var jobs = await _context.JobDetails                
-                .Include(x => x.Triggers)
+            var jobs = await _context.JobDetails
                 .OrderBy(x => x.JobGroup)
                 .ThenBy(x => x.JobName)
-                .Select(JobDetailsDto.Projection)
-                .ToListAsync();
+                .GroupJoin(
+                    _context.Triggers,
+                    jobDetail => new { jobDetail.JobName, jobDetail.JobGroup },
+                    trigger => new { trigger.JobName, trigger.JobGroup },
+                    JobListDto.Projection)
+                .ToListAsync(cancellationToken);
 
             return jobs;
         }

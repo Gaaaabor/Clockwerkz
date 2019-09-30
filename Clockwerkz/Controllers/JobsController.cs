@@ -17,6 +17,13 @@ namespace Clockwerkz.Controllers
             return Json(jobDetails);
         }
 
+        [HttpGet("{jobGroup}/{jobName}")]
+        public async Task<IActionResult> Get(string jobGroup, string jobName)
+        {
+            var jobDetails = await Mediator.Send(new JobDetailsQuery { JobGroup = jobGroup, JobName = jobName });
+            return Json(jobDetails);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(ScheduleJobCommand jobScheduleCommand)
         {

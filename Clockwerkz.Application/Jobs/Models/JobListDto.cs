@@ -6,25 +6,25 @@ using System.Linq.Expressions;
 
 namespace Clockwerkz.Application.Jobs.Models
 {
-    public class JobDetailsDto
+    public class JobListDto
     {
         public string Id { get; set; }
         public string Name { get; set; }
         public string JobGroup { get; set; }
         public IEnumerable<TriggerDto> Triggers { get; set; }
 
-        public static Expression<Func<JobDetail, JobDetailsDto>> Projection
+        public static Expression<Func<JobDetail, IEnumerable<Trigger>, JobListDto>> Projection
         {
             get
             {
-                return jobDetail => new JobDetailsDto
+                return (jobDetail, triggers) => new JobListDto
                 {
                     Id = $"{jobDetail.JobGroup}_{jobDetail.JobName}",
                     JobGroup = jobDetail.JobGroup,
                     Name = jobDetail.JobName,
-                    Triggers = jobDetail.Triggers
-                    .AsQueryable()
-                    .Select(TriggerDto.Projection)
+                    Triggers = triggers
+                        .AsQueryable()
+                        .Select(TriggerDto.Projection)
                 };
             }
         }

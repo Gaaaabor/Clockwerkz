@@ -1,4 +1,5 @@
 ﻿using Clockwerkz.Application;
+using Clockwerkz.Application.Jobs.Models;
 using Quartz;
 using System;
 using System.Collections.Generic;
@@ -36,10 +37,52 @@ namespace Clockwerkz.Infrastructure
 
             if (startImmediately)
             {
-                trigger = trigger.StartNow(); 
+                trigger = trigger.StartNow();
             }
 
             await _scheduler.ScheduleJob(job, trigger.Build());
+        }
+
+        public async Task<JobDetailDto> GetJobDetail(string jobGroup, string jobName)
+        {
+            if (string.IsNullOrEmpty(jobGroup) || string.IsNullOrEmpty(jobName))
+            {
+                return null;
+            }
+
+            var key = JobKey.Create(jobName, jobGroup);
+            var jobDetail = await _scheduler.GetJobDetail(key);
+            if (jobDetail == null)
+            {
+                return null;
+            }
+
+            var jobDetailDto = new JobDetailDto
+            {
+                JobName = jobDetail.Key.Name,
+                JobGroup = jobDetail.Key.Group,
+                JobDataMap = new Dictionary<string, string>()
+            };
+
+            if (jobDetail.JobDataMap != null)
+            {
+                foreach (var jobData in jobDetail.JobDataMap)
+                {
+                    jobDetailDto.JobDataMap.Add(jobData.Key, jobData.Value.ToString());
+                }
+            }
+
+            var jobTriggers = await _scheduler.GetTriggersOfJob(key);
+            if (jobTriggers != null && jobTriggers.Any())
+            {
+                jobDetailDto.Triggers = jobTriggers.Select(x => new TriggerDto
+                {
+                    StartTime = x.StartTimeUtc.Ticks,
+                    EndTime = x.EndTimeUtc?.Ticks
+                });
+            }
+
+            return jobDetailDto;
         }
 
         private JobDataMap NormalizeKeys(IDictionary<string, object> jobDataMap)
@@ -54,7 +97,7 @@ namespace Clockwerkz.Infrastructure
         }
 
         public async Task DeleteTrigger(string name, string groupName)
-        {            
+        {
             await _scheduler.UnscheduleJob(new TriggerKey(name, groupName));
         }
 
