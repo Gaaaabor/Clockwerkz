@@ -11,86 +11,85 @@ namespace Clockwerkz.Persistence.Mappings
         {
             #region Generated Configure
             // table
-            builder.ToTable("SIMPROP_TRIGGERS", "Quartz");
+            //builder.ToTable("SIMPROP_TRIGGERS", "Quartz");
 
             // key
             builder.HasKey(t => new { t.SchedName, t.TriggerName, t.TriggerGroup });
 
             // properties
             builder.Property(t => t.SchedName)
-                .IsRequired()
-                .HasColumnName("SCHED_NAME")
-                .HasColumnType("nvarchar(120)")
+                .IsRequired()                
+                .HasField("SCHED_NAME")                
                 .HasMaxLength(120);
 
             builder.Property(t => t.TriggerName)
                 .IsRequired()
-                .HasColumnName("TRIGGER_NAME")
-                .HasColumnType("nvarchar(150)")
+                .HasField("TRIGGER_NAME")
+                
                 .HasMaxLength(150);
 
             builder.Property(t => t.TriggerGroup)
                 .IsRequired()
-                .HasColumnName("TRIGGER_GROUP")
-                .HasColumnType("nvarchar(150)")
+                .HasField("TRIGGER_GROUP")
+                
                 .HasMaxLength(150);
 
             builder.Property(t => t.StrProp1)
-                .HasColumnName("STR_PROP_1")
-                .HasColumnType("nvarchar(512)")
+                .HasField("STR_PROP_1")
+                
                 .HasMaxLength(512);
 
             builder.Property(t => t.StrProp2)
-                .HasColumnName("STR_PROP_2")
-                .HasColumnType("nvarchar(512)")
+                .HasField("STR_PROP_2")
+                
                 .HasMaxLength(512);
 
             builder.Property(t => t.StrProp3)
-                .HasColumnName("STR_PROP_3")
-                .HasColumnType("nvarchar(512)")
+                .HasField("STR_PROP_3")
+                
                 .HasMaxLength(512);
 
             builder.Property(t => t.IntProp1)
-                .HasColumnName("INT_PROP_1")
-                .HasColumnType("int");
+                .HasField("INT_PROP_1")
+                ;
 
             builder.Property(t => t.IntProp2)
-                .HasColumnName("INT_PROP_2")
-                .HasColumnType("int");
+                .HasField("INT_PROP_2")
+                ;
 
             builder.Property(t => t.LongProp1)
-                .HasColumnName("LONG_PROP_1")
-                .HasColumnType("bigint");
+                .HasField("LONG_PROP_1")
+                ;
 
             builder.Property(t => t.LongProp2)
-                .HasColumnName("LONG_PROP_2")
-                .HasColumnType("bigint");
+                .HasField("LONG_PROP_2")
+                ;
 
             builder.Property(t => t.DecProp1)
-                .HasColumnName("DEC_PROP_1")
+                .HasField("DEC_PROP_1")
                 .HasColumnType("numeric(13, 4)");
 
             builder.Property(t => t.DecProp2)
-                .HasColumnName("DEC_PROP_2")
+                .HasField("DEC_PROP_2")
                 .HasColumnType("numeric(13, 4)");
 
             builder.Property(t => t.BoolProp1)
-                .HasColumnName("BOOL_PROP_1")
+                .HasField("BOOL_PROP_1")
                 .HasColumnType("bit");
 
             builder.Property(t => t.BoolProp2)
-                .HasColumnName("BOOL_PROP_2")
+                .HasField("BOOL_PROP_2")
                 .HasColumnType("bit");
 
             builder.Property(t => t.TimeZoneId)
-                .HasColumnName("TIME_ZONE_ID")
+                .HasField("TIME_ZONE_ID")
                 .HasColumnType("nvarchar(80)")
                 .HasMaxLength(80);
 
             // relationships
             builder.HasOne(t => t.Trigger)
                 .WithMany(t => t.SimpropTriggers)
-                .HasForeignKey(d => new { d.SchedName, d.TriggerName, d.TriggerGroup})
+                .HasForeignKey(d => new { d.SchedName, d.TriggerName, d.TriggerGroup })
                 .HasConstraintName("FK_SIMPROP_TRIGGERS_TRIGGERS");
 
             #endregion

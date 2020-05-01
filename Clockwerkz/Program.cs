@@ -12,9 +12,10 @@ namespace Clockwerkz
         }
 
         public static IWebHost CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)                
+            WebHost.CreateDefaultBuilder(args)
                 .UseKestrel()
                 .ConfigureServices(services => services.AddAutofac())
+                .UseIIS()
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();

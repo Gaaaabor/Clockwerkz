@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Clockwerkz.Controllers
 {
     public class AccountController : Controller
-    {        
+    {
         public async Task Login(string returnUrl = "/")
         {
             await HttpContext.ChallengeAsync(Auth0Configuration.AuthenticationScheme, new AuthenticationProperties() { RedirectUri = returnUrl });

@@ -66,7 +66,7 @@ namespace Clockwerkz.Configuration
                         context.ProtocolMessage.SetParameter("audience", configuration[Audience]);
                         return Task.FromResult(0);
 
-                    },                    
+                    },
                     OnRedirectToIdentityProviderForSignOut = (context) => OnSignOut(context, configuration)
                 };
             });

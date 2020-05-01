@@ -1,0 +1,67 @@
+﻿{
+  "ContextClassName": "ClockwerkzDbContext",
+  "ContextNamespace": null,
+  "DefaultDacpacSchema": null,
+  "DoNotCombineNamespace": false,
+  "IdReplace": false,
+  "IncludeConnectionString": false,
+  "ModelNamespace": null,
+  "OutputContextPath": null,
+  "OutputPath": "Entities",
+  "ProjectRootNamespace": "Clockwerkz.Domain",
+  "SelectedHandlebarsLanguage": 0,
+  "SelectedToBeGenerated": 0,
+  "Tables": [
+    {
+      "HasPrimaryKey": true,
+      "Name": "[Quartz].[BLOB_TRIGGERS]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[Quartz].[CALENDARS]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[Quartz].[CRON_TRIGGERS]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[Quartz].[FIRED_TRIGGERS]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[Quartz].[JOB_DETAILS]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[Quartz].[LOCKS]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[Quartz].[PAUSED_TRIGGER_GRPS]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[Quartz].[SCHEDULER_STATE]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[Quartz].[SIMPLE_TRIGGERS]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[Quartz].[SIMPROP_TRIGGERS]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[Quartz].[TRIGGERS]"
+    }
+  ],
+  "UseDatabaseNames": false,
+  "UseDbContextSplitting": false,
+  "UseFluentApiOnly": false,
+  "UseHandleBars": false,
+  "UseInflector": true,
+  "UseLegacyPluralizer": false,
+  "UseSpatial": false
+}

@@ -47,6 +47,7 @@ namespace Clockwerkz
         {
             services.AddMvc(options =>
             {
+                options.EnableEndpointRouting = false;
                 options.RespectBrowserAcceptHeader = true;
                 options.OutputFormatters.RemoveType<StringOutputFormatter>();
             });
@@ -104,6 +105,7 @@ namespace Clockwerkz
 
             app.UseMvc(routes =>
             {
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

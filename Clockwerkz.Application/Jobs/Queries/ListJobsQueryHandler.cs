@@ -23,11 +23,12 @@ namespace Clockwerkz.Application.Jobs.Queries
             var jobs = await _context.JobDetails
                 .OrderBy(x => x.JobGroup)
                 .ThenBy(x => x.JobName)
-                .GroupJoin(
-                    _context.Triggers,
-                    jobDetail => new { jobDetail.JobName, jobDetail.JobGroup },
-                    trigger => new { trigger.JobName, trigger.JobGroup },
-                    JobListDto.Projection)
+                .Select(JobListDto.Projection)
+                //.GroupJoin(
+                //    _context.Triggers,
+                //    jobDetail => new { jobDetail.JobName, jobDetail.JobGroup },
+                //    trigger => new { trigger.JobName, trigger.JobGroup },
+                //    JobListDto.Projection)
                 .ToListAsync(cancellationToken);
 
             return jobs;

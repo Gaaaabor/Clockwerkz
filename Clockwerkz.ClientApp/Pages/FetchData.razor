@@ -1,0 +1,43 @@
+﻿@page "/fetchdata"
+
+@using Clockwerkz.Application.Jobs.Models;
+@using Clockwerkz.Application.Jobs.Queries;
+@inject MediatR.IMediator Mediator
+
+<h1>Jobs</h1>
+
+@if (jobs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Group</th>                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var job in jobs)
+            {
+                <tr>
+                    <td>@job.Id</td>
+                    <td>@job.Name</td>
+                    <td>@job.JobGroup</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ICollection<JobListDto> jobs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        jobs = await Mediator.Send(new ListJobsQuery());
+    }
+}

@@ -13,18 +13,20 @@ namespace Clockwerkz.Application.Jobs.Models
         public string JobGroup { get; set; }
         public IEnumerable<TriggerDto> Triggers { get; set; }
 
-        public static Expression<Func<JobDetail, IEnumerable<Trigger>, JobListDto>> Projection
+        public JobListDto()
+        {
+            Triggers = Enumerable.Empty<TriggerDto>();
+        }
+
+        public static Expression<Func<JobDetail, JobListDto>> Projection
         {
             get
             {
-                return (jobDetail, triggers) => new JobListDto
+                return jobDetail => new JobListDto
                 {
                     Id = $"{jobDetail.JobGroup}_{jobDetail.JobName}",
                     JobGroup = jobDetail.JobGroup,
-                    Name = jobDetail.JobName,
-                    Triggers = triggers
-                        .AsQueryable()
-                        .Select(TriggerDto.Projection)
+                    Name = jobDetail.JobName
                 };
             }
         }

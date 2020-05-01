@@ -22,7 +22,7 @@ namespace Clockwerkz.Application.Jobs.Models
                 return trigger => new TriggerDto
                 {
                     Name = trigger.TriggerName,
-                    JobGroup = trigger.JobGroup,                    
+                    JobGroup = trigger.JobGroup,
                     State = trigger.TriggerState,
                     Type = trigger.TriggerType,
                     StartTime = trigger.StartTime,
