@@ -1,15 +1,58 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="sidebar">
-    <NavMenu />
-</div>
+<MatAppBarContainer>
+    <MatAppBar Fixed="true">
+        <MatAppBarRow>
+            <MatAppBarSection>
+                <MatIconButton Icon="menu" OnClick="@((e) => ButtonClicked())"></MatIconButton>
+                <MatAppBarTitle>Clockwerkz</MatAppBarTitle>
+            </MatAppBarSection>
+            <MatAppBarSection Align="@MatAppBarSectionAlign.End">
+                <NavLink class="text-white nav-link" href="" Match="NavLinkMatch.All">
+                    Home
+                </NavLink>
+                <NavLink class="text-white nav-link" href="jobs">
+                    Jobs
+                </NavLink>
+                <NavLink class="text-white nav-link" href="counter">
+                    Counter
+                </NavLink>
+            </MatAppBarSection>
+        </MatAppBarRow>
+    </MatAppBar>
+    <MatAppBarContent>
+        @*Navigation Drawer*@
+        <MatDrawerContainer>
+            <MatDrawer Opened="@Opened" Mode="@MatDrawerMode.Modal">
+                @* List *@
+                <MatListGroup>
+                    <MatListGroupSubHeader>Dashboard</MatListGroupSubHeader>
+                    <MatList>
+                        <MatListItem>
+                            Posts
+                        </MatListItem>
+                        <MatListItem>
+                            Pages
+                        </MatListItem>
+                        <MatListItem>
+                            Media
+                        </MatListItem>
+                    </MatList>                    
+                </MatListGroup>
+            </MatDrawer>
+        </MatDrawerContainer>
+        <MatDrawerContent Style="width:100vw; height : 100%;">
+            <div class="container">
+                @Body
+            </div>
+        </MatDrawerContent>
+    </MatAppBarContent>
+</MatAppBarContainer>
 
-<div class="main">
-    <div class="top-row px-4">
-        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-    </div>
-
-    <div class="content px-4">
-        @Body
-    </div>
-</div>
+@functions {
+    bool Opened = false;
+    void ButtonClicked()
+    {
+        Opened = !Opened;
+    }
+}

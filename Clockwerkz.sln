@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clockwerkz.Infrastructure",
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Clockwerkz.Db", "Clockwerkz.Db\Clockwerkz.Db.sqlproj", "{2B598BD4-F3CA-47A9-AF9A-854EA50AB82A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clockwerkz.ClientApp", "Clockwerkz.ClientApp\Clockwerkz.ClientApp.csproj", "{6CC9125A-7037-4FCE-B43F-4C9FCE37C5FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clockwerkz.ClientApp", "Clockwerkz.ClientApp\Clockwerkz.ClientApp.csproj", "{6CC9125A-7037-4FCE-B43F-4C9FCE37C5FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

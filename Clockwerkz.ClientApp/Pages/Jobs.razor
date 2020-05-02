@@ -1,0 +1,40 @@
+﻿@page "/jobs"
+
+@using Clockwerkz.Application.Jobs.Models;
+@using Clockwerkz.Application.Jobs.Queries;
+
+@inject MediatR.IMediator Mediator
+@code {
+    private ICollection<JobListDto> jobs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        jobs = await Mediator.Send(new ListJobsQuery());
+    }
+}
+
+<h1>Jobs</h1>
+
+@if (jobs == null)
+{
+    <p><em>Loading jobs...</em></p>
+}
+else
+{
+    @foreach (var job in jobs)
+    {
+        <MatList SingleSelection="true" TwoLine="true">
+            <MatListItem>
+                <MatListItemText>
+                    <MatListItemPrimaryText>@job.Name</MatListItemPrimaryText>
+                    <MatListItemSecondaryText>@job.JobGroup</MatListItemSecondaryText>
+                    @foreach (var trigger in job.Triggers)
+                    {
+                        <MatIcon Icon="@MatIconNames.Schedule">@trigger.StartTime</MatIcon>
+                        <MatIcon Icon="@MatIconNames.Schedule">@trigger.EndTime</MatIcon>
+                    }
+                </MatListItemText>
+            </MatListItem>
+        </MatList>
+    }
+}
