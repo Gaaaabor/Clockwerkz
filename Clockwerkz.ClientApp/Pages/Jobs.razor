@@ -23,13 +23,16 @@
 
         _hubConnection.On<JobListDto>("JobScheduled", scheduledJob =>
         {
-            jobs.Add(scheduledJob);
-            StateHasChanged();
+            if (scheduledJob != null)
+            {
+                jobs.Add(scheduledJob);
+                StateHasChanged();
+            }
         });
 
         await _hubConnection.StartAsync();
 
-        jobs = new List<JobListDto>(await Mediator.Send(new ListJobsQuery()));        
+        jobs = new List<JobListDto>(await Mediator.Send(new ListJobsQuery()));
     }
 
     public async Task ScheduleJob()
