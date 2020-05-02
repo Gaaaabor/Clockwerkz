@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Clockwerkz.Application.Jobs.Queries
 {
-    public class ListJobsQuery : IRequest<ICollection<JobListDto>>
+    public class ListJobsQuery : IRequest<IEnumerable<JobListDto>>
     {
     }
 }

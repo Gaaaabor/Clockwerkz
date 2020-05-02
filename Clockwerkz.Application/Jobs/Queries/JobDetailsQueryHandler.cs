@@ -16,7 +16,7 @@ namespace Clockwerkz.Application.Jobs.Queries
 
         public async Task<JobDetailDto> Handle(JobDetailsQuery request, CancellationToken cancellationToken)
         {
-            var jobDetail = await _jobManager.GetJobDetail(request.JobGroup, request.JobName);
+            var jobDetail = await _jobManager.GetJobDetailAsync(request.JobGroup, request.JobName);
             if (jobDetail == null)
             {
                 return null;

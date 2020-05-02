@@ -1,20 +1,54 @@
 ﻿@page "/jobs"
 
+@using Microsoft.AspNetCore.SignalR.Client
 @using Clockwerkz.Application.Jobs.Models;
 @using Clockwerkz.Application.Jobs.Queries;
+@using Clockwerkz.Application.Jobs.Commands;
 
+@inject NavigationManager NavigationManager
 @inject MediatR.IMediator Mediator
+
 @code {
+
+    private HubConnection _hubConnection;
     private ICollection<JobListDto> jobs;
+    private string _userInput;
+    private string _messageInput;
 
     protected override async Task OnInitializedAsync()
     {
-        jobs = await Mediator.Send(new ListJobsQuery());
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/jobHub"))
+            .Build();
+
+        _hubConnection.On<JobListDto>("JobScheduled", scheduledJob =>
+        {
+            jobs.Add(scheduledJob);
+            StateHasChanged();
+        });
+
+        await _hubConnection.StartAsync();
+
+        jobs = new List<JobListDto>(await Mediator.Send(new ListJobsQuery()));        
+    }
+
+    public async Task ScheduleJob()
+    {
+        var command = new ScheduleJobCommand
+        {
+            JobName = "Chicken_" + Guid.NewGuid().ToString(),
+            GroupName = "Test",
+            JobDataMap = new Dictionary<string, object>(),
+            StartImmediately = false
+        };
+
+        var createdJob = await Mediator.Send(command);
+        await _hubConnection.SendAsync("JobScheduled", createdJob);
     }
 }
 
 <h1>Jobs</h1>
-
+<MatButton Icon="@MatIconNames.Schedule" OnClick="ScheduleJob">Schedule test</MatButton>
 @if (jobs == null)
 {
     <p><em>Loading jobs...</em></p>
@@ -26,13 +60,8 @@ else
         <MatList SingleSelection="true" TwoLine="true">
             <MatListItem>
                 <MatListItemText>
-                    <MatListItemPrimaryText>@job.Name</MatListItemPrimaryText>
-                    <MatListItemSecondaryText>@job.JobGroup</MatListItemSecondaryText>
-                    @foreach (var trigger in job.Triggers)
-                    {
-                        <MatIcon Icon="@MatIconNames.Schedule">@trigger.StartTime</MatIcon>
-                        <MatIcon Icon="@MatIconNames.Schedule">@trigger.EndTime</MatIcon>
-                    }
+                    <MatListItemPrimaryText>@($"{job.Name}_{job.JobGroup}")</MatListItemPrimaryText>
+                    <MatListItemSecondaryText>@job.Description</MatListItemSecondaryText>
                 </MatListItemText>
             </MatListItem>
         </MatList>

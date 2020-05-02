@@ -1,6 +1,7 @@
 ﻿using Clockwerkz.Application;
 using Clockwerkz.Application.Jobs.Models;
 using Quartz;
+using Quartz.Impl.Matchers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Clockwerkz.Infrastructure
             _scheduler = scheduler;
         }
 
-        public async Task ScheduleCustomJob(string jobName, string groupName, bool startImmediately, string cronExpression, IDictionary<string, object> jobDataMap)
+        public async Task ScheduleCustomJobAsync(string jobName, string groupName, bool startImmediately, string cronExpression, IDictionary<string, object> jobDataMap)
         {
             var normalizedJobData = NormalizeKeys(jobDataMap);
 
@@ -32,18 +33,22 @@ namespace Clockwerkz.Infrastructure
 
             var trigger = TriggerBuilder
                 .Create()
-                .WithIdentity(triggerName, groupName)
-                .WithCronSchedule(cronExpression, x => x.InTimeZone(TimeZoneInfo.Utc));
+                .WithIdentity(triggerName, groupName);
 
-            if (startImmediately)
+            if (cronExpression != null)
             {
-                trigger = trigger.StartNow();
+                trigger.WithCronSchedule(cronExpression, x => x.InTimeZone(TimeZoneInfo.Utc));
+
+                if (startImmediately)
+                {
+                    trigger = trigger.StartNow();
+                }
             }
 
             await _scheduler.ScheduleJob(job, trigger.Build());
         }
 
-        public async Task<JobDetailDto> GetJobDetail(string jobGroup, string jobName)
+        public async Task<JobDetailDto> GetJobDetailAsync(string jobGroup, string jobName)
         {
             if (string.IsNullOrEmpty(jobGroup) || string.IsNullOrEmpty(jobName))
             {
@@ -91,12 +96,12 @@ namespace Clockwerkz.Infrastructure
             return new JobDataMap(upperKeyedDict);
         }
 
-        public async Task DeleteJob(string name, string groupName)
+        public async Task DeleteJobAsync(string name, string groupName)
         {
             await _scheduler.DeleteJob(JobKey.Create(name, groupName));
         }
 
-        public async Task DeleteTrigger(string name, string groupName)
+        public async Task DeleteTriggerAsync(string name, string groupName)
         {
             await _scheduler.UnscheduleJob(new TriggerKey(name, groupName));
         }
@@ -104,6 +109,36 @@ namespace Clockwerkz.Infrastructure
         public async Task Start()
         {
             await _scheduler.Start();
+        }
+
+        public async Task<IEnumerable<JobListDto>> GetJobsAsync()
+        {
+            var jobList = new List<JobListDto>();
+
+            var jobKeys = await _scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
+            foreach (var jobKey in jobKeys)
+            {
+                var job = await GetJobAsync(jobKey.Group, jobKey.Name);
+                jobList.Add(job);
+            }
+
+            return jobList;
+        }
+
+        public async Task<JobListDto> GetJobAsync(string jobGroup, string jobName)
+        {
+            var job = await _scheduler.GetJobDetail(JobKey.Create(jobName, jobGroup));
+            if (job == null)
+            {
+                return null;
+            }
+
+            return new JobListDto
+            {
+                JobGroup = job.Key.Group,
+                Name = job.Key.Name,
+                Description = job.Description
+            };
         }
     }
 }

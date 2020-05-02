@@ -7,9 +7,11 @@ namespace Clockwerkz.Application
     public interface IJobManager
     {
         Task Start();
-        Task ScheduleCustomJob(string name, string groupName, bool startImmediately, string cronExpression, IDictionary<string, object> jobDataMap);
-        Task DeleteJob(string name, string groupName);
-        Task DeleteTrigger(string name, string groupName);
-        Task<JobDetailDto> GetJobDetail(string jobGroup, string jobName);
+        Task ScheduleCustomJobAsync(string name, string groupName, bool startImmediately, string cronExpression, IDictionary<string, object> jobDataMap);
+        Task DeleteJobAsync(string name, string groupName);
+        Task DeleteTriggerAsync(string name, string groupName);
+        Task<JobDetailDto> GetJobDetailAsync(string jobGroup, string jobName);
+        Task<IEnumerable<JobListDto>> GetJobsAsync();
+        Task<JobListDto> GetJobAsync(string jobGroup, string jobName);
     }
 }

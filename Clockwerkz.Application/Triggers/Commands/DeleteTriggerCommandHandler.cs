@@ -15,7 +15,7 @@ namespace Clockwerkz.Application.Triggers.Commands
 
         public async Task<Unit> Handle(DeleteTriggerCommand request, CancellationToken cancellationToken)
         {
-            await _jobManager.DeleteTrigger(request.Name, request.GroupName);
+            await _jobManager.DeleteTriggerAsync(request.Name, request.GroupName);
 
             return Unit.Value;
         }

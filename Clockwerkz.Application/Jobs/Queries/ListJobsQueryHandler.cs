@@ -1,31 +1,23 @@
 ﻿using Clockwerkz.Application.Jobs.Models;
-using Clockwerkz.Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Clockwerkz.Application.Jobs.Queries
 {
-    public class ListJobsQueryHanlder : IRequestHandler<ListJobsQuery, ICollection<JobListDto>>
+    public class ListJobsQueryHanlder : IRequestHandler<ListJobsQuery, IEnumerable<JobListDto>>
     {
-        private readonly IClockwerkzDbContext _context;
+        private readonly IJobManager _jobManager;
 
-        public ListJobsQueryHanlder(IClockwerkzDbContext context)
+        public ListJobsQueryHanlder(IJobManager jobManager)
         {
-            _context = context;
+            _jobManager = jobManager;
         }
 
-        public async Task<ICollection<JobListDto>> Handle(ListJobsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<JobListDto>> Handle(ListJobsQuery request, CancellationToken cancellationToken)
         {
-            var jobs = await _context.JobDetails
-                .OrderBy(x => x.JobGroup)
-                .ThenBy(x => x.JobName)
-                .Select(JobListDto.Projection)
-                .ToListAsync(cancellationToken);
-
+            var jobs = await _jobManager.GetJobsAsync();
             return jobs;
         }
     }

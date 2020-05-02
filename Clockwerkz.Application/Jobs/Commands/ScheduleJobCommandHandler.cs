@@ -1,10 +1,11 @@
-﻿using MediatR;
+﻿using Clockwerkz.Application.Jobs.Models;
+using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Clockwerkz.Application.Jobs.Commands
 {
-    public class ScheduleJobCommandHandler : IRequestHandler<ScheduleJobCommand>
+    public class ScheduleJobCommandHandler : IRequestHandler<ScheduleJobCommand, JobListDto>
     {
         private readonly IJobManager _jobManager;
 
@@ -13,16 +14,17 @@ namespace Clockwerkz.Application.Jobs.Commands
             _jobManager = jobManager;
         }
 
-        public async Task<Unit> Handle(ScheduleJobCommand request, CancellationToken cancellationToken)
+        public async Task<JobListDto> Handle(ScheduleJobCommand request, CancellationToken cancellationToken)
         {
-            await _jobManager.ScheduleCustomJob(
+            await _jobManager.ScheduleCustomJobAsync(
                 request.JobName,
                 request.GroupName,
                 request.StartImmediately,
                 request.CronExpression,
                 request.JobDataMap);
 
-            return Unit.Value;
+            var job = await _jobManager.GetJobAsync(request.GroupName, request.JobName);
+            return job;
         }
     }
 }
