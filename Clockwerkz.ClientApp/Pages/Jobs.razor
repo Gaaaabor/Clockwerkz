@@ -1,9 +1,12 @@
 ﻿@page "/jobs"
 
 @using Microsoft.AspNetCore.SignalR.Client
+@using Clockwerkz.Infrastructure.Comparers;
+@using Clockwerkz.Application.Notifications;
 @using Clockwerkz.Application.Jobs.Models;
 @using Clockwerkz.Application.Jobs.Queries;
 @using Clockwerkz.Application.Jobs.Commands;
+@using System;
 
 @inject NavigationManager NavigationManager
 @inject MediatR.IMediator Mediator
@@ -11,28 +14,32 @@
 @code {
 
     private HubConnection _hubConnection;
-    private ICollection<JobListDto> jobs;
+    private SortedSet<JobListDto> jobs;
     private string _userInput;
     private string _messageInput;
+
+    private string _jobFilter;
 
     protected override async Task OnInitializedAsync()
     {
         _hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/jobHub"))
+            .WithUrl(NavigationManager.ToAbsoluteUri("/notificationService"))
             .Build();
 
-        _hubConnection.On<JobListDto>("JobScheduled", scheduledJob =>
+        _hubConnection.On<JobListDto>(NotificationMethods.JobScheduled, jobListDto =>
         {
-            if (scheduledJob != null)
+            if (jobListDto != null)
             {
-                jobs.Add(scheduledJob);
+                jobs.Add(jobListDto);
                 StateHasChanged();
             }
         });
 
         await _hubConnection.StartAsync();
 
-        jobs = new List<JobListDto>(await Mediator.Send(new ListJobsQuery()));
+        jobs = new SortedSet<JobListDto>(
+            await Mediator.Send(new ListJobsQuery()),
+            new JobListDtoComparer());
     }
 
     public async Task ScheduleJob()
@@ -48,25 +55,84 @@
         var createdJob = await Mediator.Send(command);
         await _hubConnection.SendAsync("JobScheduled", createdJob);
     }
+
+    private string DateTimeFromBinary(long? fileTimeUtc)
+    {
+        if (fileTimeUtc.HasValue)
+        {
+            var parsedDate = DateTime.FromBinary(fileTimeUtc.Value);
+            return TimeZoneInfo.ConvertTimeFromUtc(parsedDate, TimeZoneInfo.Local).ToString();
+        }
+
+        return "N/A";
+    }
 }
 
 <h1>Jobs</h1>
-<MatButton Icon="@MatIconNames.Schedule" OnClick="ScheduleJob">Schedule test</MatButton>
+<div class="flex-row">
+    <MatButton Icon="@MatIconNames.Schedule" Outlined="true" OnClick="ScheduleJob">Schedule test 1</MatButton>
+    <MatButton Icon="@MatIconNames.Schedule" Outlined="true" OnClick="ScheduleJob">Schedule test 2</MatButton>
+    <MatButton Icon="@MatIconNames.Schedule" Outlined="true" OnClick="ScheduleJob">Schedule test 3</MatButton>
+</div>
+
 @if (jobs == null)
 {
     <p><em>Loading jobs...</em></p>
 }
 else
 {
-    @foreach (var job in jobs)
-    {
-        <MatList SingleSelection="true" TwoLine="true">
-            <MatListItem>
-                <MatListItemText>
-                    <MatListItemPrimaryText>@($"{job.Name}_{job.JobGroup}")</MatListItemPrimaryText>
-                    <MatListItemSecondaryText>@job.Description</MatListItemSecondaryText>
-                </MatListItemText>
-            </MatListItem>
-        </MatList>
-    }
+    <MatTextField @bind-Value="@_jobFilter" Label="Filter"></MatTextField>
+
+    <MatTable Items="@jobs" class="mat-elevation-z5" PageSize="1000">
+        <MatTableHeader>
+            <th>State</th>
+            <th>Group</th>
+            <th>Name</th>
+            <th>PreviousFireTime</th>
+            <th>NextFireTime</th>
+        </MatTableHeader>
+        <MatTableRow>
+            <td>@context.State</td>
+            <td>@context.JobGroup</td>
+            <td>@context.JobName</td>
+            <td>@context.PreviousFireTime</td>
+            <td>@context.NextFireTime</td>
+        </MatTableRow>
+    </MatTable>
+
+    @*<div class="mat-layout-grid">
+        <div class="mat-layout-grid-inner">
+
+            @foreach (var job in jobs)
+                    {
+                        <div class="flex-column mat-elevation-z6 mat-layout-grid-cell mat-layout-grid-cell-span-3">
+                            <MatListItem Class="jd-max-height">
+                                <MatIcon Icon="@MatIconNames.Perm_identity"></MatIcon>
+                                <span class="icon-text">@job.JobName</span>
+                            </MatListItem>
+                            <MatDivider></MatDivider>
+                            <MatListItem Class="jd-max-height">
+                                <MatIcon Icon="@MatIconNames.Group"></MatIcon>
+                                <span class="icon-text">@job.JobGroup</span>
+                            </MatListItem>
+                            <MatDivider></MatDivider>
+                            <MatListItem Class="jd-max-height">
+                                <MatIcon Icon="@MatIconNames.Traffic"></MatIcon>
+                                <span class="icon-text">@job.State</span>
+                            </MatListItem>
+                            <MatDivider></MatDivider>
+                            <MatListItem Class="jd-max-height">
+                                <MatIcon Icon="@MatIconNames.Alarm_on"></MatIcon>
+                                <span class="icon-text"> @DateTimeFromBinary(job.PreviousFireTime)</span>
+                            </MatListItem>
+                            <MatDivider></MatDivider>
+                            <MatListItem Class="jd-max-height">
+                                <MatIcon Icon="@MatIconNames.Timer"></MatIcon>
+                                <span class="icon-text">@DateTimeFromBinary(job.NextFireTime)</span>
+                            </MatListItem>
+                        </div>
+                    }
+
+            </div>
+        </div>*@
 }

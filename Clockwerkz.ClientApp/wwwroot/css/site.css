@@ -162,3 +162,12 @@ app {
         display: block;
     }
 }
+
+.icon-text {
+    margin-left: 10px;
+}
+
+
+.jd-max-height {
+    max-height: 35px;
+}

@@ -1,8 +1,8 @@
 
 using Autofac;
 using Clockwerkz.ClientApp.Configuration;
-using Clockwerkz.ClientApp.Hubs;
 using Clockwerkz.ClientApp.Infrastructure;
+using Clockwerkz.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -84,7 +84,7 @@ namespace Clockwerkz.ClientApp
             
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<JobHub>("/jobHub");
+                endpoints.MapHub<NotificationService>("/notificationService");
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

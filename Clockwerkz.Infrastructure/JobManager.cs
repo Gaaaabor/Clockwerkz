@@ -1,7 +1,6 @@
 ﻿using Clockwerkz.Application;
 using Clockwerkz.Application.Jobs.Models;
 using Quartz;
-using Quartz.Impl.Matchers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +17,12 @@ namespace Clockwerkz.Infrastructure
             _scheduler = scheduler;
         }
 
-        public async Task ScheduleCustomJobAsync(string jobName, string groupName, bool startImmediately, string cronExpression, IDictionary<string, object> jobDataMap)
+        public async Task Start()
+        {
+            await _scheduler.Start();
+        }
+
+        public async Task<JobListDto> ScheduleCustomJobAsync(string jobName, string groupName, bool startImmediately, string cronExpression, IDictionary<string, object> jobDataMap)
         {
             var normalizedJobData = NormalizeKeys(jobDataMap);
 
@@ -31,69 +35,28 @@ namespace Clockwerkz.Infrastructure
 
             var triggerName = Guid.NewGuid().ToString();
 
-            var trigger = TriggerBuilder
+            var triggerBuilder = TriggerBuilder
                 .Create()
                 .WithIdentity(triggerName, groupName);
 
             if (cronExpression != null)
             {
-                trigger.WithCronSchedule(cronExpression, x => x.InTimeZone(TimeZoneInfo.Utc));
+                triggerBuilder.WithCronSchedule(cronExpression, x => x.InTimeZone(TimeZoneInfo.Utc));
 
                 if (startImmediately)
                 {
-                    trigger = trigger.StartNow();
+                    triggerBuilder = triggerBuilder.StartNow();
                 }
             }
 
-            await _scheduler.ScheduleJob(job, trigger.Build());
-        }
+            var trigger = triggerBuilder.Build();
+            await _scheduler.ScheduleJob(job, trigger);
 
-        public async Task<JobDetailDto> GetJobDetailAsync(string jobGroup, string jobName)
-        {
-            if (string.IsNullOrEmpty(jobGroup) || string.IsNullOrEmpty(jobName))
-            {
-                return null;
-            }
+            var triggerState = await _scheduler.GetTriggerState(trigger.Key);
 
-            var key = JobKey.Create(jobName, jobGroup);
-            var jobDetail = await _scheduler.GetJobDetail(key);
-            if (jobDetail == null)
-            {
-                return null;
-            }
+            var jobListDto = Map(trigger, triggerState);
 
-            var jobDetailDto = new JobDetailDto
-            {
-                JobName = jobDetail.Key.Name,
-                JobGroup = jobDetail.Key.Group,
-                JobDataMap = new Dictionary<string, string>()
-            };
-
-            if (jobDetail.JobDataMap != null)
-            {
-                foreach (var jobData in jobDetail.JobDataMap)
-                {
-                    jobDetailDto.JobDataMap.Add(jobData.Key, jobData.Value.ToString());
-                }
-            }
-
-            var jobTriggers = await _scheduler.GetTriggersOfJob(key);
-            if (jobTriggers != null && jobTriggers.Any())
-            {
-                jobDetailDto.Triggers = jobTriggers.Select(x => new TriggerDto
-                {
-                    StartTime = x.StartTimeUtc.Ticks,
-                    EndTime = x.EndTimeUtc?.Ticks
-                });
-            }
-
-            return jobDetailDto;
-        }
-
-        private JobDataMap NormalizeKeys(IDictionary<string, object> jobDataMap)
-        {
-            var upperKeyedDict = jobDataMap.ToDictionary(k => k.Key.ToUpper(), v => v.Value.ToString());
-            return new JobDataMap(upperKeyedDict);
+            return jobListDto;
         }
 
         public async Task DeleteJobAsync(string name, string groupName)
@@ -106,38 +69,25 @@ namespace Clockwerkz.Infrastructure
             await _scheduler.UnscheduleJob(new TriggerKey(name, groupName));
         }
 
-        public async Task Start()
+        private JobDataMap NormalizeKeys(IDictionary<string, object> jobDataMap)
         {
-            await _scheduler.Start();
+            var upperKeyedDict = jobDataMap.ToDictionary(k => k.Key.ToUpper(), v => v.Value?.ToString());
+            return new JobDataMap(upperKeyedDict);
         }
 
-        public async Task<IEnumerable<JobListDto>> GetJobsAsync()
+        private JobListDto Map(ITrigger trigger, TriggerState triggerState)
         {
-            var jobList = new List<JobListDto>();
-
-            var jobKeys = await _scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
-            foreach (var jobKey in jobKeys)
-            {
-                var job = await GetJobAsync(jobKey.Group, jobKey.Name);
-                jobList.Add(job);
-            }
-
-            return jobList;
-        }
-
-        public async Task<JobListDto> GetJobAsync(string jobGroup, string jobName)
-        {
-            var job = await _scheduler.GetJobDetail(JobKey.Create(jobName, jobGroup));
-            if (job == null)
-            {
-                return null;
-            }
-
             return new JobListDto
             {
-                JobGroup = job.Key.Group,
-                Name = job.Key.Name,
-                Description = job.Description
+                JobName = trigger.JobKey.Name,
+                JobGroup = trigger.JobKey.Group,
+                TriggerGroup = trigger.Key.Group,
+                TriggerName = trigger.Key.Name,                
+                State = triggerState.ToString(),
+                StartTime = trigger.StartTimeUtc.Ticks,
+                EndTime = trigger.EndTimeUtc?.Ticks,
+                PreviousFireTime = trigger.GetPreviousFireTimeUtc()?.Ticks,
+                NextFireTime = trigger.GetNextFireTimeUtc()?.Ticks
             };
         }
     }

@@ -1,13 +1,11 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.AspNetCore.Components
+@inherits LayoutComponentBase
 
 <MatAppBarContainer>
     <MatAppBar Fixed="true">
         <MatAppBarRow>
             <MatAppBarSection>
-                <MatIconButton Icon="menu" OnClick="@((e) => ButtonClicked())"></MatIconButton>
                 <MatAppBarTitle>Clockwerkz</MatAppBarTitle>
-            </MatAppBarSection>
-            <MatAppBarSection Align="@MatAppBarSectionAlign.End">
                 <NavLink class="text-white nav-link" href="" Match="NavLinkMatch.All">
                     Home
                 </NavLink>
@@ -20,39 +18,9 @@
             </MatAppBarSection>
         </MatAppBarRow>
     </MatAppBar>
-    <MatAppBarContent>
-        @*Navigation Drawer*@
-        <MatDrawerContainer>
-            <MatDrawer Opened="@Opened" Mode="@MatDrawerMode.Modal">
-                @* List *@
-                <MatListGroup>
-                    <MatListGroupSubHeader>Dashboard</MatListGroupSubHeader>
-                    <MatList>
-                        <MatListItem>
-                            Posts
-                        </MatListItem>
-                        <MatListItem>
-                            Pages
-                        </MatListItem>
-                        <MatListItem>
-                            Media
-                        </MatListItem>
-                    </MatList>                    
-                </MatListGroup>
-            </MatDrawer>
-        </MatDrawerContainer>
-        <MatDrawerContent Style="width:100vw; height : 100%;">
-            <div class="container">
-                @Body
-            </div>
-        </MatDrawerContent>
+    <MatAppBarContent Style="width: 100vw; height: 100%">
+        <div class="container">
+            @Body
+        </div>
     </MatAppBarContent>
 </MatAppBarContainer>
-
-@functions {
-    bool Opened = false;
-    void ButtonClicked()
-    {
-        Opened = !Opened;
-    }
-}

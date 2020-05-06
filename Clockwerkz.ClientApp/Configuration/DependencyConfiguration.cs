@@ -1,4 +1,6 @@
 ﻿using Clockwerkz.Application;
+using Clockwerkz.Application.Interfaces;
+using Clockwerkz.Application.Jobs.Interfaces;
 using Clockwerkz.ClientApp.Common;
 using Clockwerkz.Domain;
 using Clockwerkz.Infrastructure;
@@ -7,6 +9,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
 
 namespace Clockwerkz.ClientApp.Configuration
 {
@@ -22,7 +25,11 @@ namespace Clockwerkz.ClientApp.Configuration
             //DI registrations            
             services.AddTransient<IMediator, Mediator>();
             services.AddTransient<IJobManager, JobManager>();
+            services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IJobSettingsProvider, JobSettingsProvider>(x => new JobSettingsProvider(configuration));
+            services.AddTransient<IJobDataSerializer, JobDataSerializer>();
+
+            services.AddScoped<HttpClient>();
 
             // Add DbContext using SQL Server Provider
             services.AddDbContext<IClockwerkzDbContext, ClockwerkzDbContext>(x => x.UseSqlServer(configuration.GetConnectionString(AppsettingsConfig.QuartzDb)));
