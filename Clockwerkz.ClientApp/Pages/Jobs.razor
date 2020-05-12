@@ -26,7 +26,7 @@
             .WithUrl(NavigationManager.ToAbsoluteUri("/notificationService"))
             .Build();
 
-        _hubConnection.On<JobListDto>(NotificationMethods.JobScheduled, jobListDto =>
+        _hubConnection.On<JobListDto>(JobScheduledNotificationMessage.Event, jobListDto =>
         {
             if (jobListDto != null)
             {
@@ -70,20 +70,16 @@
 
 <h1>Jobs</h1>
 <div class="flex-row">
-    <MatButton Icon="@MatIconNames.Schedule" Outlined="true" OnClick="ScheduleJob">Schedule test 1</MatButton>
-    <MatButton Icon="@MatIconNames.Schedule" Outlined="true" OnClick="ScheduleJob">Schedule test 2</MatButton>
-    <MatButton Icon="@MatIconNames.Schedule" Outlined="true" OnClick="ScheduleJob">Schedule test 3</MatButton>
+    <MatButton Icon="@MatIconNames.Schedule" Outlined="true" OnClick="ScheduleJob">Schedule test 1</MatButton>    
 </div>
-
+<br />
 @if (jobs == null)
 {
     <p><em>Loading jobs...</em></p>
 }
 else
-{
-    <MatTextField @bind-Value="@_jobFilter" Label="Filter"></MatTextField>
-
-    <MatTable Items="@jobs" class="mat-elevation-z5" PageSize="1000">
+{    
+    <MatTable Items="@jobs" PageSize="jobs.Count" ShowPaging="false" Striped="true" class="mat-elevation-z5" FilterByColumnName="JobName" >
         <MatTableHeader>
             <th>State</th>
             <th>Group</th>
@@ -95,44 +91,8 @@ else
             <td>@context.State</td>
             <td>@context.JobGroup</td>
             <td>@context.JobName</td>
-            <td>@context.PreviousFireTime</td>
-            <td>@context.NextFireTime</td>
+            <td>@DateTimeFromBinary(context.PreviousFireTime)</td>
+            <td>@DateTimeFromBinary(context.NextFireTime)</td>
         </MatTableRow>
     </MatTable>
-
-    @*<div class="mat-layout-grid">
-        <div class="mat-layout-grid-inner">
-
-            @foreach (var job in jobs)
-                    {
-                        <div class="flex-column mat-elevation-z6 mat-layout-grid-cell mat-layout-grid-cell-span-3">
-                            <MatListItem Class="jd-max-height">
-                                <MatIcon Icon="@MatIconNames.Perm_identity"></MatIcon>
-                                <span class="icon-text">@job.JobName</span>
-                            </MatListItem>
-                            <MatDivider></MatDivider>
-                            <MatListItem Class="jd-max-height">
-                                <MatIcon Icon="@MatIconNames.Group"></MatIcon>
-                                <span class="icon-text">@job.JobGroup</span>
-                            </MatListItem>
-                            <MatDivider></MatDivider>
-                            <MatListItem Class="jd-max-height">
-                                <MatIcon Icon="@MatIconNames.Traffic"></MatIcon>
-                                <span class="icon-text">@job.State</span>
-                            </MatListItem>
-                            <MatDivider></MatDivider>
-                            <MatListItem Class="jd-max-height">
-                                <MatIcon Icon="@MatIconNames.Alarm_on"></MatIcon>
-                                <span class="icon-text"> @DateTimeFromBinary(job.PreviousFireTime)</span>
-                            </MatListItem>
-                            <MatDivider></MatDivider>
-                            <MatListItem Class="jd-max-height">
-                                <MatIcon Icon="@MatIconNames.Timer"></MatIcon>
-                                <span class="icon-text">@DateTimeFromBinary(job.NextFireTime)</span>
-                            </MatListItem>
-                        </div>
-                    }
-
-            </div>
-        </div>*@
 }

@@ -14,9 +14,9 @@ namespace Clockwerkz.Infrastructure
             _hubContext = hubContext;
         }
 
-        public async Task SendAsync(NotificationMessage notificationMessage)
+        public async Task SendAsync(NotificationMessageBase notificationMessage)
         {
-            await _hubContext.Clients.All.SendAsync(notificationMessage.Method, notificationMessage.Item);
+            await _hubContext.Clients.All.SendAsync(notificationMessage.EventName, notificationMessage.Item);
         }
     }
 }

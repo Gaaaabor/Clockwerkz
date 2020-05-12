@@ -1,6 +1,6 @@
 ﻿namespace Clockwerkz.Application.Notifications
 {
-    public static class NotificationMethods
+    public static class NotificationEvents
     {
         public const string JobScheduled = "JobScheduled";
     }

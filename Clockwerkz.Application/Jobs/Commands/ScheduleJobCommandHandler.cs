@@ -26,11 +26,7 @@ namespace Clockwerkz.Application.Jobs.Commands
                 request.CronExpression,
                 request.JobDataMap);
 
-            await _notificationService.SendAsync(new NotificationMessage
-            {
-                Method = NotificationMethods.JobScheduled,
-                Item = job
-            });
+            await _notificationService.SendAsync(new JobScheduledNotificationMessage(job));
 
             return Unit.Value;
         }

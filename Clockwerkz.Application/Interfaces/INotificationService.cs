@@ -5,6 +5,6 @@ namespace Clockwerkz.Application.Interfaces
 {
     public interface INotificationService
     {
-        Task SendAsync(NotificationMessage notificationMessage);
+        Task SendAsync(NotificationMessageBase notificationMessage);
     }
 }
