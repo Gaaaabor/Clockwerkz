@@ -17,8 +17,10 @@
     private SortedSet<JobListDto> jobs;
     private string _userInput;
     private string _messageInput;
-
     private string _jobFilter;
+    private bool _isDialogIsOpen;
+
+    private ScheduleJobCommand _scheduleJobCommand;
 
     protected override async Task OnInitializedAsync()
     {
@@ -26,34 +28,22 @@
             .WithUrl(NavigationManager.ToAbsoluteUri("/notificationService"))
             .Build();
 
-        _hubConnection.On<JobListDto>(JobScheduledNotificationMessage.Event, jobListDto =>
-        {
-            if (jobListDto != null)
+        _hubConnection.On<JobListDto>
+            (JobScheduledNotificationMessage.Event, jobListDto =>
             {
-                jobs.Add(jobListDto);
-                StateHasChanged();
-            }
-        });
+                if (jobListDto != null)
+                {
+                    jobs.Add(jobListDto);
+                    StateHasChanged();
+                }
+            });
 
         await _hubConnection.StartAsync();
 
-        jobs = new SortedSet<JobListDto>(
+        jobs = new SortedSet<JobListDto>
+            (
             await Mediator.Send(new ListJobsQuery()),
             new JobListDtoComparer());
-    }
-
-    public async Task ScheduleJob()
-    {
-        var command = new ScheduleJobCommand
-        {
-            JobName = "Chicken_" + Guid.NewGuid().ToString(),
-            GroupName = "Test",
-            JobDataMap = new Dictionary<string, object>(),
-            StartImmediately = false
-        };
-
-        var createdJob = await Mediator.Send(command);
-        await _hubConnection.SendAsync("JobScheduled", createdJob);
     }
 
     private string DateTimeFromBinary(long? fileTimeUtc)
@@ -66,11 +56,58 @@
 
         return "N/A";
     }
+
+    private void ScheduleJob()
+    {
+        _isDialogIsOpen = true;
+        _scheduleJobCommand = new ScheduleJobCommand();
+        _scheduleJobCommand.JobDataMap = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+    }
+
+    private void Back()
+    {
+        _isDialogIsOpen = false;
+    }
+
+    private async Task Schedule()
+    {
+        _isDialogIsOpen = false;
+
+        if (_scheduleJobCommand == null)
+        {
+            return;
+        }
+
+        var createdJob = await Mediator.Send(_scheduleJobCommand);
+        await _hubConnection.SendAsync("JobScheduled", createdJob);
+    }
+
+    private string _key;
+    private string _value;
+    private void AddJobDataMap()
+    {
+        if (_scheduleJobCommand == null)
+        {
+            return;
+        }
+
+        if (!_scheduleJobCommand.JobDataMap.TryGetValue(_key, out var _))
+        {
+            _scheduleJobCommand.JobDataMap.Add(_key, _value);
+        }
+        else
+        {
+            _scheduleJobCommand.JobDataMap[_key] = _value;
+        }
+
+        _key = string.Empty;
+        _value = string.Empty;
+    }
 }
 
 <h1>Jobs</h1>
 <div class="flex-row">
-    <MatButton Icon="@MatIconNames.Schedule" Outlined="true" OnClick="ScheduleJob">Schedule test 1</MatButton>    
+    <MatButton Icon="@MatIconNames.Schedule" Outlined="true" OnClick="ScheduleJob">Schedule</MatButton>
 </div>
 <br />
 @if (jobs == null)
@@ -78,14 +115,15 @@
     <p><em>Loading jobs...</em></p>
 }
 else
-{    
-    <MatTable Items="@jobs" PageSize="jobs.Count" ShowPaging="false" Striped="true" class="mat-elevation-z5" FilterByColumnName="JobName" >
+{
+    <MatTable Items="@jobs" PageSize="jobs.Count" ShowPaging="false" Striped="true" class="mat-elevation-z5" FilterByColumnName="JobName" DebounceMilliseconds="200">
         <MatTableHeader>
             <th>State</th>
             <th>Group</th>
             <th>Name</th>
             <th>PreviousFireTime</th>
             <th>NextFireTime</th>
+            <th>Actions</th>
         </MatTableHeader>
         <MatTableRow>
             <td>@context.State</td>
@@ -93,6 +131,76 @@ else
             <td>@context.JobName</td>
             <td>@DateTimeFromBinary(context.PreviousFireTime)</td>
             <td>@DateTimeFromBinary(context.NextFireTime)</td>
+            <td>
+                <MatButton Icon="@MatIconNames.Delete"></MatButton>
+                <MatButton Icon="@MatIconNames.Stop"></MatButton>
+                <MatButton Icon="@MatIconNames.Pause"></MatButton>
+                <MatButton Icon="@MatIconNames.Description"></MatButton>
+            </td>
         </MatTableRow>
     </MatTable>
 }
+
+<MatDialog @bind-IsOpen="@_isDialogIsOpen">
+    <MatDialogTitle>Schedule a job</MatDialogTitle>
+    <MatDialogContent>
+        @if (_scheduleJobCommand != null)
+        {
+            <div class="mat-layout-grid">
+                <div class="mat-layout-grid-inner">
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                        <p>
+                            <MatStringField Icon="@MatIconNames.Perm_identity" @bind-Value="@_scheduleJobCommand.JobName" Label="Job name" Outlined="true"></MatStringField>
+                        </p>
+                        <p>
+                            <MatStringField Icon="@MatIconNames.Group" @bind-Value="@_scheduleJobCommand.GroupName" Label="Group name" Outlined="true"></MatStringField>
+                        </p>
+                    </div>
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                        <p>
+                            <MatStringField Icon="@MatIconNames.Date_range" @bind-Value="@_scheduleJobCommand.CronExpression" Label="CRON schedule" Outlined="true"></MatStringField>
+                        </p>
+                        <p>
+                            <MatCheckbox Label="Start it immediately" @bind-Value="@_scheduleJobCommand.StartImmediately"></MatCheckbox>
+                        </p>
+                    </div>
+
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                        <p>
+                            <MatStringField Icon="@MatIconNames.Vpn_key" @bind-Value="@_key" Label="Key" Outlined="true"></MatStringField>
+                        </p>
+                        <p>
+                            <MatButton Icon="@MatIconNames.Add" Outlined="true" OnClick="AddJobDataMap"></MatButton>
+                        </p>
+                    </div>
+
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                        <p>
+                            <MatStringField Icon="@MatIconNames.Description" @bind-Value="@_value" Label="Value" Outlined="true"></MatStringField>
+                        </p>
+                    </div>
+
+                    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+                        <p>
+                            <MatList>
+                                @foreach (var item in _scheduleJobCommand.JobDataMap)
+                                {
+                                    <MatListItem>
+                                        @item.Key 
+                                        @item.Value
+                                    </MatListItem>
+                                    <MatListDivider></MatListDivider>
+                                }
+                            </MatList>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </MatDialogContent>
+    <MatDialogActions>
+        <MatButton OnClick="@Back">Back</MatButton>
+        <MatButton OnClick="@Schedule">Schedule!</MatButton>
+    </MatDialogActions>
+</MatDialog>
