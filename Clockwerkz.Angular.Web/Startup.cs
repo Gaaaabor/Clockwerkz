@@ -1,9 +1,15 @@
+using Clockwerkz.Angular.Web.Constants;
+using Clockwerkz.Domain;
+using Clockwerkz.Persistence;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Clockwerkz.Angular.Web
 {
@@ -11,19 +17,35 @@ namespace Clockwerkz.Angular.Web
     {
         private IConfiguration _configuration { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            _configuration = configuration;
+            var configurationBuilder = new ConfigurationBuilder();
+
+            if (string.Equals(env.EnvironmentName, Environments.Development, StringComparison.OrdinalIgnoreCase))
+            {
+                configurationBuilder.AddUserSecrets<Startup>();
+            }
+
+            //configurationBuilder.AddJsonFile(string.Format(AppSettingsConfig.AppSettingsFileFormat, env.EnvironmentName), false, true);
+            //configurationBuilder.AddJsonFile(AppSettingsConfig.JobSettingsFileName, false, true);
+
+            _configuration = configurationBuilder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            var connectionString = _configuration.GetConnectionString(AppSettingsConfig.QuartzDb);
+            services.AddDbContext<IClockwerkzDbContext, ClockwerkzDbContext>(options => options.UseSqlServer(connectionString));
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddControllers();
+
+            services.AddMediatR(typeof(Startup).Assembly);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -41,6 +63,7 @@ namespace Clockwerkz.Angular.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();
@@ -52,7 +75,7 @@ namespace Clockwerkz.Angular.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                    pattern: "api/{controller}/{action=Index}/{id?}");
             });
 
             app.UseSpa(spa =>

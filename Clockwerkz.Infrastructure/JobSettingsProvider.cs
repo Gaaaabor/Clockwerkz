@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Clockwerkz.Infrastructure
 {
@@ -16,8 +17,8 @@ namespace Clockwerkz.Infrastructure
 
         public JobSettingsProvider(IConfiguration configuration)
         {
-            var jobSettings = new JobSettings();
-            configuration.Bind(JobSettingKey, jobSettings);
+            var settings = configuration.GetSection(JobSettingKey);
+            var jobSettings = JsonConvert.DeserializeObject<JobSettings>(settings.Value);
             _jobSettings = jobSettings;
         }
 

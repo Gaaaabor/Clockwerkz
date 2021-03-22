@@ -25,7 +25,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Clockwerkz.Db", "Clockwerkz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clockwerkz.ClientApp", "Clockwerkz.ClientApp\Clockwerkz.ClientApp.csproj", "{6CC9125A-7037-4FCE-B43F-4C9FCE37C5FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clockwerkz.Angular.Web", "Clockwerkz.Angular.Web\Clockwerkz.Angular.Web.csproj", "{6288EA09-AD50-4AFF-8598-E464A7BF6D03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clockwerkz.Angular.Web", "Clockwerkz.Angular.Web\Clockwerkz.Angular.Web.csproj", "{6288EA09-AD50-4AFF-8598-E464A7BF6D03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
