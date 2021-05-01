@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
+using Clockwerkz.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class TriggerMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.Trigger>
+    public partial class TriggerMap : IEntityTypeConfiguration<Trigger>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.Trigger> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Trigger> builder)
         {
             #region Generated Configure
             // table
@@ -101,8 +99,22 @@ namespace Clockwerkz.Persistence.Mappings
             // relationships
             builder.HasOne(t => t.JobDetail)
                 .WithMany(t => t.Triggers)
-                .HasForeignKey(d => new { d.SchedName, d.JobName, d.JobGroup})
+                .HasForeignKey(d => new { d.SchedName, d.JobName, d.JobGroup })
                 .HasConstraintName("FK_TRIGGERS_JOB_DETAILS");
+
+            //triggers
+            builder.HasIndex(e => new { e.SchedName, e.CalendarName }, "IDX_T_C");
+            builder.HasIndex(e => new { e.SchedName, e.JobGroup }, "IDX_T_JG");
+            builder.HasIndex(e => new { e.SchedName, e.NextFireTime }, "IDX_T_NEXT_FIRE_TIME");
+            builder.HasIndex(e => new { e.SchedName, e.TriggerGroup }, "IDX_T_G");
+            builder.HasIndex(e => new { e.SchedName, e.TriggerState }, "IDX_T_STATE");
+            builder.HasIndex(e => new { e.SchedName, e.JobName, e.JobGroup }, "IDX_T_J");
+            builder.HasIndex(e => new { e.SchedName, e.MisfireInstr, e.NextFireTime }, "IDX_T_NFT_MISFIRE");
+            builder.HasIndex(e => new { e.SchedName, e.TriggerGroup, e.TriggerState }, "IDX_T_N_G_STATE");
+            builder.HasIndex(e => new { e.SchedName, e.TriggerState, e.NextFireTime }, "IDX_T_NFT_ST");
+            builder.HasIndex(e => new { e.SchedName, e.MisfireInstr, e.NextFireTime, e.TriggerState }, "IDX_T_NFT_ST_MISFIRE");
+            builder.HasIndex(e => new { e.SchedName, e.TriggerName, e.TriggerGroup, e.TriggerState }, "IDX_T_N_STATE");
+            builder.HasIndex(e => new { e.SchedName, e.MisfireInstr, e.NextFireTime, e.TriggerGroup, e.TriggerState }, "IDX_T_NFT_ST_MISFIRE_GRP");
 
             #endregion
         }

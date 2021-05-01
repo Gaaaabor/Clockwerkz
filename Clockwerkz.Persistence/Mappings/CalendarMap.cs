@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class CalendarMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.Calendar>
+    public partial class CalendarMap : IEntityTypeConfiguration<Domain.Entities.Calendar>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.Calendar> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Domain.Entities.Calendar> builder)
         {
             #region Generated Configure
             // table
@@ -29,7 +26,7 @@ namespace Clockwerkz.Persistence.Mappings
                 .HasColumnType("nvarchar(200)")
                 .HasMaxLength(200);
 
-            builder.Property(t => t.CalendarMember)
+            builder.Property(t => t.Calendar1)
                 .IsRequired()
                 .HasColumnName("CALENDAR")
                 .HasColumnType("varbinary(max)");

@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class FiredTriggerMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.FiredTrigger>
+    public partial class FiredTriggerMap : IEntityTypeConfiguration<Domain.Entities.FiredTrigger>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.FiredTrigger> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Domain.Entities.FiredTrigger> builder)
         {
             #region Generated Configure
             // table
@@ -87,8 +84,16 @@ namespace Clockwerkz.Persistence.Mappings
                 .HasColumnType("bit");
 
             // relationships
+
+            //triggers
+            builder.HasIndex(e => new { e.SchedName, e.InstanceName }, "IDX_FT_TRIG_INST_NAME");
+            builder.HasIndex(e => new { e.SchedName, e.JobGroup }, "IDX_FT_JG");
+            builder.HasIndex(e => new { e.SchedName, e.TriggerGroup }, "IDX_FT_TG");
+            builder.HasIndex(e => new { e.SchedName, e.InstanceName, e.RequestsRecovery }, "IDX_FT_INST_JOB_REQ_RCVRY");
+            builder.HasIndex(e => new { e.SchedName, e.JobName, e.JobGroup }, "IDX_FT_J_G");
+            builder.HasIndex(e => new { e.SchedName, e.TriggerName, e.TriggerGroup }, "IDX_FT_T_G");
+
             #endregion
         }
-
     }
 }

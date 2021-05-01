@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class JobDetailMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.JobDetail>
+    public partial class JobDetailMap : IEntityTypeConfiguration<Domain.Entities.JobDetail>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.JobDetail> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Domain.Entities.JobDetail> builder)
         {
             #region Generated Configure
             // table

@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
+using Clockwerkz.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class CronTriggerMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.CronTrigger>
+    public partial class CronTriggerMap : IEntityTypeConfiguration<CronTrigger>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.CronTrigger> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<CronTrigger> builder)
         {
             #region Generated Configure
             // table
@@ -48,8 +46,8 @@ namespace Clockwerkz.Persistence.Mappings
 
             // relationships
             builder.HasOne(t => t.Trigger)
-                .WithMany(t => t.CronTriggers)
-                .HasForeignKey(d => new { d.SchedName, d.TriggerName, d.TriggerGroup})
+                .WithOne(t => t.CronTrigger)
+                .HasForeignKey<CronTrigger>(d => new { d.SchedName, d.TriggerName, d.TriggerGroup })
                 .HasConstraintName("FK_CRON_TRIGGERS_TRIGGERS");
 
             #endregion

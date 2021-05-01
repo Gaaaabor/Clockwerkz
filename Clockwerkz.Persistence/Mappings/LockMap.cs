@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class LockMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.Lock>
+    public partial class LockMap : IEntityTypeConfiguration<Domain.Entities.Lock>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.Lock> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Domain.Entities.Lock> builder)
         {
             #region Generated Configure
             // table

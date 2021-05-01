@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class BlobTriggerMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.BlobTrigger>
+    public partial class BlobTriggerMap : IEntityTypeConfiguration<Domain.Entities.BlobTrigger>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.BlobTrigger> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Domain.Entities.BlobTrigger> builder)
         {
             #region Generated Configure
             // table

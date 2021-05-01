@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class PausedTriggerGrpMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.PausedTriggerGrp>
+    public partial class PausedTriggerGrpMap : IEntityTypeConfiguration<Domain.Entities.PausedTriggerGrp>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.PausedTriggerGrp> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Domain.Entities.PausedTriggerGrp> builder)
         {
             #region Generated Configure
             // table

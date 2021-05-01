@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
+using Clockwerkz.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class SimpleTriggerMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.SimpleTrigger>
+    public partial class SimpleTriggerMap : IEntityTypeConfiguration<SimpleTrigger>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.SimpleTrigger> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<SimpleTrigger> builder)
         {
             #region Generated Configure
             // table
@@ -52,8 +50,8 @@ namespace Clockwerkz.Persistence.Mappings
 
             // relationships
             builder.HasOne(t => t.Trigger)
-                .WithMany(t => t.SimpleTriggers)
-                .HasForeignKey(d => new { d.SchedName, d.TriggerName, d.TriggerGroup})
+                .WithOne(t => t.SimpleTrigger)
+                .HasForeignKey<SimpleTrigger>(d => new { d.SchedName, d.TriggerName, d.TriggerGroup })
                 .HasConstraintName("FK_SIMPLE_TRIGGERS_TRIGGERS");
 
             #endregion

@@ -1,52 +1,50 @@
-using System;
-using System.Collections.Generic;
+using Clockwerkz.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class SimpropTriggerMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.SimpropTrigger>
+    public partial class SimpropTriggerMap : IEntityTypeConfiguration<SimpropTrigger>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.SimpropTrigger> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<SimpropTrigger> builder)
         {
-            #region Generated Configure
+            #region Generated Configure            
             // table
-            //builder.ToTable("SIMPROP_TRIGGERS", "Quartz");
+            builder.ToTable("SIMPROP_TRIGGERS", "Quartz");
 
             // key
             builder.HasKey(t => new { t.SchedName, t.TriggerName, t.TriggerGroup });
 
             // properties
             builder.Property(t => t.SchedName)
-                .IsRequired()                
-                .HasField("SCHED_NAME")                
+                .IsRequired()
+                .HasField("SCHED_NAME")
                 .HasMaxLength(120);
 
             builder.Property(t => t.TriggerName)
                 .IsRequired()
                 .HasField("TRIGGER_NAME")
-                
+
                 .HasMaxLength(150);
 
             builder.Property(t => t.TriggerGroup)
                 .IsRequired()
                 .HasField("TRIGGER_GROUP")
-                
+
                 .HasMaxLength(150);
 
             builder.Property(t => t.StrProp1)
                 .HasField("STR_PROP_1")
-                
+
                 .HasMaxLength(512);
 
             builder.Property(t => t.StrProp2)
                 .HasField("STR_PROP_2")
-                
+
                 .HasMaxLength(512);
 
             builder.Property(t => t.StrProp3)
                 .HasField("STR_PROP_3")
-                
+
                 .HasMaxLength(512);
 
             builder.Property(t => t.IntProp1)
@@ -88,8 +86,8 @@ namespace Clockwerkz.Persistence.Mappings
 
             // relationships
             builder.HasOne(t => t.Trigger)
-                .WithMany(t => t.SimpropTriggers)
-                .HasForeignKey(d => new { d.SchedName, d.TriggerName, d.TriggerGroup })
+                .WithOne(p => p.SimpropTrigger)
+                .HasForeignKey<SimpropTrigger>(d => new { d.SchedName, d.TriggerName, d.TriggerGroup })
                 .HasConstraintName("FK_SIMPROP_TRIGGERS_TRIGGERS");
 
             #endregion

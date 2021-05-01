@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clockwerkz.Persistence.Mappings
 {
-    public partial class SchedulerStateMap
-        : IEntityTypeConfiguration<Clockwerkz.Domain.Entities.SchedulerState>
+    public partial class SchedulerStateMap : IEntityTypeConfiguration<Domain.Entities.SchedulerState>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Clockwerkz.Domain.Entities.SchedulerState> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Domain.Entities.SchedulerState> builder)
         {
             #region Generated Configure
             // table
