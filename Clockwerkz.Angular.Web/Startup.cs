@@ -57,6 +57,7 @@ namespace Clockwerkz.Angular.Web
             });
 
             services.AddMediatR(typeof(Startup).Assembly);
+            services.AddSignalR();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -93,8 +94,7 @@ namespace Clockwerkz.Angular.Web
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<NotificationService>("/notificationService");
-                endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapHub<NotificationService>("/notificationService");                
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "api/{controller}/{action=Index}/{id?}");
