@@ -118,6 +118,5 @@ namespace Clockwerkz.Persistence.Mappings
 
             #endregion
         }
-
     }
 }

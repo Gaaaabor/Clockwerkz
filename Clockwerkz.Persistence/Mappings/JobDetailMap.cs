@@ -70,6 +70,5 @@ namespace Clockwerkz.Persistence.Mappings
             // relationships
             #endregion
         }
-
     }
 }

@@ -23,45 +23,36 @@ namespace Clockwerkz.Persistence.Mappings
             builder.Property(t => t.TriggerName)
                 .IsRequired()
                 .HasField("TRIGGER_NAME")
-
                 .HasMaxLength(150);
 
             builder.Property(t => t.TriggerGroup)
                 .IsRequired()
                 .HasField("TRIGGER_GROUP")
-
                 .HasMaxLength(150);
 
             builder.Property(t => t.StrProp1)
                 .HasField("STR_PROP_1")
-
                 .HasMaxLength(512);
 
             builder.Property(t => t.StrProp2)
                 .HasField("STR_PROP_2")
-
                 .HasMaxLength(512);
 
             builder.Property(t => t.StrProp3)
                 .HasField("STR_PROP_3")
-
                 .HasMaxLength(512);
 
             builder.Property(t => t.IntProp1)
-                .HasField("INT_PROP_1")
-                ;
+                .HasField("INT_PROP_1");
 
             builder.Property(t => t.IntProp2)
-                .HasField("INT_PROP_2")
-                ;
+                .HasField("INT_PROP_2");
 
             builder.Property(t => t.LongProp1)
-                .HasField("LONG_PROP_1")
-                ;
+                .HasField("LONG_PROP_1");
 
             builder.Property(t => t.LongProp2)
-                .HasField("LONG_PROP_2")
-                ;
+                .HasField("LONG_PROP_2");
 
             builder.Property(t => t.DecProp1)
                 .HasField("DEC_PROP_1")
@@ -92,6 +83,5 @@ namespace Clockwerkz.Persistence.Mappings
 
             #endregion
         }
-
     }
 }
