@@ -1,37 +1,23 @@
-﻿using Clockwerkz.Application.Jobs.Interfaces;
-using Clockwerkz.Application.Jobs.Models;
-using Clockwerkz.Domain;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Clockwerkz.Application.Jobs.Queries
 {
-    public class JobDetailsQueryHandler : IRequestHandler<JobDetailsQuery, JobDetailDto>
+    public class JobDetailsQueryHandler : IRequestHandler<JobDetailsQuery, IDictionary<string, string>>
     {
-        private readonly IClockwerkzDbContext _context;
-        private readonly IJobDataSerializer _jobDataSerializer;
+        private readonly IJobManager _jobManager;
 
-        public JobDetailsQueryHandler(IClockwerkzDbContext context, IJobDataSerializer jobDataSerializer)
+        public JobDetailsQueryHandler(IJobManager jobManager)
         {
-            _context = context;
-            _jobDataSerializer = jobDataSerializer;
+            _jobManager = jobManager;
         }
 
-        public async Task<JobDetailDto> Handle(JobDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<IDictionary<string, string>> Handle(JobDetailsQuery request, CancellationToken cancellationToken)
         {
-            var jobDetail = await _context.JobDetails.FirstOrDefaultAsync(x => x.JobName == request.JobName && x.JobGroup == request.JobGroup);
-            if (jobDetail == null)
-            {
-                return null;
-            }
-
-            var jobDetailDto = JobDetailDto.Create(jobDetail);
-
-            jobDetailDto.JobDataMap = _jobDataSerializer.Deserialize(jobDetail.JobData);
-
-            return jobDetailDto;
+            var result = await _jobManager.GetJobDataMapAsync(request.JobName, request.GroupName);
+            return result;
         }
     }
 }

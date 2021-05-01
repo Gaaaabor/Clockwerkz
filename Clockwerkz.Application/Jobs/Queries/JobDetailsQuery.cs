@@ -1,11 +1,11 @@
-﻿using Clockwerkz.Application.Jobs.Models;
-using MediatR;
+﻿using MediatR;
+using System.Collections.Generic;
 
 namespace Clockwerkz.Application.Jobs.Queries
 {
-    public class JobDetailsQuery : IRequest<JobDetailDto>
+    public class JobDetailsQuery : IRequest<IDictionary<string, string>>
     {
-        public string JobGroup { get; set; }
         public string JobName { get; set; }
+        public string GroupName { get; set; }
     }
 }

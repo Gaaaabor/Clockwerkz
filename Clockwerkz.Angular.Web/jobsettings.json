@@ -2,31 +2,31 @@
   "JobSettings": {
     "JobTypes": [
       {
-        "Type": "Machinewerkz.JobInterfaces.IDeviceActivationJob, Machinewerkz.JobInterfaces",
-        "Name": "DeviceActivation",
-        "DataMapGroup": "ActivationGroup"
+        "Type": "Clockwerkz.Common.IDummyJob, Clockwerkz.Common",
+        "Name": "Dummy",
+        "DataMapGroup": "DummyGroup"
       }
     ],
     "JobDataMapKeys": [
       {
-        "Groups": "ActivationGroup",
-        "Label": "Device serial",
-        "Name": "deviceSerial",
+        "Groups": "DummyGroup",
+        "Label": "Dummy name",
+        "Name": "name",
         "Type": "Default"
       },
       {
-        "Groups": "ApiCallGroup",
-        "Label": "HttpMethod",
-        "Name": "httpMethod",
+        "Groups": "AnotherDummyGroup",
+        "Label": "Options",
+        "Name": "options",
         "Type": "Dropdown",
         "DropdownValues": [
           {
-            "Key": "POST",
-            "Value": "POST"
+            "Key": "Option 1",
+            "Value": "OPTION 1"
           },
           {
-            "Key": "GET",
-            "Value": "GET"
+            "Key": "Option 2",
+            "Value": "OPTION 2"
           }
         ]
       }

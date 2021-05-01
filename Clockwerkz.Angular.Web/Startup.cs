@@ -1,15 +1,19 @@
+using Autofac;
 using Clockwerkz.Angular.Web.Constants;
+using Clockwerkz.Angular.Web.Infrastructure;
 using Clockwerkz.Domain;
+using Clockwerkz.Infrastructure;
 using Clockwerkz.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
+using System.Linq;
 
 namespace Clockwerkz.Angular.Web
 {
@@ -17,17 +21,20 @@ namespace Clockwerkz.Angular.Web
     {
         private IConfiguration _configuration { get; }
 
-        public Startup(IWebHostEnvironment env)
+        public Startup(IWebHostEnvironment environment)
         {
-            var configurationBuilder = new ConfigurationBuilder();
+            var configurationBuilder = new ConfigurationBuilder()
+                .SetBasePath(environment.ContentRootPath)
+                .AddJsonFile($"{AppSettingsConfig.AppSettingsKey}.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"{AppSettingsConfig.QuartzSettingsKey}.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"{AppSettingsConfig.JobSettingsKey}.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"{AppSettingsConfig.AppSettingsKey}.{environment.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
 
-            if (string.Equals(env.EnvironmentName, Environments.Development, StringComparison.OrdinalIgnoreCase))
+            if (environment.IsDevelopment())
             {
                 configurationBuilder.AddUserSecrets<Startup>();
             }
-
-            //configurationBuilder.AddJsonFile(string.Format(AppSettingsConfig.AppSettingsFileFormat, env.EnvironmentName), false, true);
-            //configurationBuilder.AddJsonFile(AppSettingsConfig.JobSettingsFileName, false, true);
 
             _configuration = configurationBuilder.Build();
         }
@@ -44,8 +51,17 @@ namespace Clockwerkz.Angular.Web
             });
 
             services.AddControllers();
+            services.AddResponseCompression(opts =>
+            {
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" });
+            });
 
             services.AddMediatR(typeof(Startup).Assembly);
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new AutofacModule());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -61,8 +77,12 @@ namespace Clockwerkz.Angular.Web
                 app.UseHsts();
             }
 
+            app.UseResponseCompression();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             if (!env.IsDevelopment())
             {
@@ -73,6 +93,8 @@ namespace Clockwerkz.Angular.Web
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<NotificationService>("/notificationService");
+                endpoints.MapFallbackToPage("/_Host");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "api/{controller}/{action=Index}/{id?}");

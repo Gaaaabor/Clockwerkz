@@ -4,11 +4,19 @@ using System.Threading.Tasks;
 
 namespace Clockwerkz.Application.Jobs.Commands
 {
-    public class DeleteJobCommandHandler : IRequestHandler<DeleteJobCommand>
+    public class DeleteJobCommandHandler : IRequestHandler<DeleteJobCommand, bool>
     {
-        public Task<Unit> Handle(DeleteJobCommand request, CancellationToken cancellationToken)
+        private readonly IJobManager _jobManager;
+
+        public DeleteJobCommandHandler(IJobManager jobManager)
         {
-            throw new System.NotImplementedException();
+            _jobManager = jobManager;
+        }
+
+        public async Task<bool> Handle(DeleteJobCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _jobManager.DeleteJobAsync(request.JobName, request.GroupName);
+            return result;
         }
     }
 }

@@ -20,13 +20,29 @@ namespace Clockwerkz.Application.Jobs.Queries
 
         public async Task<IEnumerable<JobListDto>> Handle(ListJobsQuery request, CancellationToken cancellationToken)
         {
-            var jobs = await _context.JobDetails
-                .OrderBy(x => x.JobGroup)
+            var jobDetailsQuery = _context.JobDetails
+                .OrderBy(x => x.SchedName)
                 .ThenBy(x => x.JobName)
-                .Join(_context.Triggers,
-                    job => new { job.JobGroup, job.JobName },
-                    t => new { t.JobGroup, t.JobName },
-                    JobListDto.Projection)
+                .ThenBy(x => x.JobGroup)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.SchedulerName))
+            {
+                jobDetailsQuery = jobDetailsQuery.Where(x => x.SchedName == request.SchedulerName);
+            }
+
+            if (!string.IsNullOrEmpty(request.JobName))
+            {
+                jobDetailsQuery = jobDetailsQuery.Where(x => x.JobName.Contains(request.JobName));
+            }
+
+            if (!string.IsNullOrEmpty(request.GroupName))
+            {
+                jobDetailsQuery = jobDetailsQuery.Where(x => x.JobGroup.Contains(request.GroupName));
+            }
+
+            var jobs = await jobDetailsQuery
+                .Select(JobListDto.Projection)
                 .ToListAsync(cancellationToken);
 
             return jobs;

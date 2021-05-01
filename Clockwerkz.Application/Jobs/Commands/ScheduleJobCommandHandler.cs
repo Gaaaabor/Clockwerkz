@@ -1,4 +1,5 @@
 ﻿using Clockwerkz.Application.Interfaces;
+using Clockwerkz.Application.Jobs.Models;
 using Clockwerkz.Application.Notifications;
 using MediatR;
 using System.Threading;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Clockwerkz.Application.Jobs.Commands
 {
-    public class ScheduleJobCommandHandler : IRequestHandler<ScheduleJobCommand>
+    public class ScheduleJobCommandHandler : IRequestHandler<ScheduleJobCommand, JobListDto>
     {
         private readonly IJobManager _jobManager;
         private readonly INotificationService _notificationService;
@@ -17,18 +18,19 @@ namespace Clockwerkz.Application.Jobs.Commands
             _notificationService = notificationService;
         }
 
-        public async Task<Unit> Handle(ScheduleJobCommand request, CancellationToken cancellationToken)
+        public async Task<JobListDto> Handle(ScheduleJobCommand request, CancellationToken cancellationToken)
         {
-            var job = await _jobManager.ScheduleCustomJobAsync(
+            var result = await _jobManager.ScheduleJobAsync(
                 request.JobName,
                 request.GroupName,
+                request.Description,
                 request.StartImmediately,
                 request.CronExpression,
                 request.JobDataMap);
 
-            await _notificationService.SendAsync(new JobScheduledNotificationMessage(job));
+            await _notificationService.SendAsync(new JobScheduledNotificationMessage(result));
 
-            return Unit.Value;
+            return result;
         }
     }
 }

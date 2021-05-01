@@ -3,8 +3,8 @@
     public class AppSettingsConfig
     {
         public const string QuartzDb = "QuartzDb";
-        public const string ConfigurationRootPath = "ClientApp/build";
-        public const string JobSettingsFileName = "jobsettings.json";
-        public const string AppSettingsFileFormat = "appsettings.{0}.json";
+        public const string AppSettingsKey = "appsettings";
+        public const string QuartzSettingsKey = "quartzsettings";
+        public const string JobSettingsKey = "jobsettings";
     }
 }

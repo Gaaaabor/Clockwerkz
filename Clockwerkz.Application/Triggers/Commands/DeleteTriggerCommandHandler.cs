@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Clockwerkz.Application.Triggers.Commands
 {
-    public class DeleteTriggerCommandHandler : IRequestHandler<DeleteTriggerCommand>
+    public class DeleteTriggerCommandHandler : IRequestHandler<DeleteTriggerCommand, bool>
     {
         private readonly IJobManager _jobManager;
 
@@ -13,11 +13,10 @@ namespace Clockwerkz.Application.Triggers.Commands
             _jobManager = jobManager;
         }
 
-        public async Task<Unit> Handle(DeleteTriggerCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteTriggerCommand request, CancellationToken cancellationToken)
         {
-            await _jobManager.DeleteTriggerAsync(request.Name, request.GroupName);
-
-            return Unit.Value;
+            var result = await _jobManager.DeleteTriggerAsync(request.TriggerName, request.GroupName);
+            return result;
         }
     }
 }

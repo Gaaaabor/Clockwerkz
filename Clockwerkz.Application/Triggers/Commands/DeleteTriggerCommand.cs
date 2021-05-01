@@ -2,9 +2,9 @@
 
 namespace Clockwerkz.Application.Triggers.Commands
 {
-    public class DeleteTriggerCommand : IRequest
+    public class DeleteTriggerCommand : IRequest<bool>
     {
-        public string Name { get; set; }
+        public string TriggerName { get; set; }
         public string GroupName { get; set; }
     }
 }
