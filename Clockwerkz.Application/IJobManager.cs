@@ -15,6 +15,5 @@ namespace Clockwerkz.Application
         Task<bool> PauseTriggerAsync(string triggerName, string groupName);
         Task<bool> DeleteTriggerAsync(string triggerName, string groupName);
         Task<IDictionary<string, string>> GetJobDataMapAsync(string jobName, string groupName);
-
     }
 }

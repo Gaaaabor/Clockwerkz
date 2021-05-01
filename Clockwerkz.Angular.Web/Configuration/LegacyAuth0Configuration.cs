@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
-
 namespace Clockwerkz.Angular.Web.Configuration
 {
     public static class LegacyAuth0Configuration
@@ -66,7 +65,6 @@ namespace Clockwerkz.Angular.Web.Configuration
                     {
                         context.ProtocolMessage.SetParameter("audience", configuration[Audience]);
                         return Task.FromResult(0);
-
                     },
                     OnRedirectToIdentityProviderForSignOut = (context) => OnSignOut(context, configuration)
                 };
@@ -86,6 +84,7 @@ namespace Clockwerkz.Angular.Web.Configuration
                     var request = context.Request;
                     postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
                 }
+
                 logoutUri += $"&returnTo={Uri.EscapeDataString(postLogoutUri)}";
             }
 
@@ -94,6 +93,5 @@ namespace Clockwerkz.Angular.Web.Configuration
 
             return Task.CompletedTask;
         }
-
     }
 }

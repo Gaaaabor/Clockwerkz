@@ -66,7 +66,6 @@ namespace Clockwerkz.Angular.Web.Configuration
                     {
                         context.ProtocolMessage.SetParameter(Audience, configuration[Audience]);
                         return Task.FromResult(0);
-
                     },
                 };
             });
@@ -85,6 +84,7 @@ namespace Clockwerkz.Angular.Web.Configuration
                     var request = context.Request;
                     postLogoutUri = request.Scheme + "://" + request.Host + request.PathBase + postLogoutUri;
                 }
+
                 logoutUri += $"&returnTo={Uri.EscapeDataString(postLogoutUri)}";
             }
 
