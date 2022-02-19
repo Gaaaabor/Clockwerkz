@@ -1,0 +1,8 @@
+version: '3.9'
+
+services:
+  clockwerkz.blazor.web:
+    image: ${DOCKER_REGISTRY-}clockwerkzblazorweb
+    build:
+      context: .
+      dockerfile: Clockwerkz.Blazor.Web/Dockerfile
