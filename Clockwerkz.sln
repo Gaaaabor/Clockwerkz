@@ -23,7 +23,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clockwerkz.Infrastructure",
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Clockwerkz.Db", "Clockwerkz.Db\Clockwerkz.Db.sqlproj", "{2B598BD4-F3CA-47A9-AF9A-854EA50AB82A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clockwerkz.Blazor.Web", "Clockwerkz.Blazor.Web\Clockwerkz.Blazor.Web.csproj", "{D3FA8FE1-F81B-4DD9-8872-EDF869BA39E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clockwerkz.Blazor.Web", "Clockwerkz.Blazor.Web\Clockwerkz.Blazor.Web.csproj", "{D3FA8FE1-F81B-4DD9-8872-EDF869BA39E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A90FA29-D07B-4AD6-9FAA-42B36A11B2FA}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

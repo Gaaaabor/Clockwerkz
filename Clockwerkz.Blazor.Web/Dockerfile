@@ -7,7 +7,14 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
+
+COPY ["Clockwerkz.Common/Clockwerkz.Common.csproj", "Clockwerkz.Common/"]
+COPY ["Clockwerkz.Application/Clockwerkz.Application.csproj", "Clockwerkz.Application/"]
+COPY ["Clockwerkz.Domain/Clockwerkz.Domain.csproj", "Clockwerkz.Domain/"]
+COPY ["Clockwerkz.Infrastructure/Clockwerkz.Infrastructure.csproj", "Clockwerkz.Infrastructure/"]
+COPY ["Clockwerkz.Persistence/Clockwerkz.Persistence.csproj", "Clockwerkz.Persistence/"]
 COPY ["Clockwerkz.Blazor.Web/Clockwerkz.Blazor.Web.csproj", "Clockwerkz.Blazor.Web/"]
+
 RUN dotnet restore "Clockwerkz.Blazor.Web/Clockwerkz.Blazor.Web.csproj"
 COPY . .
 WORKDIR "/src/Clockwerkz.Blazor.Web"
