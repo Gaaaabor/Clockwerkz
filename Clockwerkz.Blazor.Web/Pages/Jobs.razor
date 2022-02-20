@@ -2,12 +2,15 @@
 
 @using Clockwerkz.Application.Jobs.Queries
 @using Clockwerkz.Application.Jobs.Models
+
 @inject MediatR.IMediator _mediator
+@inject NavigationManager _navigationManager
 
 <PageTitle>Jobs</PageTitle>
 
 <h1>Jobs</h1>
 
+<button class="btn btn-primary" @onclick="ScheduleJob">Schedule job</button>
 <button class="btn btn-primary" @onclick="FetchJobs">Fetch jobs</button>
 
 @if (_jobs == null)
@@ -19,6 +22,7 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th></th>
                 <th>SchedulerName</th>
                 <th>JobGroup</th>
                 <th>JobName</th>
@@ -29,6 +33,9 @@ else
             @foreach (var job in _jobs)
             {
                 <tr>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => JobDetails(job.JobName, job.JobGroup)">Details</button>
+                    </td>
                     <td>@job.SchedulerName</td>
                     <td>@job.JobGroup</td>
                     <td>@job.JobName</td>
@@ -40,11 +47,22 @@ else
 }
 
 @code {
+
     private ICollection<JobListDto> _jobs;
+
+    private void ScheduleJob()
+    {
+        _navigationManager.NavigateTo($"/jobs/schedule");
+    }
 
     private async Task FetchJobs()
     {
         var jobs = await _mediator.Send(new ListJobsQuery());
         _jobs = jobs.ToList();
+    }
+
+    private void JobDetails(string jobName, string groupName)
+    {
+        _navigationManager.NavigateTo($"jobs/{jobName}/{groupName}");
     }
 }

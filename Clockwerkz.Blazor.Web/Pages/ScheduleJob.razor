@@ -1,0 +1,69 @@
+﻿@page "/jobs/schedule"
+
+@using Clockwerkz.Blazor.Web.Models.Jobs;
+@using Clockwerkz.Application.Jobs.Commands;
+
+@inject MediatR.IMediator _mediator
+@inject NavigationManager _navigationManager
+
+<h3>ScheduleJob</h3>
+
+<EditForm Model="@_model" OnValidSubmit="@HandleValidSubmitAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <p>
+        <label>
+            Job's name:
+            <InputText id="JobName" @bind-Value="_model.JobName" />
+        </label>
+    </p>
+
+    <p>
+        <label>
+            Job's group name:
+            <InputText id="GroupName" @bind-Value="_model.GroupName" />
+        </label>
+    </p>
+
+    <p>
+        <label>
+            Description:
+            <InputText id="Description" @bind-Value="_model.Description" />
+        </label>
+    </p>
+    <p>
+        <label>
+            CronExpression:
+            <InputText id="CronExpression" @bind-Value="_model.CronExpression" />
+        </label>
+    </p>
+
+    <button class="btn btn-danger" @onclick="Back">Back</button>
+    <button class="btn btn-success" type="submit">Submit</button>
+</EditForm>
+
+
+@code {
+
+    private ScheduleJobModel _model = new();
+
+    private void Back()
+    {
+        _navigationManager.NavigateTo("/jobs");
+    }
+
+    private async Task HandleValidSubmitAsync()
+    {
+        var scheduledJob = await _mediator.Send(new ScheduleJobCommand
+        {
+            JobName = _model.JobName,
+            GroupName = _model.GroupName,
+            Description = _model.Description,
+            CronExpression = _model.CronExpression,
+            StartImmediately = true
+        });
+
+        _navigationManager.NavigateTo("/jobs");
+    }
+}

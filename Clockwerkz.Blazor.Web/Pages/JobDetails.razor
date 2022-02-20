@@ -1,0 +1,26 @@
+﻿@page "/jobs/{jobname}/{groupname}"
+
+@using Clockwerkz.Application.Jobs.Queries
+@using Clockwerkz.Application.Jobs.Models
+
+@inject MediatR.IMediator _mediator
+
+<h3>JobDetails</h3>
+
+@code {
+
+    [Parameter]
+    public string JobName { get; set; }
+
+    [Parameter]
+    public string GroupName { get; set; }
+
+    private IDictionary<string, string> _jobDetails { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        _jobDetails = await _mediator.Send(new JobDetailsQuery { JobName = JobName, GroupName = GroupName });
+    }
+}
